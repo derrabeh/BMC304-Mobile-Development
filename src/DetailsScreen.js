@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { Header } from './components/common';
 
 class DetailsScreen extends React.Component {
     render() {
       return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
+            <Header headerText={'Details'} navigation={this.props.navigation} />
           <Text>Details Screen</Text>
         </View>
       );
