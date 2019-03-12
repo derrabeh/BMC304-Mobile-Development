@@ -1,20 +1,8 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
-import { createStackNavigator, createAppContainer, createDrawerNavigator} from 'react-navigation'; 
-import { DetailsScreen } from './src/DetailsScreen';
-import { HomeScreen } from './src/HomeScreen';
-import { LoginScreen } from './src/LoginScreen';
-
-const AppDrawerNavigator = createDrawerNavigator(
-  {
-    Home: {
-      screen: HomeScreen
-    }, 
-    Details: {
-      screen: DetailsScreen
-    }
-  }
-)
+import { createStackNavigator, createAppContainer } from 'react-navigation'; 
+import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
+import { LoginScreen } from './src/screen/LoginScreen';
 
 const RootStack = createStackNavigator(
   {

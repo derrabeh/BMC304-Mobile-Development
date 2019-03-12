@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Header } from './components/common';
+import { Header } from '../components/common';
 
 class DetailsScreen extends React.Component {
     render() {

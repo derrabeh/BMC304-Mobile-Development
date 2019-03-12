@@ -6,12 +6,13 @@ import { Text, View, Image, TouchableHighlight } from "react-native";
 // Make a component
 const Header = (props) => {
   const { textStyle, containerStyle, imageStyle, textContainerStyle, iconContainerStyle } = styles;
+  const menuIcon = require('../../../assets/drawer.png');
 
   return (
     <View style={containerStyle}>
       <View style={iconContainerStyle}>
         <TouchableHighlight onPress={() => props.navigation.openDrawer()}>
-          <Image style={imageStyle} source={require('../../../assets/drawer.png')} />
+          <Image style={imageStyle} source={menuIcon} />
         </TouchableHighlight>
       </View>
       <View style={textContainerStyle}>
