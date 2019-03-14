@@ -11,7 +11,7 @@ const AppDrawerNavigator = createDrawerNavigator(
         screen: DetailsScreen
       }
     }
-  )
+  );
 
   export { AppDrawerNavigator };
 
