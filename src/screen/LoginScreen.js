@@ -1,10 +1,11 @@
 import React from 'react';
 import firebase from 'firebase';
-import { View, Image, ToastAndroid, ImageBackground, Text, KeyboardAvoidingView } from 'react-native';
+import { View, Image, ToastAndroid, ImageBackground, Text, 
+        KeyboardAvoidingView } from 'react-native';
 import { LoginInput, LoginButton, Container } from '../components/common';
 
 class LoginScreen extends React.Component {
-  state = {email: '', password: ''};
+  state = { email: '', password: '' };
 
   // on login button press
   onButtonPress() {
@@ -12,6 +13,7 @@ class LoginScreen extends React.Component {
 
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(() => {
+        this.setState({ email: '', password: '' });
         this.props.navigation.navigate('Home');
       })
         .catch(() => {
@@ -28,7 +30,7 @@ class LoginScreen extends React.Component {
     const lockIcon = require('../../assets/lock2.png');
 
     return (
-      <ImageBackground style={containerStyle} source={background} blurRadius={1} >
+      <ImageBackground style={containerStyle} source={background} blurRadius={2} >
         <KeyboardAvoidingView behavior='padding' enabled>
           <View style={logoContainerStyle}>
             <Image style={logoStyle} source={logo} />
@@ -62,7 +64,7 @@ class LoginScreen extends React.Component {
               <Text style={{color: 'white'}}>Or</Text>
             </View>
             <View style={buttonContainerStyle}>
-              <LoginButton children="Sign Up" />
+              <LoginButton children="Sign Up" onPress={() => {this.props.navigation.navigate('SignUp')}} />
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -83,8 +85,8 @@ const styles = {
       paddingBottom: 20
     }, 
     logoStyle: {
-      width: 220,
-      height: 220
+      width: 200,
+      height: 200
     }, 
     buttonsContainerStyle: {
       marginTop: 25,

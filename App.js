@@ -4,13 +4,14 @@ import firebase from 'firebase';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; 
 import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
 import { LoginScreen } from './src/screen/LoginScreen';
-
+import { SignUpScreen } from './src/screen/SignUpScreen';
 
 const RootStack = createStackNavigator(
   {
     Login: LoginScreen,
+    SignUp: SignUpScreen,
     Home: AppDrawerNavigator,
-    Details: AppDrawerNavigator,
+    Details: AppDrawerNavigator
   },
   {
     initialRouteName: 'Login',

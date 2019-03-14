@@ -18,7 +18,7 @@ const styles = {
         flex: 1,
         alignSelf: 'stretch',
         backgroundColor: 'white', 
-        borderRadius: 15, 
+        borderRadius: 20, 
         borderWidth: 1,
         borderColor: 'white',
         marginLeft: 5, 

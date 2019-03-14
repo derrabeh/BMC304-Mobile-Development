@@ -30,7 +30,7 @@ const styles = {
         paddingLeft: 5, 
         fontSize: 15,
         lineHeight: 23, 
-        flex: 10
+        flex: 10, 
     }, 
     iconStyle: {
         height: 30,
