@@ -14,7 +14,7 @@ class LoginScreen extends React.Component {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ email: '', password: '' });
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('uni_home');
       })
         .catch(() => {
           ToastAndroid.show('Wrong username or password !', ToastAndroid.SHORT);

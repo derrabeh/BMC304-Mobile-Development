@@ -16,7 +16,7 @@ class HomeScreen extends React.Component {
       return (
         <View>
             <Header headerText={'Home'} navigation={this.props.navigation} />
-            <Text>Home Screen</Text>
+            <Text>Home Screen w</Text>
             <Button title="Back" onPress={() => this.props.navigation.navigate('Login')} />
         </View>
       );
