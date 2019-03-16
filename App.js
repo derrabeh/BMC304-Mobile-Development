@@ -11,7 +11,7 @@ const RootStack = createStackNavigator(
   {
     Login: LoginScreen,
     SignUp: SignUpScreen,
-    uni_home : UniHomeScreen,
+    Uni_Home: UniHomeScreen,
     Home: AppDrawerNavigator,
     Details: AppDrawerNavigator
   },

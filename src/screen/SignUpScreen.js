@@ -23,10 +23,33 @@ class SignUpScreen extends React.Component {
     else {
       firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(() => {
-          this.props.navigation.navigate('Home');
+          const emailNew = email.replace(/\./g, ',');
+
+          const table = firebase.database().ref().child('users/' + emailNew);
+
+          if (userIndex === 1) {
+            table.set({
+              userType: 1
+            });
+            this.props.navigation.navigate('Uni_Home');
+          }
+          else if (userIndex === 2) {
+            table.set({
+              userType: 2
+            });
+            this.props.navigation.navigate('Home');
+          }
+          else {
+            table.set({
+              userType: null
+            })
+          }
+          
+          
         })
           .catch((error) => {
             ToastAndroid.show(error.message, ToastAndroid.SHORT);
+            console.log(error.message);
           })
     }
   }
