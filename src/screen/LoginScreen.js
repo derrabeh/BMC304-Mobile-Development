@@ -13,12 +13,33 @@ class LoginScreen extends React.Component {
 
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(() => {
-        this.setState({ email: '', password: '' });
-        this.props.navigation.navigate('uni_home');
+        
+        const emailNew = email.replace(/\./g, ',');
+
+        try {
+          const userType = firebase.database().ref('/users/' + emailNew);
+
+          userType.once('value').then(snapshot => {
+            console.log(snapshot.val().userType);
+            if (snapshot.val().userType == 1) {
+              this.props.navigation.navigate('Uni_Home');
+            }
+            else {
+              this.props.navigation.navigate('Home');
+            }
+          });
+
+          this.setState({ email: '', password: '' });
+        }
+        catch (error) {
+          ToastAndroid.show(error.message, ToastAndroid.SHORT);
+        }
       })
         .catch(() => {
           ToastAndroid.show('Wrong username or password !', ToastAndroid.SHORT);
         });
+
+        
   }
 
   render() {
