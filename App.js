@@ -7,6 +7,7 @@ import { LoginScreen } from './src/screen/LoginScreen';
 import { SignUpScreen } from './src/screen/SignUpScreen';
 import { UniHomeScreen } from './src/screen/UniHomeScreen';
 
+
 const RootStack = createStackNavigator(
   {
     Login: LoginScreen,
@@ -16,7 +17,7 @@ const RootStack = createStackNavigator(
     Details: AppDrawerNavigator
   },
   {
-    initialRouteName: 'Login',
+    initialRouteName: 'Uni_Home',
     headerMode: 'none',
     navigationOptions: {
       headerVisible: false,
@@ -30,12 +31,12 @@ export default class App extends React.Component {
   componentWillMount() {
     // Initialize Firebase
     firebase.initializeApp({
-      apiKey: 'AIzaSyAVNZrTYMo4YKjaLT64g-K4FWUVr8LkUH8',
-      authDomain: 'uni-search-367ae.firebaseapp.com',
-      databaseURL: 'https://uni-search-367ae.firebaseio.com',
-      projectId: 'uni-search-367ae',
-      storageBucket: 'uni-search-367ae.appspot.com',
-      messagingSenderId: '333300685077'
+      apiKey: "AIzaSyAsbVKAQ6obb2glh6MLSvNsgRgNMnTu9Ak",
+      authDomain: "bmc304-a4454.firebaseapp.com",
+      databaseURL: "https://bmc304-a4454.firebaseio.com",
+      projectId: "bmc304-a4454",
+      storageBucket: "bmc304-a4454.appspot.com",
+      messagingSenderId: "533913500230"
     });
   }
 
