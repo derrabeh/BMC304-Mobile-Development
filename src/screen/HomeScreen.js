@@ -1,81 +1,83 @@
-import React from 'react';
-import { View, Text, Button, ActivityIndicator, Dimensions, StyleSheet, TextInput, ListView } from 'react-native';
-import { Header, Input } from '../components/common';
+import React,{ Component } from 'react';
+import { FlatList, View, Text, Button, TouchableOpacity } from 'react-native';
+import { Header, Input, Card } from '../components/common';
 import * as firebase from 'firebase';
 
-
-export default class HomeScreen extends React.Component {
-    constructor(props) {
-    super(props);
-
-    this.navigationOptions = {
-        title: 'Home'
-    };
-
-    state = {
-      username: '', 
-      password: ''
-    };
-  }
-
-  componentWillMount() {
-    let initialLoad = true;
-    this.setState({ loading: true });
-
-    const firebaseConfig = {
-    apiKey: "AIzaSyDEiETsuhqLalpORr1r80OMpZprdv-Tq0g",
-    authDomain: "bmc304assignment.firebaseapp.com",
-    databaseURL: "https://bmc304assignment.firebaseio.com",
-    projectId: "bmc304assignment",
-    storageBucket: "bmc304assignment.appspot.com",
-    messagingSenderId: "23854769824"
+export default class HomeScreen extends Component {
+  static navigationOptions = {
+    title: 'Home',
   };
 
-   firebase.initializeApp(firebaseConfig);
+  constructor(props) {
+    super(props);
+    this.state ={ catName: [] }
+  };
+  
 
-   firebase
-      .database()
-      .ref('example')
-      .on('value', snapshot => {
-        this.setState({ text: snapshot.val() && snapshot.val().text });
+  componentDidMount() {
+    var ref = firebase.database().ref('/category')
+    ref.once('value')
+      .then(
+        function(snapshot) { 
+          const cat =[]
+      
+          snapshot.forEach(categories => {
+            const temp = categories.val();
+            cat.push(temp);
 
-        var ds = new ListView.DataSource({
-          rowHasChanged: (r1, r2) => r1 !== r2,
-        });
-        this.setState({ dataSource: ds.cloneWithRows(snapshot.val()) });
-
-        if (initialLoad) {
-          this.setState({ loading: false });
-          initialLoad = false;
-        }
       });
-  }
+        this.setState({
+          cat
+        })
+        }.bind(this)); 
+}
 
-   renderRow(record) {
-    return (
-      <View>
-        <Text>Email is {record.email}</Text>
-        <Text>Normal text is {record.text}</Text>
+
+render(){
+  return(
+    <View> 
+    <Header headerText={'HOME PAGE'} navigation={this.props.navigation} /> 
+    <FlatList 
+      data={this.state.cat}
+      renderItem={({ item, index }) => (  
+      <Card>
+      <TouchableOpacity style={styles.itemStyle}>
+          <Text style={styles.item}> {item.cat_name} </Text>
+      </TouchableOpacity>
+      </Card> 
+      )} 
+    />
+
+    <Button
+        title="Back"
+        onPress={() => this.props.navigation.navigate('Login')}
+    />
       </View>
     );
+}
+}
+
+const styles = {
+
+  item: {
+    padding: 10,
+    fontSize: 15,
+    height: 44,
+  },
+
+  itemStyle:{
+    justifyContent:'center',
+    padding: 5,
+    borderRadius: 5,
+    borderColor: '#32CD32'
+  },
+
+  buttonStyle: {
+    marginTop: 20,
   }
 
-    render() {
-      return (
-        <View>
-            <Header headerText={'Home'} navigation={this.props.navigation} />
-            <Input
-              onChangeText={username => this.setState({ username })}
-              value={this.state.username}
-              label="Username"
-              placeholder="hello world"
-            />
-            <Text>Home Screen</Text>
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Login')} />
-        </View>
-      );
-    }
 }
+
 
 export { HomeScreen };
 
