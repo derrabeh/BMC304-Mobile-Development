@@ -1,26 +1,83 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { Header, Input } from '../components/common';
+import React,{ Component } from 'react';
+import { FlatList, View, Text, Button, TouchableOpacity } from 'react-native';
+import { Header, Input, Card } from '../components/common';
+import * as firebase from 'firebase';
 
-class HomeScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Home'
-    };
+export default class HomeScreen extends Component {
+  static navigationOptions = {
+    title: 'Home',
+  };
 
-    state = {
-      username: '', 
-      password: ''
-    }
+  constructor(props) {
+    super(props);
+    this.state ={ catName: [] }
+  };
+  
 
-    render() {
-      return (
-        <View>
-            <Header headerText={'Home'} navigation={this.props.navigation} />
-            <Text>Home Screen w</Text>
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Login')} />
-        </View>
-      );
-    }
+  componentDidMount() {
+    var ref = firebase.database().ref('/category')
+    ref.once('value')
+      .then(
+        function(snapshot) { 
+          const cat =[]
+      
+          snapshot.forEach(categories => {
+            const temp = categories.val();
+            cat.push(temp);
+
+      });
+        this.setState({
+          cat
+        })
+        }.bind(this)); 
 }
 
+
+render(){
+  return(
+    <View> 
+    <Header headerText={'HOME PAGE'} navigation={this.props.navigation} /> 
+    <FlatList 
+      data={this.state.cat}
+      renderItem={({ item, index }) => (  
+      <Card>
+      <TouchableOpacity style={styles.itemStyle}>
+          <Text style={styles.item}> {item.cat_name} </Text>
+      </TouchableOpacity>
+      </Card> 
+      )} 
+    />
+
+    <Button
+        title="Back"
+        onPress={() => this.props.navigation.navigate('Login')}
+    />
+      </View>
+    );
+}
+}
+
+const styles = {
+
+  item: {
+    padding: 10,
+    fontSize: 15,
+    height: 44,
+  },
+
+  itemStyle:{
+    justifyContent:'center',
+    padding: 5,
+    borderRadius: 5,
+    borderColor: '#32CD32'
+  },
+
+  buttonStyle: {
+    marginTop: 20,
+  }
+
+}
+
+
 export { HomeScreen };
+

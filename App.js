@@ -3,7 +3,7 @@ import React from 'react';
 import firebase from 'firebase';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; 
 import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
-import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, DetailsScreen,
+import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, HomeScreen, DetailsScreen,
           QualificationScreen, StudentApplicationScreen } from './src/screen';
 
 
@@ -13,13 +13,15 @@ const RootStack = createStackNavigator(
     SignUp: SignUpScreen,
     Uni_Home: UniHomeScreen,
     Admin_Home: AdminHomeScreen,
+    HomeScreen: HomeScreen,
     Home: AppDrawerNavigator,
     Details: DetailsScreen,
     Qualification: QualificationScreen,
     StudentApplication: StudentApplicationScreen
   },
   {
-    initialRouteName: 'Uni_Home',
+    //need to change later
+    initialRouteName: 'HomeScreen',
     headerMode: 'none',
     navigationOptions: {
       headerVisible: false,
@@ -33,12 +35,12 @@ export default class App extends React.Component {
   componentWillMount() {
     // Initialize Firebase
     firebase.initializeApp({
-      apiKey: "AIzaSyAsbVKAQ6obb2glh6MLSvNsgRgNMnTu9Ak",
-      authDomain: "bmc304-a4454.firebaseapp.com",
-      databaseURL: "https://bmc304-a4454.firebaseio.com",
-      projectId: "bmc304-a4454",
-      storageBucket: "bmc304-a4454.appspot.com",
-      messagingSenderId: "533913500230"
+      apiKey: "AIzaSyAVNZrTYMo4YKjaLT64g-K4FWUVr8LkUH8",
+      authDomain: "uni-search-367ae.firebaseapp.com",
+      databaseURL: "https://uni-search-367ae.firebaseio.com",
+      projectId: "uni-search-367ae",
+      storageBucket: "uni-search-367ae.appspot.com",
+      messagingSenderId: "333300685077"
     });
   }
 
