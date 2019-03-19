@@ -3,40 +3,65 @@ import { View, Text, Button , BackHandler,TouchableHighlight , ToastAndroid} fro
 import { Header, Input } from '../components/common';
 import firebase from 'firebase';
 
+
 class UniHomeScreen extends React.Component {
     static navigationOptions = {
         title: 'uni_home'
     };
+    
 
     constructor(props){
         super(props);
-        this.dataF = [];
+        this.state = {
+            allProg:{}
+          };
     }
 
     componentDidMount(){
-
-            firebase.database().ref('/program').once('value', function (snapshot) {
-                console.log(snapshot.val())
-                // console.log(snapshot.val().Object,'there');
-                console.log(snapshot.val().prog1.prog_name,'here');  //get OS
-                console.log(snapshot.numChildren(),'count'); //get 3
-                for (var p in snapshot.val()) {
-                    console.log(p,'-----');  //get prog1 prog2 prog3
-                  }
-
+        firebase.database().ref('/prog').once('value', function (snapshot) {
+            console.log(snapshot.val())
+            console.log(snapshot.numChildren(),'count'); //get 3
+            for (var p in snapshot.val()) {
+                console.log(p,'-----sss');  //get prog1 prog2 prog3
+                }
+            this.setState({
+                allProg: snapshot.val(),
             });
-        }
-
+        }.bind(this));
+    }
 
     render() {
+
+    let d = JSON.stringify(this.state.allProg);
+    let g = JSON.parse(d);
+    console.log(d,'what is this');
+    console.log(g,'how about this');
 
       return (
         <View>
             <Header headerText={'University Admin - Home'} navigation={this.props.navigation} />
             <Text>University Admin - Home Page{'\n'}</Text>
-  
-
-
+            {
+            Object.keys(g).map((d, i) => {
+                if(g[d].uni == 'HELP'){
+                    return(  
+                    <View>
+                    <Text>
+                        Name: {g[d].prog_name} {'\n'}
+                        ID  : {g[d].id} {'\n'}
+                        UNI : {g[d].uni} {'\n'}
+                    </Text>
+                    <Button title="View Applicant" onPress={() => this.props.navigation.navigate('App_Prog', {
+                        name: g[d].prog_name,
+                        any : 'wtf',
+                        })} />
+                    <Text>{'\n'}</Text>
+                    </View>
+                    );
+                }
+            }
+            )
+            }
             <Button title="Back" onPress={() => this.props.navigation.navigate('Login')} />
         </View>
       );
