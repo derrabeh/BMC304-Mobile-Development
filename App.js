@@ -20,6 +20,7 @@ const RootStack = createStackNavigator(
     StudentApplication: StudentApplicationScreen
   },
   {
+    //need to change later
     initialRouteName: 'HomeScreen',
     headerMode: 'none',
     navigationOptions: {
@@ -34,12 +35,12 @@ export default class App extends React.Component {
   componentWillMount() {
     // Initialize Firebase
     firebase.initializeApp({
-    apiKey: "AIzaSyAVNZrTYMo4YKjaLT64g-K4FWUVr8LkUH8",
-    authDomain: "uni-search-367ae.firebaseapp.com",
-    databaseURL: "https://uni-search-367ae.firebaseio.com",
-    projectId: "uni-search-367ae",
-    storageBucket: "uni-search-367ae.appspot.com",
-    messagingSenderId: "333300685077"
+      apiKey: "AIzaSyAVNZrTYMo4YKjaLT64g-K4FWUVr8LkUH8",
+      authDomain: "uni-search-367ae.firebaseapp.com",
+      databaseURL: "https://uni-search-367ae.firebaseio.com",
+      projectId: "uni-search-367ae",
+      storageBucket: "uni-search-367ae.appspot.com",
+      messagingSenderId: "333300685077"
     });
   }
 
