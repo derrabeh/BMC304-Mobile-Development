@@ -7,7 +7,8 @@ import { LoginScreen } from './src/screen/LoginScreen';
 import { SignUpScreen } from './src/screen/SignUpScreen';
 import { UniHomeScreen } from './src/screen/UniHomeScreen';
 import { ProgApplicationScreen } from './src/screen/ProgApplicationScreen';
-import { AppDetailScreen } from './src/screen/AppDetailScreen';
+import { AppDetails } from './src/screen/AppDetailScreen';
+
 
 const RootStack = createStackNavigator(
   {
@@ -17,7 +18,7 @@ const RootStack = createStackNavigator(
     Home: AppDrawerNavigator,
     Details: AppDrawerNavigator,
     App_Prog : ProgApplicationScreen,
-    App_Detail : AppDetailScreen,
+    App_Detail : AppDetails,
   
   },
   {
@@ -28,7 +29,7 @@ const RootStack = createStackNavigator(
     }
   },
 );
-
+console.disableYellowBox = true;
 const AppContainer = createAppContainer(RootStack);
 
 export default class App extends React.Component {

@@ -45,8 +45,16 @@ class ProgApplicationScreen extends React.Component {
                   Applicant : {allApp[k].applicant} {'\n'}
                   Appied Program : {allApp[k].applied_prog}  (This id is from last screen: {d.state.params.prog_id} ){'\n'}
                   Status: {allApp[k].status} {'\n'}
+                  Key : {k}
                 </Text>
-                <Button title="View Applicant Details" onPress={() => this.props.navigation.navigate('ApplicantDetail')} />
+                <Button title="View Applicant Details" onPress={() => this.props.navigation.navigate('App_Detail',
+                {
+                  applicant : allApp[k].applicant,
+                  applied_prog : allApp[k].applied_prog,
+                  status : allApp[k].status,
+                  prog_name : d.state.params.prog_name,
+                  key : k
+                })} />
                 </View>
               );
             }
