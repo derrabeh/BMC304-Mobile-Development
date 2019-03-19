@@ -3,9 +3,8 @@ import React from 'react';
 import firebase from 'firebase';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; 
 import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
-import { LoginScreen } from './src/screen/LoginScreen';
-import { SignUpScreen } from './src/screen/SignUpScreen';
-import { UniHomeScreen } from './src/screen/UniHomeScreen';
+import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, DetailsScreen,
+          QualificationScreen, StudentApplicationScreen } from './src/screen';
 
 
 const RootStack = createStackNavigator(
@@ -13,8 +12,11 @@ const RootStack = createStackNavigator(
     Login: LoginScreen,
     SignUp: SignUpScreen,
     Uni_Home: UniHomeScreen,
+    Admin_Home: AdminHomeScreen,
     Home: AppDrawerNavigator,
-    Details: AppDrawerNavigator
+    Details: DetailsScreen,
+    Qualification: QualificationScreen,
+    StudentApplication: StudentApplicationScreen
   },
   {
     initialRouteName: 'Uni_Home',

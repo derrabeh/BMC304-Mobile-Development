@@ -23,29 +23,39 @@ class SignUpScreen extends React.Component {
     else {
       firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(() => {
-          const emailNew = email.replace(/\./g, ',');
+          firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(() => {
+              const uid = firebase.auth().currentUser.uid;
 
-          const table = firebase.database().ref().child('users/' + emailNew);
-
-          if (userIndex === 1) {
-            table.set({
-              userType: 1
-            });
-            this.props.navigation.navigate('Uni_Home');
-          }
-          else if (userIndex === 2) {
-            table.set({
-              userType: 2
-            });
-            this.props.navigation.navigate('Home');
-          }
-          else {
-            table.set({
-              userType: null
-            })
-          }
-          
-          
+              const table = firebase.database().ref().child('users/' + uid);
+      
+              if (userIndex === 1) {
+                table.set({
+                  userType: 1,
+                  email: email
+                });
+                this.props.navigation.navigate('Uni_Home');
+              }
+              else if (userIndex === 2) {
+                table.set({
+                  userType: 2,
+                  email: email
+                });
+                this.props.navigation.navigate('Home');
+              }
+              else if (userIndex === 3) {
+                table.set({
+                  userType: 3,
+                  email: email
+                });
+                this.props.navigation.navigate('Admin_Home');
+              }
+              else {
+                table.set({
+                  userType: null
+                });
+              }
+            });      
         })
           .catch((error) => {
             ToastAndroid.show(error.message, ToastAndroid.SHORT);
@@ -100,6 +110,7 @@ class SignUpScreen extends React.Component {
               <Picker.Item label="Select account type" value="null" />
               <Picker.Item label="Student" value="student" />
               <Picker.Item label="University Admin" value="university" />
+              <Picker.Item label="Application Admin" value="app" />
             </Picker>
           </View>
           <View style={buttonsContainerStyle}>
