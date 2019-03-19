@@ -34,8 +34,7 @@ class UniHomeScreen extends React.Component {
 
     let d = JSON.stringify(this.state.allProg);
     let g = JSON.parse(d);
-    console.log(d,'what is this');
-    console.log(g,'how about this');
+    console.log(g,'wwwwww')
 
       return (
         <View>
@@ -52,8 +51,9 @@ class UniHomeScreen extends React.Component {
                         UNI : {g[d].uni} {'\n'}
                     </Text>
                     <Button title="View Applicant" onPress={() => this.props.navigation.navigate('App_Prog', {
-                        name: g[d].prog_name,
-                        any : 'wtf',
+                        prog_name: g[d].prog_name,
+                        prog_id : g[d].id,
+                        uni: g[d].uni,
                         })} />
                     <Text>{'\n'}</Text>
                     </View>
