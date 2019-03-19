@@ -5,27 +5,35 @@ import { View, Image, ToastAndroid, ImageBackground, Text,
 import { LoginInput, LoginButton, Container } from '../components/common';
 
 class LoginScreen extends React.Component {
-  state = { email: '', password: '' };
+  state = { email: 'User3@user.com', password: '123456789', user: '' };
 
   // on login button press
   onButtonPress() {
     const { email, password } = this.state;
 
+    // authenticate the user
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(() => {
-        
-        const emailNew = email.replace(/\./g, ',');
 
+        // get the user id
+        const uid = firebase.auth().currentUser.uid;
+
+        // check the user type and navigate to their screen
         try {
-          const userType = firebase.database().ref('/users/' + emailNew);
+          this.setState({ user: uid });
+
+          const userType = firebase.database().ref('/users/' + uid);
 
           userType.once('value').then(snapshot => {
-            console.log(snapshot.val().userType);
+            // console.log(snapshot.val().userType);
             if (snapshot.val().userType == 1) {
-              this.props.navigation.navigate('Uni_Home');
+              this.props.navigation.navigate('Uni_Home', { userID: this.state.user });
+            }
+            else if (snapshot.val().userType == 2) {
+              this.props.navigation.navigate('Home', { userID: this.state.user });
             }
             else {
-              this.props.navigation.navigate('Home');
+              this.props.navigation.navigate('Admin_Home', { userID: this.state.user });
             }
           });
 
@@ -44,7 +52,7 @@ class LoginScreen extends React.Component {
 
   render() {
     const { containerStyle, logoContainerStyle, logoStyle, buttonsContainerStyle,
-            buttonContainerStyle, textContainerStyle } = styles;
+            buttonContainerStyle } = styles;
     const logo = require('../../assets/logo.png');
     const background = require('../../assets/background.jpg');
     const emailIcon = require('../../assets/mail2.png');
@@ -81,15 +89,11 @@ class LoginScreen extends React.Component {
             <View style={buttonContainerStyle}>
               <LoginButton onPress={this.onButtonPress.bind(this)} children="Login" />
             </View>
-            <View style={textContainerStyle}>
-              <Text style={{color: 'white'}}>Or</Text>
-            </View>
             <View style={buttonContainerStyle}>
               <LoginButton children="Sign Up" onPress={() => {this.props.navigation.navigate('SignUp')}} />
             </View>
           </View>
         </KeyboardAvoidingView>
-          
       </ImageBackground>
     );
   }  
@@ -115,7 +119,8 @@ const styles = {
       marginRight: 50
     }, 
     buttonContainerStyle: {
-      height: 40
+      height: 40,
+      marginBottom: 10
     }, 
     textContainerStyle: {
       flexDirection: 'row', 
