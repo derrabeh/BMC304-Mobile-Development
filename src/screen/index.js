@@ -1,6 +1,6 @@
 export * from './AdminHomeScreen';
 export * from './DetailsScreen';
-export * from './HomeScreen';
+export * from './StudentHomeScreen';
 export * from './LoginScreen';
 export * from './SignUpScreen';
 export * from './UniHomeScreen';
