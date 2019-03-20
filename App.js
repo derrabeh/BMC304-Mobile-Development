@@ -4,7 +4,7 @@ import firebase from 'firebase';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; 
 // import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
 import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
-          QualificationScreen, StudentApplicationScreen } from './src/screen';
+          QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen } from './src/screen';
 
 
 const RootStack = createStackNavigator(
@@ -16,7 +16,9 @@ const RootStack = createStackNavigator(
     Student_Home: StudentHomeScreen,
     Details: DetailsScreen,
     Qualification: QualificationScreen,
-    StudentApplication: StudentApplicationScreen
+    StudentApplication: StudentApplicationScreen,
+    App_Prog : ProgApplicationScreen,
+    App_Detail : AppDetails,
   },
   {
     //need to change later
@@ -27,7 +29,7 @@ const RootStack = createStackNavigator(
     }
   },
 );
-
+console.disableYellowBox = true;
 const AppContainer = createAppContainer(RootStack);
 
 export default class App extends React.Component {
