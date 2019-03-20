@@ -27,10 +27,10 @@ class LoginScreen extends React.Component {
           userType.once('value').then(snapshot => {
             // console.log(snapshot.val().userType);
             if (snapshot.val().userType == 1) {
-              this.props.navigation.navigate('Uni_Home', { userID: this.state.user });
+              this.props.navigation.navigate('Student_Home', { userID: this.state.user });
             }
             else if (snapshot.val().userType == 2) {
-              this.props.navigation.navigate('Home', { userID: this.state.user });
+              this.props.navigation.navigate('Uni_Home', { userID: this.state.user });
             }
             else {
               this.props.navigation.navigate('Admin_Home', { userID: this.state.user });

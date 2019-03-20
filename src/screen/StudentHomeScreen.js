@@ -3,7 +3,7 @@ import { FlatList, View, Text, Button, TouchableOpacity } from 'react-native';
 import { Header, Input, Card } from '../components/common';
 import * as firebase from 'firebase';
 
-export default class HomeScreen extends Component {
+export default class StudentHomeScreen extends Component {
   static navigationOptions = {
     title: 'Home',
   };
@@ -79,5 +79,5 @@ const styles = {
 }
 
 
-export { HomeScreen };
+export { StudentHomeScreen };
 

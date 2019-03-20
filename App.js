@@ -2,8 +2,8 @@
 import React from 'react';
 import firebase from 'firebase';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; 
-import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
-import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, HomeScreen, DetailsScreen,
+// import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
+import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
           QualificationScreen, StudentApplicationScreen } from './src/screen';
 
 
@@ -13,15 +13,14 @@ const RootStack = createStackNavigator(
     SignUp: SignUpScreen,
     Uni_Home: UniHomeScreen,
     Admin_Home: AdminHomeScreen,
-    HomeScreen: HomeScreen,
-    Home: AppDrawerNavigator,
+    Student_Home: StudentHomeScreen,
     Details: DetailsScreen,
     Qualification: QualificationScreen,
     StudentApplication: StudentApplicationScreen
   },
   {
     //need to change later
-    initialRouteName: 'HomeScreen',
+    initialRouteName: 'Login',
     headerMode: 'none',
     navigationOptions: {
       headerVisible: false,
