@@ -34,14 +34,21 @@ export default class StudentHomeScreen extends Component {
 
 
 render(){
+  let prv = this.props.navigation;
+
   return(
     <View> 
     <Header headerText={'HOME PAGE'} navigation={this.props.navigation} /> 
+    <Text>{prv.state.params.userID} hello</Text>
     <FlatList 
       data={this.state.cat}
       renderItem={({ item, index }) => (  
       <Card>
-      <TouchableOpacity style={styles.itemStyle}>
+      <TouchableOpacity style={styles.itemStyle} onPress={() => this.props.navigation.navigate('ProgList',{
+        cat:item.cat_short,
+        catName:item.cat_name,
+        userID : prv.state.params.userID,
+        })}>
           <Text style={styles.item}> {item.cat_name} </Text>
       </TouchableOpacity>
       </Card> 

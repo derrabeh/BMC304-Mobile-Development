@@ -4,7 +4,8 @@ import firebase from 'firebase';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; 
 // import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
 import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
-          QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen } from './src/screen';
+          QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen, ProgListScreen,
+        ProgDetailScreen } from './src/screen';
 
 
 const RootStack = createStackNavigator(
@@ -19,6 +20,8 @@ const RootStack = createStackNavigator(
     StudentApplication: StudentApplicationScreen,
     App_Prog : ProgApplicationScreen,
     App_Detail : AppDetails,
+    ProgList : ProgListScreen,
+    ProgDetail : ProgDetailScreen
   },
   {
     //need to change later

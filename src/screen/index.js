@@ -8,3 +8,5 @@ export * from './QualificationScreen';
 export * from './StudentApplicationScreen';
 export * from './ProgApplicationScreen';
 export * from './AppDetailScreen';
+export * from './ProgListScreen';
+export * from './ProgDetailScreen';
