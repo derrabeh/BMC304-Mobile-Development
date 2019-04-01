@@ -6,3 +6,5 @@ export * from './SignUpScreen';
 export * from './UniHomeScreen';
 export * from './QualificationScreen';
 export * from './StudentApplicationScreen';
+export * from './StudentQualificationScreen';
+export * from './AddQualification';
