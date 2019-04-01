@@ -5,7 +5,7 @@ import { View, Image, ToastAndroid, ImageBackground, Text,
 import { LoginInput, LoginButton, Container } from '../components/common';
 
 class LoginScreen extends React.Component {
-  state = { email: 'User1@user.com', password: '123456789', user: '' };
+  state = { email: 'User10@user.com', password: '123456789', user: '' };
 
   // on login button press
   onButtonPress() {

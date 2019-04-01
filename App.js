@@ -5,7 +5,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 // import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
 import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
           QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen, ProgListScreen,
-        ProgDetailScreen } from './src/screen';
+        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen } from './src/screen';
 
 
 const RootStack = createStackNavigator(
@@ -18,10 +18,12 @@ const RootStack = createStackNavigator(
     Details: DetailsScreen,
     Qualification: QualificationScreen,
     StudentApplication: StudentApplicationScreen,
-    App_Prog : ProgApplicationScreen,
-    App_Detail : AppDetails,
-    ProgList : ProgListScreen,
-    ProgDetail : ProgDetailScreen
+    App_Prog: ProgApplicationScreen,
+    App_Detail: AppDetails,
+    ProgList: ProgListScreen,
+    ProgDetail: ProgDetailScreen, 
+    NewQualification: NewQualificationScreen,
+    QualificationDetail: QualificationDetailsScreen
   },
   {
     //need to change later
