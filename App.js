@@ -1,11 +1,11 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import firebase from 'firebase';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
-import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
-import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, HomeScreen, DetailsScreen,
-          QualificationScreen, StudentApplicationScreen, StudentQualification, AppDetails, ProgApplicationScreen, ProgListScreen,
-        ProgDetailScreen, AddQualification } from './src/screen';
+import { createStackNavigator, createAppContainer } from 'react-navigation'; 
+// import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
+import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
+          QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen, ProgListScreen,
+        ProgDetailScreen } from './src/screen';
 
 
 const RootStack = createStackNavigator(
@@ -21,9 +21,7 @@ const RootStack = createStackNavigator(
     App_Prog : ProgApplicationScreen,
     App_Detail : AppDetails,
     ProgList : ProgListScreen,
-    ProgDetail : ProgDetailScreen,
-    StudentQualification: StudentQualification,
-    AddQualification: AddQualification
+    ProgDetail : ProgDetailScreen
   },
   {
     //need to change later

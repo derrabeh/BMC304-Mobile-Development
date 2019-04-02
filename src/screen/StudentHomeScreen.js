@@ -57,8 +57,7 @@ render(){
 
     <Button
         title="Back"
-        onPress={() => this.props.navigation.navigate('StudentQualification')}
-
+        onPress={() => this.props.navigation.navigate('Login')}
     />
       </View>
     );
