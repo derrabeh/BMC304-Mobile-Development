@@ -1095,7 +1095,7 @@ class AddQualification extends React.Component {
 					'Your qualification is successfully recorded',
 					[
 						{text: 'Cancel'},
-						{text: 'OK', onPress:() => this.props.navigation.navigate('StudentQualification',{
+						{text: 'OK', onPress:() => this.props.navigation.push('StudentQualification',{
 							Q_type: this.state.Q_type,
 							score: this.state.score
 						})
