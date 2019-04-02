@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Header } from '../components/common';
+import { Header, CardItem, Card } from '../components/common';
 import firebase from 'firebase';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 class StudentApplicationScreen extends React.Component {
     state = { applications: [], userID: '' };
@@ -58,7 +59,10 @@ class StudentApplicationScreen extends React.Component {
     }
 
     renderApplications() {
-        return this.state.applications.map(application => <Text>{application.university}</Text>);
+        return this.state.applications.map(application => 
+            <CardItem>
+                <Text>{application.university}</Text>
+            </CardItem>);
     }
 
     render() {
@@ -66,7 +70,26 @@ class StudentApplicationScreen extends React.Component {
         <View>
             <Header headerText={'Student application'} navigation={this.props.navigation} />
             <Text>Student Application Screen</Text>
-            {this.renderApplications()}
+            <Card>
+                {this.renderApplications()}
+            </Card>
+            <SwipeListView
+                useFlatList
+                data={this.state.listViewData}
+                renderItem={ (data, rowMap) => (
+                    <View style={styles.rowFront}>
+                        <Text>I am {data.item} in a SwipeListView</Text>
+                    </View>
+                )}
+                renderHiddenItem={ (data, rowMap) => (
+                    <View style={styles.rowBack}>
+                        <Text>Left</Text>
+                        <Text>Right</Text>
+                    </View>
+                )}
+                leftOpenValue={75}
+                rightOpenValue={-75}
+            />
         </View>
       );
     }

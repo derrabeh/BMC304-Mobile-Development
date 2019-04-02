@@ -3,9 +3,10 @@ import firebase from 'firebase';
 import { View, Image, ToastAndroid, ImageBackground, Text, 
         KeyboardAvoidingView } from 'react-native';
 import { LoginInput, LoginButton, Container } from '../components/common';
+// import console = require('console');
 
 class LoginScreen extends React.Component {
-  state = { email: 'User1@user.com', password: '123456789', user: '' };
+  state = { email: 'User10@user.com', password: '123456789', user: '' };
 
   // on login button press
   onButtonPress() {
@@ -33,7 +34,7 @@ class LoginScreen extends React.Component {
               this.props.navigation.navigate('Uni_Home', { userID: this.state.user });
             }
             else {
-              this.props.navigation.navigate('Admin_Home', { userID: this.state.user });
+              this.props.navigation.navigate('Qualification', { userID: this.state.user });
             }
           });
 
@@ -41,10 +42,12 @@ class LoginScreen extends React.Component {
         }
         catch (error) {
           ToastAndroid.show(error.message, ToastAndroid.SHORT);
+          console.log(error.message);
         }
       })
-        .catch(() => {
+        .catch((error) => {
           ToastAndroid.show('Wrong username or password !', ToastAndroid.SHORT);
+          console.log(error.message);
         });
 
         
