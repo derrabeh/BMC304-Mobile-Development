@@ -26,6 +26,7 @@ class QualificationScreen extends React.Component {
                 // sort the array
                 qualiRetrieved.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
                 this.setState({ qualifications: qualiRetrieved });
+                console.log(this.state.qualifications);
             });
     }
 
@@ -53,7 +54,7 @@ class QualificationScreen extends React.Component {
 
         return (
             <TouchableOpacity 
-                onPress={() => { this.props.navigation.navigate('QualificationDetail', {
+                onPress={() => { this.props.navigation.push('QualificationDetail', {
                                 qualificationID: rowData.key });
                         }}
                 delayPressIn='70' 
@@ -92,7 +93,7 @@ class QualificationScreen extends React.Component {
                 headerIcon2ContainerStyle } = styles;
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-        console.log(this.state.qualifications);
+        // console.log(this.state.qualifications);
 
         this.state = {
             dataSource: ds.cloneWithRows(this.state.qualifications),
@@ -100,8 +101,7 @@ class QualificationScreen extends React.Component {
 
         return (
             <View style={{ backgroundColor: '#bdc3c7', flex: 1 }} >
-                <View style={{ height: 18 }} />
-                <View style={headerContainerStyle} >
+                {/* <View style={headerContainerStyle} >
                     <TouchableOpacity 
                         style={headerIcon1ContainerStyle} 
                         onPress={() => this.props.navigation.navigate('Admin_Home')}
@@ -117,14 +117,14 @@ class QualificationScreen extends React.Component {
                         <Text style={headerTextStyle} >Qualification</Text>
                     </View>
                     <View style={headerIcon2ContainerStyle}>
-                        {/* <Icon
+                        <Icon
                             name='sort'
                             type='sort-alpha-down'
                             color='white'
-                        /> */}
+                        />
                     </View>
                     
-                </View>
+                </View> */}
                 <View style={searchBarDiv} >
                     <SearchBar 
                         onChangeText={()=>{console.log(this.state.qualifications)}} 
@@ -185,7 +185,7 @@ class QualificationScreen extends React.Component {
         backgroundColor: '#bdc3c7', 
         paddingLeft: 5, 
         paddingRight: 5, 
-        paddingTop: 7,
+        paddingTop: 25,
         paddingBottom: 7
       }, 
       avatarStyle: {

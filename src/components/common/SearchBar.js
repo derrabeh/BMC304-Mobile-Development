@@ -18,7 +18,6 @@ const SearchBar = ({ onChangeText, value, placeholder }) => {
                 style={textInputStyle}
                 onChangeText={onChangeText}
                 value={value}
-                textAlign='center'
             />
         </View>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, KeyboardAvoidingView, 
-        TouchableOpacity } from 'react-native';
+        TouchableOpacity, ScrollView } from 'react-native';
 import firebase from 'firebase';
 import { Icon } from 'react-native-elements';
 
@@ -29,9 +29,16 @@ class NewQualificationScreen extends React.Component {
                 description
             };
 
-            console.log('sucess');
-            const dir = firebase.database().ref('/qualification');
-            dir.push(qualification);
+
+            try {
+                console.log('sucess');
+                const dir = firebase.database().ref('/qualification');
+                dir.push(qualification);
+                this.props.navigation.push('Qualification');
+            }
+            catch (error) {
+                console.log(error);
+            }
 
         }
         else {
@@ -46,83 +53,84 @@ class NewQualificationScreen extends React.Component {
 
       return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' enabled >
-            <View style={{justifyContent: "flex-end", flex: 1}}>
-            <View style={headerStyle}>
-                <View style={iconContainerStyle}>
-                    <TouchableOpacity 
-                    onPress={() => this.props.navigation.navigate('Qualification')}
-                    >
-                        <View style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
-                            paddingBottom: 5 }}
+            <ScrollView style={{flex: 1}}>
+                <View style={headerStyle}>
+                    <View style={iconContainerStyle}>
+                        <TouchableOpacity 
+                        onPress={() => this.props.navigation.navigate('Qualification')}
                         >
-                            <Icon
-                                name='times'
+                            <View style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
+                                paddingBottom: 5 }}
+                        >
+                                <Icon
+                                    name='times'
+                                    type='font-awesome'
+                                    color='white'
+                                    size={28}
+                                />
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={this.saveQualification}
+                        >
+                            <View style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
+                                paddingBottom: 5  }}>
+                                <Icon
+                                name='check'
                                 type='font-awesome'
-                                color='white'
+                                color='white' 
                                 size={28}
-                            />
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={this.saveQualification}
-                    >
-                        <View style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
-                            paddingBottom: 5  }}>
-                            <Icon
-                            name='check'
-                            type='font-awesome'
-                            color='white' 
-                            size={28}
-                            />
-                        </View>
-                    </TouchableOpacity>  
+                                />
+                            </View>
+                        </TouchableOpacity>  
+                    </View>
+                    <View style={nameInputContainerStyle}>
+                        <TextInput
+                            style={nameTextFieldStyle}
+                            onChangeText={(name) => this.setState({ name })}
+                            value={this.state.name}
+                            autoFocus
+                            placeholder='Qualification Name'
+                        />
+                    </View>
                 </View>
-                <View style={nameInputContainerStyle}>
-                    <TextInput
-                        style={nameTextFieldStyle}
-                        onChangeText={(name) => this.setState({ name })}
-                        value={this.state.name}
-                        autoFocus
-                        placeholder='Qualification Name'
-                    />
+                <View style={bodyContainerStyle}>
+                    <View style={{flex: 1, justifyContent: 'center'}}>
+                    <View style={inputContainerStyle} >
+                        <Text style={inputTextStyle} >Minimum Score</Text>
+                        <TextInput
+                            onChangeText={(min) => this.setState({ min })}
+                            value={this.state.min}
+                            style={textInputStyle}
+                        />
+                    </View>
+                    <View style={inputContainerStyle}>
+                        <Text style={inputTextStyle} >Maximum Score</Text>
+                        <TextInput
+                            onChangeText={(max) => this.setState({ max })}
+                            value={this.state.max}
+                            style={textInputStyle}
+                        />
+                    </View>
+                    <View style={inputContainerStyle}>
+                        <Text style={inputTextStyle} >List of Possible Grades</Text>
+                        <TextInput style={inputTextStyle} 
+                            onChangeText={(grades) => this.setState({ grades })}
+                            value={this.state.grades}
+                            style={textInputStyle}
+                        />
+                    </View>
+                    <View style={inputContainerStyle}>
+                        <Text style={inputTextStyle} >Description</Text>
+                        <TextInput
+                            onChangeText={(description) => this.setState({ description })}
+                            value={this.state.description}
+                            style={textInputStyle}
+                        />
+                    </View>
+                    </View>
                 </View>
-                
-            </View>
-            <View style={bodyContainerStyle}>
-                <View style={inputContainerStyle} >
-                    <Text style={inputTextStyle} >Minimum Score</Text>
-                    <TextInput
-                        onChangeText={(min) => this.setState({ min })}
-                        value={this.state.min}
-                        style={textInputStyle}
-                    />
-                </View>
-                <View style={inputContainerStyle}>
-                    <Text style={inputTextStyle} >Maximum Score</Text>
-                    <TextInput
-                        onChangeText={(max) => this.setState({ max })}
-                        value={this.state.max}
-                        style={textInputStyle}
-                    />
-                </View>
-                <View style={inputContainerStyle}>
-                    <Text style={inputTextStyle} >List of Possible Grades</Text>
-                    <TextInput style={inputTextStyle} 
-                        onChangeText={(grades) => this.setState({ grades })}
-                        value={this.state.grades}
-                        style={textInputStyle}
-                    />
-                </View>
-                <View style={inputContainerStyle}>
-                    <Text style={inputTextStyle} >Description</Text>
-                    <TextInput
-                        onChangeText={(description) => this.setState({ description })}
-                        value={this.state.description}
-                        style={textInputStyle}
-                    />
-                </View>
-                </View>
-            </View>
+            </ScrollView>
             
         </KeyboardAvoidingView>
       );
@@ -163,7 +171,8 @@ class NewQualificationScreen extends React.Component {
           marginLeft: 40, 
           marginRight: 40, 
           flex: 7, 
-          paddingTop: 10
+          paddingTop: 10, 
+          justifyContent: 'flex-end'
       }, 
       textInputStyle: {
           borderWidth: 1, 

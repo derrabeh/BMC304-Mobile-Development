@@ -39,7 +39,7 @@ class QualificationDetailsScreen extends React.Component {
                         const ref = firebase.database().ref('qualification/' + key); 
                         ref.remove();
                         console.log(navigation);
-                        navigation.navigate('Qualification');
+                        navigation.push('Qualification');
                     }
                 }, 
             ], 
@@ -58,7 +58,7 @@ class QualificationDetailsScreen extends React.Component {
             <View style={headerStyle}>
                 <View style={iconContainerStyle}>
                     <TouchableOpacity 
-                    onPress={() => this.props.navigation.navigate('Qualification')}
+                    onPress={() => this.props.navigation.push('Qualification')}
                     >
                         <View 
                             style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
@@ -72,7 +72,7 @@ class QualificationDetailsScreen extends React.Component {
                             />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity 
+                    {/* <TouchableOpacity 
                     onPress={() => console.log('hello world')}
                     >
                         <View 
@@ -86,7 +86,7 @@ class QualificationDetailsScreen extends React.Component {
                                 size={28}
                             />
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 <View style={nameContainerStyle}>
                     <Text style={nameStyle} >{this.state.name}</Text>
@@ -143,12 +143,12 @@ class QualificationDetailsScreen extends React.Component {
   const styles = {
       containerStyle: {
           flex: 1, 
-          marginTop: 20, 
           backgroundColor: 'grey'
       },
       headerStyle: {
           flex: 3, 
-          backgroundColor: '#34495e'
+          backgroundColor: '#34495e',
+          paddingTop: 25
       }, 
       bodyStyle: {
           flex: 7, 

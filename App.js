@@ -1,12 +1,47 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import firebase from 'firebase';
-import { createStackNavigator, createAppContainer } from 'react-navigation'; 
+import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation'; 
 // import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
 import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
           QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen, ProgListScreen,
-        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen } from './src/screen';
+        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen, 
+        ApplicantHomeScreen } from './src/screen';
 
+const SASAdminTabNavigator = createBottomTabNavigator({
+  Qualification: { screen: QualificationScreen },
+  University: { screen: DetailsScreen }
+  }, {
+    tabBarOptions: {
+      activeTintColor: 'white',
+        inactiveTintColor: 'gray',
+        style: {
+            backgroundColor: '#2c3e50',
+        },
+        indicatorStyle: {
+            backgroundColor: '#000',
+        },
+    }
+  }
+);
+
+const StudentTabNavigator = createBottomTabNavigator({
+  Home: { screen: ApplicantHomeScreen },
+  History: { screen: StudentApplicationScreen }, 
+  Profile: { screen: DetailsScreen }
+  }, {
+    tabBarOptions: {
+      activeTintColor: 'white',
+        inactiveTintColor: 'gray',
+        style: {
+            backgroundColor: '#2c3e50',
+        },
+        indicatorStyle: {
+            backgroundColor: '#000',
+        },
+    }
+  }
+);
 
 const RootStack = createStackNavigator(
   {
@@ -14,9 +49,9 @@ const RootStack = createStackNavigator(
     SignUp: SignUpScreen,
     Uni_Home: UniHomeScreen,
     Admin_Home: AdminHomeScreen,
-    Student_Home: StudentHomeScreen,
+    Student_Home: StudentTabNavigator,
     Details: DetailsScreen,
-    Qualification: QualificationScreen,
+    Qualification: SASAdminTabNavigator,
     StudentApplication: StudentApplicationScreen,
     App_Prog: ProgApplicationScreen,
     App_Detail: AppDetails,

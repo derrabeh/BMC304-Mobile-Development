@@ -12,3 +12,5 @@ export * from './ProgListScreen';
 export * from './ProgDetailScreen';
 export * from './NewQualificationScreen';
 export * from './QualificationDetailsScreen';
+export * from './ApplicantHomeScreen';
+
