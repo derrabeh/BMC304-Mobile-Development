@@ -46,7 +46,7 @@ class AppDetails extends React.Component {
 
 
 
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Uni_Home')} />
+            <Button title="Back" onPress={() => this.props.navigation.push('App_Prog',{ prog_id : d.state.params.prog_id,prog_name : d.state.params.prog_name, })} />
         </View>
       );
     }
