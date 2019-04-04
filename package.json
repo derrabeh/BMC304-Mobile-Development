@@ -16,7 +16,12 @@
     "react-native-elements": "^1.1.0",
     "react-native-icons": "^0.7.1",
     "react-native-swipe-list-view": "^1.5.3",
+<<<<<<< HEAD
     "react-navigation": "^3.6.0"
+=======
+    "react-native-swipeable-row": "^0.8.1",
+    "react-navigation": "^3.3.2"
+>>>>>>> f3d8359b2e9060a7be63a751fc04eff4f9bc1b60
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.1",

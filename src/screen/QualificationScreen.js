@@ -1,20 +1,32 @@
 import React from 'react';
-import { View, Text, ListView, TouchableOpacity } from 'react-native';
+import { View, Text, ListView, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
 import firebase from 'firebase';
 import { Avatar, Icon } from 'react-native-elements';
 import { SearchBar } from '../components/common/SearchBar';
+import { Spinner } from '../components/common';
+import Swipable from 'react-native-swipeable-row';
 
 // import console = require('console');
 
 class QualificationScreen extends React.Component {
-    state = { qualifications: [], searchText: '' };
 
-    componentWillMount() {
+    constructor(props) {
+        super(props);
+        this.state = {
+            searchText: '', 
+            isLoading: true
+        };
+
+        this.arrayHolder = [];
+    }
+
+    componentDidMount() {
         const ref = firebase.database().ref('qualification');
 
         ref.once('value')
             .then((snapshot) => {
                 const qualiRetrieved = [];
+
                 snapshot.forEach((childSnapshot) => {
                     // pushing all qualifications to array
                     qualiRetrieved.push({
@@ -23,111 +35,185 @@ class QualificationScreen extends React.Component {
                         maxScore: childSnapshot.val().maxScore
                     });
                 });
-                // sort the array
+
                 qualiRetrieved.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
-                this.setState({ qualifications: qualiRetrieved });
-                console.log(this.state.qualifications);
+
+                const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
+                this.setState({
+                    isLoading: false,
+                    dataSource: ds.cloneWithRows(qualiRetrieved),
+                    }, 
+                    () => { this.arrayHolder = qualiRetrieved; }
+                );
+                
             });
     }
 
+    // navigate to 'new qualification' screen
     addNewQuali = () => {
-        this.props.navigation.navigate('NewQualification');
+        this.props.navigation.push('NewQualification');
     }
 
+    // filter qualifcation - not functioning yet
     filterQualification(searchText) {
-
-        let filteredQuali = [];
-        // console.log(searchText);
-        // console.log(this.state.qualifications);
-        const qualifications = this.state.qualifications;
-        if (searchText !== '') {
-            filteredQuali = qualifications.filter((searchText) => {
-                return qualifications.name === searchText;
-            });
-        }
-        console.log(filteredQuali);
+        console.log(searchText);
+        const filteredData = this.arrayHolder.filter(
+            (qualification) => {
+                const name = qualification.name.toUpperCase();
+                const value = searchText.toUpperCase();
+                
+                return name.indexOf(value) > -1;
+            }
+        );
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(filteredData),
+            searchText: searchText
+        })
     }
 
+    askDelete(key) {
+        const navigation = this.props.navigation;
+        Alert.alert(
+            'Delete Qualification?', 
+            '',
+            [
+                { text: 'No', onPress: () => console.log('No is pressed') }, 
+                { text: 'yes', 
+                    onPress: () => {
+                        console.log(key);
+                        const ref = firebase.database().ref('qualification/' + key); 
+                        ref.remove();
+                        console.log(navigation);
+                        navigation.push('Qualification');
+                    }
+                }, 
+            ], 
+            { cancelable: false }
+        );
+    }
+
+    // function to render data for list view
     renderRow(rowData) {
         const { rowContainerStyle, avatarStyle, rowTextContainerStyle, rowText1Style,
                 avatarContainerStyle, iconContainerStyle, rowText2Style } = styles;
 
-        return (
-            <TouchableOpacity 
-                onPress={() => { this.props.navigation.push('QualificationDetail', {
-                                qualificationID: rowData.key });
-                        }}
-                delayPressIn='70' 
-            >
-                <View style={rowContainerStyle}>
-                    <View style={avatarContainerStyle} >
-                        <Avatar 
-                            rounded 
-                            title={rowData.name.substring(0, 1).toUpperCase()}
-                            size='medium'
-                            containerStyle={avatarStyle}
-                            overlayContainerStyle={{ backgroundColor: '#34495e' }}
-                        />
-                    </View>
-                    <View style={rowTextContainerStyle} >
-                        <Text style={rowText1Style} >{rowData.name.toUpperCase()}</Text>
-                        <Text style={rowText2Style} >Maximum Score: {rowData.maxScore}</Text>
-                    </View>
-                    <View style={iconContainerStyle}>
-                        <Icon
-                            name='chevron-right'
-                            type='font-awesome'
-                            color='grey' 
-                        />
-                    </View>
+        const rightButtons = [
+            <TouchableHighlight 
+                style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
+                    alignItems: 'center', backgroundColor: '#2ecc71' }}
+                onPress={()=> this.props.navigation.push('QualificationDetail', {
+                    qualificationID: rowData.key })}
+            >  
+                <View style={{ flex: 1/5 }}>
+                    <Icon
+                        name='pencil'
+                        type='font-awesome'
+                        color='white'
+                        size={28}
+                        
+                    />
                 </View>
-            </TouchableOpacity>
+                
+            </TouchableHighlight>,
+            <TouchableHighlight 
+                style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
+                    alignItems: 'center', backgroundColor: '#e74c3c' }}
+                onPress={()=> this.askDelete(rowData.key)}
+            >  
+                <View style={{ flex: 1/5 }}>
+                    <Icon
+                        name='trash'
+                        type='font-awesome'
+                        color='white'
+                        size={28}
+                        
+                    />
+                </View>
+            </TouchableHighlight>
+            
+        ];
+
+        return (
+            <Swipable rightButtons={rightButtons} >
+                <TouchableOpacity 
+                    onPress={() => { this.props.navigation.push('QualificationDetail', {
+                                    qualificationID: rowData.key });
+                            }}
+                    delayPressIn='70' 
+                >
+                    <View style={rowContainerStyle}>
+                        <View style={avatarContainerStyle} >
+                            <Avatar 
+                                rounded 
+                                title={rowData.name.substring(0, 1).toUpperCase()}
+                                size='medium'
+                                containerStyle={avatarStyle}
+                                overlayContainerStyle={{ backgroundColor: '#34495e' }}
+                            />
+                        </View>
+                        <View style={rowTextContainerStyle} >
+                            <Text style={rowText1Style} >{rowData.name.toUpperCase()}</Text>
+                            <Text style={rowText2Style} >Maximum Score: {rowData.maxScore}</Text>
+                        </View>
+                        <View style={iconContainerStyle}>
+                            <Icon
+                                name='chevron-right'
+                                type='font-awesome'
+                                color='grey' 
+                            />
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            </Swipable>
             
         );
     }
 
+    // render the whole screen view
     render() {
         const { headerContainerStyle, headerTextStyle, searchBarDiv, 
                 floatButtonStyle, floatButtonContainerStyle, 
                 headerTextContainerStyle, headerIcon1ContainerStyle, 
                 headerIcon2ContainerStyle } = styles;
-        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+        console.log('dataSource: ' + this.state.dataSource);
+        console.log(this.state.isLoading);
 
-        // console.log(this.state.qualifications);
-
-        this.state = {
-            dataSource: ds.cloneWithRows(this.state.qualifications),
-          };
-
-        return (
-            <View style={{ backgroundColor: '#bdc3c7', flex: 1 }} >
-                {/* <View style={headerContainerStyle} >
-                    <TouchableOpacity 
-                        style={headerIcon1ContainerStyle} 
-                        onPress={() => this.props.navigation.navigate('Admin_Home')}
-                    >
-                        <Icon
-                            name='chevron-left'
-                            type='font-awesome'
-                            color='white'
-                        />
-                    </TouchableOpacity>
-                    
-                    <View style={headerTextContainerStyle}>
-                        <Text style={headerTextStyle} >Qualification</Text>
-                    </View>
-                    <View style={headerIcon2ContainerStyle}>
-                        <Icon
-                            name='sort'
-                            type='sort-alpha-down'
-                            color='white'
-                        />
-                    </View>
-                    
-                </View> */}
+        if (this.state.isLoading) {
+            return (
+                <View style={{ backgroundColor: '#bdc3c7', flex: 1 }} >
                 <View style={searchBarDiv} >
                     <SearchBar 
                         onChangeText={()=>{console.log(this.state.qualifications)}} 
+                        value={this.state.searchText}
+                        placeholder='Search for qualification'
+                    />
+                </View>
+                <Spinner />
+                <View style={floatButtonContainerStyle}>
+                    <TouchableOpacity 
+                        onPress={() => this.addNewQuali()} 
+                        style={floatButtonStyle}
+                    >
+                        <Icon
+                            name='plus'
+                            type='font-awesome'
+                            color='white'
+                            style={{ margin: 5 }} 
+                            activeOpacity='0.8'
+                            underlayColor='#34495e'
+                        />
+                    </TouchableOpacity>
+                </View>
+            </View>
+            );
+        }
+
+        return (
+            <View style={{ backgroundColor: '#bdc3c7', flex: 1 }} >
+                <View style={searchBarDiv} >
+                    <SearchBar 
+                        onChangeText={(searchText) => this.filterQualification(searchText)} 
                         value={this.state.searchText}
                         placeholder='Search for qualification'
                     />
