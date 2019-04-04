@@ -8,7 +8,6 @@ class UniHomeScreen extends React.Component {
     static navigationOptions = {
         title: 'uni_home'
     };
-    
 
     constructor(props){
         super(props);

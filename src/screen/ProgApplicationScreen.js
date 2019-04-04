@@ -16,8 +16,7 @@ class ProgApplicationScreen extends React.Component {
           allApp : {}
         };
   }
-
-  
+  //sssss
   componentDidMount(){
     firebase.database().ref('/application_test').once('value', function (snapshot) {
         this.setState({
