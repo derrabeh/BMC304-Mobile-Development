@@ -13,4 +13,5 @@ export * from './ProgDetailScreen';
 export * from './NewQualificationScreen';
 export * from './QualificationDetailsScreen';
 export * from './ApplicantHomeScreen';
-
+export * from './StudentQualification';
+export * from './AddQualification';

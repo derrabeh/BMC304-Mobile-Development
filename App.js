@@ -1,12 +1,10 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import firebase from 'firebase';
-import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation'; 
-// import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
+import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
 import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
           QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen, ProgListScreen,
-        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen, 
-        ApplicantHomeScreen } from './src/screen';
+        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen, ApplicantHomeScreen, StudentQualification, AddQualification } from './src/screen';
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
@@ -27,8 +25,8 @@ const SASAdminTabNavigator = createBottomTabNavigator({
 
 const StudentTabNavigator = createBottomTabNavigator({
   Home: { screen: ApplicantHomeScreen },
-  History: { screen: StudentApplicationScreen }, 
-  Profile: { screen: DetailsScreen }
+  History: { screen: StudentApplicationScreen },
+  Profile: { screen: StudentQualification },
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -56,9 +54,11 @@ const RootStack = createStackNavigator(
     App_Prog: ProgApplicationScreen,
     App_Detail: AppDetails,
     ProgList: ProgListScreen,
-    ProgDetail: ProgDetailScreen, 
+    ProgDetail: ProgDetailScreen,
     NewQualification: NewQualificationScreen,
-    QualificationDetail: QualificationDetailsScreen
+    QualificationDetail: QualificationDetailsScreen,
+    StudentQualification: StudentQualification,
+    AddQualification: AddQualification
   },
   {
     //need to change later
