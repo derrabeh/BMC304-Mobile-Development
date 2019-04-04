@@ -19,19 +19,19 @@ class ProgApplicationScreen extends React.Component {
   //sssss
   componentDidMount(){
     console.log('NEW PAGE............')
-    // firebase.database().ref('/application_test').once('value', function (snapshot) {
-    //   this.setState({
-    //     allApp: snapshot.val(),
-    //   });
-    // }.bind(this));
-    const ref = firebase.database().ref('/application_test');
-    ref.once('value')
-      .then((snapshot) =>{
-        this.setState({
-          allApp : snapshot.val()
-        })
-      })
-      // console.log(www);
+    const ref = firebase.database().ref().child('application_test');
+    const ref2 = firebase.database().ref().child('users');
+    const applications = [];
+    ref.on('child_added', (snapshot) =>{
+        // console.log(snapshot.val().applicant);
+        const applicant = snapshot.val().applicant;
+        const email = "";
+        ref2.child(snapshot.val().applicant).once('value', childSnap => {
+          // console.log(childSnap.val());
+          email = childSnap.val();
+          console.log(applications);
+        }).bind(this);
+      });
 }
 
 

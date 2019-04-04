@@ -29,12 +29,14 @@ class AddQualification extends React.Component {
 	}
 
 	componentDidMount(){
-		var ref = firebase.database().ref('/users')
-		var query = ref.orderByKey().equalTo("0iGG0hc6pZhAulrHcGqXR9J5gt33");
-		query.once("value", function(snapshot) {
+		const { navigation } = this.props;
+		this.state.userID = navigation.getParam('userID', null);
+
+		var ref = firebase.database().ref('/users/' + this.state.userID);
+		ref.once("value", function(snapshot) {
 			this.setState({
-				Q_Type: snapshot.val().Q_Type,
-				score: snapshot.val().score
+				Q_type: snapshot.val().Q_type,
+				score: snapshot.val().score,
 			});
 		}.bind(this));
 	}
@@ -52,8 +54,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub1}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub1: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub1: sub1 })
 					}>
 
 					<Picker.Item label="Select subject 1" value="null" />
@@ -74,8 +76,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.grade1}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ grade1: itemValue, gradeIndex: itemIndex })
+					onValueChange={
+						this.setState({ grade1: grade1 })
 					}>
 
 					<Picker.Item label="Select Grade" value="null" />
@@ -95,8 +97,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub2}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub2: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub2: sub2 })
 					}>
 
 					<Picker.Item label="Select subject 2" value="null" />
@@ -117,8 +119,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.grade2}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ grade2: itemValue, gradeIndex: itemIndex })
+					onValueChange={
+						this.setState({ grade2: grade2 })
 					}>
 
 					<Picker.Item label="Select Grade" value="null" />
@@ -138,8 +140,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub3}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub3: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub3: sub3 })
 					}>
 
 					<Picker.Item label="Select subject 3" value="null" />
@@ -160,8 +162,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.grade3}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ grade3: itemValue, gradeIndex: itemIndex })
+					onValueChange={
+						this.setState({ grade3: grade3 })
 					}>
 
 					<Picker.Item label="Select Grade" value="null" />
@@ -192,8 +194,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub1}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub1: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub1: sub1 })
 					}>
 
 					<Picker.Item label="Select subject 1" value="null" />
@@ -214,8 +216,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.grade1}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ grade1: itemValue, gradeIndex: itemIndex })
+					onValueChange={
+						this.setState({ grade1: grade1 })
 					}>
 
 					<Picker.Item label="Select Grade" value="null" />
@@ -229,8 +231,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub2}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub2: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub2: sub2 })
 					}>
 
 					<Picker.Item label="Select subject 2" value="null" />
@@ -251,8 +253,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.grade2}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ grade2: itemValue, gradeIndex: itemIndex })
+					onValueChange={
+						this.setState({ grade2: grade2 })
 					}>
 
 					<Picker.Item label="Select Grade" value="null" />
@@ -267,8 +269,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub3}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub3: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub3: sub3 })
 					}>
 
 					<Picker.Item label="Select subject 3" value="null" />
@@ -289,8 +291,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.grade3}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ grade3: itemValue, gradeIndex: itemIndex })
+					onValueChange={
+						this.setState({ grade3: grade3 })
 					}>
 
 					<Picker.Item label="Select Grade" value="null" />
@@ -307,7 +309,7 @@ class AddQualification extends React.Component {
 				);
 			}
 
-			if (this.state.Q_type=='Australian Matriculation') {
+			if (this.state.Q_type =='Australian Matriculation') {
 				return (
 
 					<ScrollView>
@@ -316,8 +318,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub1}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub1: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub1: sub1 })
 					}>
 
 					<Picker.Item label="Select subject 1" value="null" />
@@ -346,8 +348,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub2}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub2: itemValue, subIndex: itemIndex })
+					onValueChange={ 
+						this.setState({ sub2: sub2 })
 					}>
 
 					<Picker.Item label="Select subject 2" value="null" />
@@ -376,8 +378,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub3}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub3: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub3: sub3 })
 					}>
 
 					<Picker.Item label="Select subject 3" value="null" />
@@ -406,8 +408,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub4}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub4: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub4: sub4 })
 					}>
 
 					<Picker.Item label="Select subject 4" value="null" />
@@ -445,8 +447,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub1}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub1: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub1: sub1 })
 					}>
 
 					<Picker.Item label="Select subject 1" value="null" />
@@ -475,8 +477,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub2}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub2: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub2: sub2 })
 					}>
 
 					<Picker.Item label="Select subject 2" value="null" />
@@ -505,8 +507,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub3}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub3: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub3: sub3 })
 					}>
 
 					<Picker.Item label="Select subject 3" value="null" />
@@ -535,8 +537,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub4}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub4: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub4: sub4 })
 					}>
 
 					<Picker.Item label="Select subject 4" value="null" />
@@ -565,8 +567,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub5}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub5: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub5: sub5 })
 					}>
 
 					<Picker.Item label="Select subject 5" value="null" />
@@ -595,8 +597,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub6}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub6: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub6: sub6 })
 					}>
 
 					<Picker.Item label="Select subject 6" value="null" />
@@ -635,8 +637,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.sub1}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ sub1: itemValue, subIndex: itemIndex })
+							onValueChange={
+								this.setState({ sub1: sub1 })
 							}>
 
 							<Picker.Item label="Select subject 1" value="null" />
@@ -657,8 +659,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.grade1}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ grade1: itemValue, gradeIndex: itemIndex })
+							onValueChange={
+								this.setState({ grade1: grade1 })
 							}>
 
 							<Picker.Item label="Select Grade" value="null" />
@@ -674,8 +676,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.sub2}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ sub2: itemValue, subIndex: itemIndex })
+							onValueChange={
+								this.setState({ sub2: sub2 })
 							}>
 
 							<Picker.Item label="Select subject 2" value="null" />
@@ -696,8 +698,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.grade2}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ grade2: itemValue, gradeIndex: itemIndex })
+							onValueChange={
+								this.setState({ grade2: grade2 })
 							}>
 
 							<Picker.Item label="Select Grade" value="null" />
@@ -712,8 +714,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.sub3}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ sub3: itemValue, subIndex: itemIndex })
+							onValueChange={
+								this.setState({ sub3: sub3 })
 							}>
 
 							<Picker.Item label="Select subject 3" value="null" />
@@ -734,8 +736,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.grade3}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ grade3: itemValue, gradeIndex: itemIndex })
+							onValueChange={
+								this.setState({ grade3: grade })
 							}>
 
 							<Picker.Item label="Select Grade" value="null" />
@@ -750,8 +752,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.sub4}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ sub4: itemValue, subIndex: itemIndex })
+							onValueChange={
+								this.setState({ sub4: sub4 })
 							}>
 
 							<Picker.Item label="Select subject 4" value="null" />
@@ -772,8 +774,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.grade4}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ grade4: itemValue, gradeIndex: itemIndex })
+							onValueChange={
+								this.setState({ grade4: grade4 })
 							}>
 
 							<Picker.Item label="Select Grade" value="null" />
@@ -788,8 +790,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.sub5}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ sub5: itemValue, subIndex: itemIndex })
+							onValueChange={
+								this.setState({ sub5: sub5 })
 							}>
 
 							<Picker.Item label="Select subject 5" value="null" />
@@ -810,8 +812,8 @@ class AddQualification extends React.Component {
 							<Picker
 							selectedValue={this.state.grade5}
 							style
-							onValueChange={(itemValue, itemIndex) =>
-								this.setState({ grade5: itemValue, gradeIndex: itemIndex })
+							onValueChange={
+								this.setState({ grade5: grade5 })
 							}>
 
 							<Picker.Item label="Select Grade" value="null" />
@@ -836,8 +838,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub1}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub1: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub1: sub1 })
 					}>
 
 					<Picker.Item label="Select subject 1" value="null" />
@@ -866,8 +868,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub2}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub2: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub2: sub2 })
 					}>
 
 					<Picker.Item label="Select subject 2" value="null" />
@@ -896,8 +898,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub3}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub3: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub3: sub3 })
 					}>
 
 					<Picker.Item label="Select subject 3" value="null" />
@@ -926,8 +928,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub4}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub4: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub4: sub4 })
 					}>
 
 					<Picker.Item label="Select subject 4" value="null" />
@@ -956,8 +958,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub5}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub5: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub5: sub5 })
 					}>
 
 					<Picker.Item label="Select subject 5" value="null" />
@@ -986,8 +988,8 @@ class AddQualification extends React.Component {
 					<Picker
 					selectedValue={this.state.sub6}
 					style
-					onValueChange={(itemValue, itemIndex) =>
-						this.setState({ sub6: itemValue, subIndex: itemIndex })
+					onValueChange={
+						this.setState({ sub6: sub6 })
 					}>
 
 					<Picker.Item label="Select subject 6" value="null" />
@@ -1039,8 +1041,8 @@ class AddQualification extends React.Component {
 			<Picker
 			selectedValue={this.state.Q_type}
 			style
-			onValueChange={(itemValue, itemIndex) =>
-				this.setState({ Q_type: itemValue, userIndex: itemIndex })
+			onValueChange={
+				this.setState({ Q_type: Q_type})
 			}>
 
 			<Picker.Item label="Select qualification type" value="null" />
@@ -1078,7 +1080,7 @@ class AddQualification extends React.Component {
 
 		saveVal = async () => {
 			try {
-				var qlf = firebase.database().ref('users/0iGG0hc6pZhAulrHcGqXR9J5gt33');
+				var qlf = firebase.database().ref('/users/' + this.state.userID);
 				qlf.update({
 					Q_type: this.state.Q_type,
 					score: this.state.score,

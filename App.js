@@ -62,7 +62,7 @@ const RootStack = createStackNavigator(
   },
   {
     //need to change later
-    initialRouteName: 'Uni_Home',
+    initialRouteName: 'Login',
     headerMode: 'none',
     navigationOptions: {
       headerVisible: false,
