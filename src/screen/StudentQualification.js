@@ -1,5 +1,4 @@
 import React from 'react';
-import { FontAwesome } from '@expo/vector-icons'
 import { Picker, TouchableHighlight, Button, ScrollView,RefreshControl, StyleSheet, Text,TextInput, View, TouchableOpacity } from 'react-native';
 import Swipeable from 'react-native-swipeable-row';
 import { Header, Input, Card} from '../components/common';
@@ -12,139 +11,123 @@ class StudentQualification extends React.Component {
 	constructor(props){
 		super(props);
 		this.state ={
-			allUser: {},
+			allUser:{},
 			Q_type:'',
 			score: 0,
+			userID:'',
 		};
 	}
 
-	componentDidMount(){
-		var ref = firebase.database().ref('/users')
-		var query = ref.orderByKey().equalTo("0iGG0hc6pZhAulrHcGqXR9J5gt33");
-		query.once("value", function(snapshot) {
+	componentWillMount(){
+		const { navigation } = this.props;
+		this.state.userID = navigation.getParam('userID', null);
+
+		var ref = firebase.database().ref('/users/' + this.state.userID);
+		ref.once("value", function(snapshot) {
 			this.setState({
 				allUser: snapshot.val(),
 				Q_type: snapshot.val().Q_type,
-				score: snapshot.val().score
+				score: snapshot.val().score,
 			});
-
-
-			/*snapshot.forEach(function(child) {
-				const k = child.key;
-				const q = child.val().Q_type;
-				//console.log(child.key, child.val().Q_type);
-			});*/
-
 		}.bind(this));
 	}
 
 	render(){
-		let d = this.props.navigation;
-		let g = JSON.stringify(this.state.allUser);
-		let allUser = JSON.parse(g);
+		const { Q_type , score } = this.state;
 
-		//console.log(allUser);
-		return(
-			<View>
-			<Header headerText={'Academic Qualification'} navigation={this.props.navigation} />
+		QualificationCond =() => {
+		  if (this.state.Q_type == ""){
+		    return(
+		      <View>
+		      <TouchableOpacity style={styles.addButton}
+		      onPress={() => {this.props.navigation.navigate('AddQualification')}}
+		      >
+		      <Text style={styles.addButtonText}>+</Text>
+		      </TouchableOpacity>
+		      </View>
+		    )}
 
-			{Object.keys(allUser).map((item, index) => {
-				if (allUser[item].Q_type == '' && allUser[item].score ==0){
+		    else{
+		      return(
+		        <View>
+		        <ScrollView
+		        scrollEnabled={!this.state.isSwiping}>
+		        <Card>
+		        <Swipeable
+		        onSwipeStart={() => this.setState({isSwiping: true})}
+		        onSwipeRelease={() => this.setState({isSwiping: false})}
+		        rightButtons = {[
+		          <TouchableHighlight style={styles.swipeBtn} onPress={() => {this.props.navigation.navigate('AddQualification')}}>
+		          <Text style={styles.swipeText}> EDIT</Text>
+		          </TouchableHighlight>
+		        ]}
+		        >
+		        <Text style={styles.typeItem}>Qualification Type : {this.state.Q_type}</Text>
+		        <Text style={styles.scoreItem}>Score : {this.state.score}</Text>
+		        </Swipeable>
+		        </Card>
+		        </ScrollView>
+		        </View>
+		      )}
+		      return null;
+		    }
 					return(
 						<View>
-						<TouchableOpacity style={styles.addButton}
-						key={item.key}
-						onPress={() => {this.props.navigation.navigate('AddQualification')}}
-						>
-						<Text style={styles.addButtonText}>+</Text>
-						</TouchableOpacity>
+							<Header headerText={'Academic Qualification'}/>
+							<View>
+							<Text>
+								{QualificationCond()}
+								</Text>
+								</View>
 						</View>
-						);
-					}
-
-					else {
-						return(
-						<View>
-						<ScrollView
-						scrollEnabled={!this.state.isSwiping}>
-						<Card>
-						<Swipeable
-						onSwipeStart={() => this.setState({isSwiping: true})}
-						onSwipeRelease={() => this.setState({isSwiping: false})}
-						rightButtons = {[
-							<TouchableHighlight style={styles.swipeBtn} key={item.key} onPress={() => {this.props.navigation.navigate('AddQualification')}}>
-							<Text style={styles.swipeText}> EDIT </Text>
-							</TouchableHighlight>,
-							/*
-							<TouchableHighlight style={styles.swipeBtn} onPress={() => this.removeQualification(item.Q_type)}>
-							<Text style={styles.swipeText}> DELETE </Text>
-							</TouchableHighlight> */
-						]}
-							>
-
-
-							<Text style={styles.typeItem}> Qualification Type : {allUser[item].Q_type} </Text>
-							<Text style={styles.scoreItem}> Score : {allUser[item].score} </Text>
-
-
-							</Swipeable>
-							</Card>
-							</ScrollView>
-							</View>
-							);
-						}
-					})
-				}
-				</View>
-				);
+					);
 				}
 			}
 
+		const styles = StyleSheet.create({
 
-			const styles = StyleSheet.create({
+			addButton:{
+				position: 'absolute',
+				left: '40%',
+				bottom: -600,
+				backgroundColor: '#E91E63',
+				width: 90,
+				height: 90,
+				borderRadius: 50,
+				alignItems:'center',
+				justifyContent: 'center',
+				elevation: 8
+			},
+			addButtonText:{
+				color: '#fff',
+				fontSize: 24,
+			},
 
-				addButton:{
-					position: 'absolute',
-					left: '40%',
-					bottom: -600,
-					backgroundColor: '#E91E63',
-					width: 90,
-					height: 90,
-					borderRadius: 50,
-					alignItems:'center',
-					justifyContent: 'center',
-					elevation: 8
-				},
-				addButtonText:{
-					color: '#fff',
-					fontSize: 24,
-				},
+			typeItem:{
+				fontSize: 22,
+				fontWeight: 'bold',
 
-				typeItem:{
-					fontSize: 22,
-					fontWeight: 'bold',
+			},
 
-				},
+			scoreItem:{
+				fontSize: 20,
+				fontStyle: 'italic',
+				color: '#4B4B4C',
+				paddingLeft: 15,
+			},
 
-				scoreItem:{
-					fontSize: 20,
-					fontStyle: 'italic',
-					color: '#4B4B4C',
-					paddingLeft: 15,
-				},
+			swipeBtn:{
+				marginTop: 15,
+				height: 20,
+			},
 
-				swipeBtn:{
-					marginTop: 15,
-					height: 20,
-				},
+			swipeText:{
+				fontSize: 18,
+				color: '#000',
+				alignItems: 'center',
+			}
 
-				swipeText:{
-					fontSize: 18,
-					color: '#000',
-					alignItems: 'center',
-				}
-
-			});
+		});
 
 
-			export { StudentQualification };
+		export {StudentQualification };

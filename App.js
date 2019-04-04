@@ -26,7 +26,7 @@ const SASAdminTabNavigator = createBottomTabNavigator({
 const StudentTabNavigator = createBottomTabNavigator({
   Home: { screen: ApplicantHomeScreen },
   History: { screen: StudentApplicationScreen },
-  Profile: { screen: DetailsScreen }
+  Profile: { screen: StudentQualification },
   }, {
     tabBarOptions: {
       activeTintColor: 'white',

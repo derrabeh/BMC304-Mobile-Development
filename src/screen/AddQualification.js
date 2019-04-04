@@ -1020,7 +1020,7 @@ class AddQualification extends React.Component {
 			else {
 				return (
 					<TextInput
-					onChangeText={Q_type => this.setState({ Q_type})}
+					onChangeText={Q_type => this.setState({Q_type})}
 					value= {this.state.Q_type}
 					label="Qualification type"
 					placeholder="Enter your Qualification Type Name"
