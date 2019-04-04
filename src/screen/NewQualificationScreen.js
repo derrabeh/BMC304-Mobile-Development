@@ -21,19 +21,20 @@ class NewQualificationScreen extends React.Component {
         if (name !== '' && min !== '' && max !== '' && 
             grades !== '' && description !== '' ) {
 
-            const qualification = {
-                name, 
-                minScore: min, 
-                maxScore: max, 
-                grades,
-                description
-            };
-
-
             try {
                 console.log('sucess');
-                const dir = firebase.database().ref('/qualification');
-                dir.push(qualification);
+                const dir = firebase.database().ref('/qualification').push();
+                const primaryKey = dir.key;
+
+                dir.set({
+                    key: primaryKey,
+                    name, 
+                    minScore: min, 
+                    maxScore: max, 
+                    grades,
+                    description
+                });
+
                 this.props.navigation.push('Qualification');
             }
             catch (error) {
@@ -47,146 +48,189 @@ class NewQualificationScreen extends React.Component {
     }
 
     render() {
-        const { headerStyle, nameTextFieldStyle, nameInputContainerStyle,
-                iconContainerStyle, bodyContainerStyle, textInputStyle,
-                inputContainerStyle, inputTextStyle } = styles;
+        const { containerStyle, headerStyle, bodyStyle, iconContainerStyle, 
+                headerInputContainerStyle, headerInputStyle, textGroupContainerStyle,
+                textGroupStyle, textHeaderStyle, textGroupStyle2, 
+                buttonStyle, buttonTextStyle, buttonGroupStyle, buttonStyle2, } = styles;
 
       return (
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' enabled >
-            <ScrollView style={{flex: 1}}>
-                <View style={headerStyle}>
-                    <View style={iconContainerStyle}>
-                        <TouchableOpacity 
-                        onPress={() => this.props.navigation.navigate('Qualification')}
-                        >
-                            <View style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
-                                paddingBottom: 5 }}
-                        >
-                                <Icon
-                                    name='times'
-                                    type='font-awesome'
-                                    color='white'
-                                    size={28}
+        <KeyboardAvoidingView style={containerStyle} behavior='padding' enabled >
+            <View style={headerStyle}>
+                <View style={iconContainerStyle}>
+                    <Icon
+                        name='chevron-left'
+                        type='font-awesome'
+                        color='white'
+                        size={28}
+                        containerStyle={{alignItems: 'flex-start'}}
+                    />
+                </View>
+                <View style={headerInputContainerStyle}>
+                    <TextInput
+                        style={headerInputStyle}
+                        onChangeText={console.log('hello world')}
+                        value={this.state.name}
+                    />
+                </View>
+                
+            </View>
+            <View style={bodyStyle}>
+                <View style={textGroupContainerStyle}>
+                    <View style={textGroupStyle2}>
+                        <View>
+                            <Text style={textHeaderStyle}>Minimum Score</Text>
+                            <View style={{ alignItems: 'center' }}>
+                                <TextInput
+                                    style={headerInputStyle}
+                                    onChangeText={console.log('hello world')}
+                                    value={this.state.name}
                                 />
                             </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={this.saveQualification}
-                        >
-                            <View style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
-                                paddingBottom: 5  }}>
-                                <Icon
-                                name='check'
-                                type='font-awesome'
-                                color='white' 
-                                size={28}
+                        </View>
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={textHeaderStyle}>Maximum Score</Text>
+                            <View>
+                                <TextInput
+                                    style={headerInputStyle}
+                                    onChangeText={console.log('hello world')}
+                                    value={this.state.name}
                                 />
                             </View>
-                        </TouchableOpacity>  
+                        </View>
                     </View>
-                    <View style={nameInputContainerStyle}>
+                    <View style={textGroupStyle}>
+                        <Text style={textHeaderStyle}>List of possible grades</Text>
+                            <TextInput
+                                style={headerInputStyle}
+                                onChangeText={console.log('hello world')}
+                                value={this.state.name}
+                            />
+                    </View>
+                    <View style={textGroupStyle}>
+                        <Text style={textHeaderStyle}>Description</Text>
                         <TextInput
-                            style={nameTextFieldStyle}
-                            onChangeText={(name) => this.setState({ name })}
+                            style={headerInputStyle}
+                            onChangeText={console.log('hello world')}
                             value={this.state.name}
-                            autoFocus
-                            placeholder='Qualification Name'
                         />
                     </View>
+                    <View style={buttonGroupStyle}>
+                    <TouchableOpacity style={buttonStyle}>
+                        <Text style={buttonTextStyle}>
+                            Update
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={buttonStyle2}
+                        onPress={console.log('hello world')}
+                    >
+                        <Text style={buttonTextStyle}>
+                            Delete
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-                <View style={bodyContainerStyle}>
-                    <View style={{flex: 1, justifyContent: 'center'}}>
-                    <View style={inputContainerStyle} >
-                        <Text style={inputTextStyle} >Minimum Score</Text>
-                        <TextInput
-                            onChangeText={(min) => this.setState({ min })}
-                            value={this.state.min}
-                            style={textInputStyle}
-                        />
-                    </View>
-                    <View style={inputContainerStyle}>
-                        <Text style={inputTextStyle} >Maximum Score</Text>
-                        <TextInput
-                            onChangeText={(max) => this.setState({ max })}
-                            value={this.state.max}
-                            style={textInputStyle}
-                        />
-                    </View>
-                    <View style={inputContainerStyle}>
-                        <Text style={inputTextStyle} >List of Possible Grades</Text>
-                        <TextInput style={inputTextStyle} 
-                            onChangeText={(grades) => this.setState({ grades })}
-                            value={this.state.grades}
-                            style={textInputStyle}
-                        />
-                    </View>
-                    <View style={inputContainerStyle}>
-                        <Text style={inputTextStyle} >Description</Text>
-                        <TextInput
-                            onChangeText={(description) => this.setState({ description })}
-                            value={this.state.description}
-                            style={textInputStyle}
-                        />
-                    </View>
-                    </View>
+                    
                 </View>
-            </ScrollView>
-            
+            </View>
         </KeyboardAvoidingView>
       );
     }
   }
 
   const styles = {
+      containerStyle: {
+          flex: 1, 
+          backgroundColor: 'yellow'
+      }, 
       headerStyle: {
-          height: 180, 
-          backgroundColor: '#34495e',  
-          alignItems: 'stretch', 
-          marginTop: 20, 
-          flex: 3
+          flex: 3, 
+          paddingTop: 20,
+          backgroundColor: 'red'
       }, 
-      nameTextFieldStyle: {
-          color: 'white', 
-          borderColor: 'white', 
-          borderBottomWidth: 1, 
-          height: 70, 
-          fontSize: 30, 
-      }, 
-      nameInputContainerStyle: {
-          flex: 8, 
-          alignItems: 'stretch', 
-          justifyContent: 'center', 
-          marginLeft: 40, 
-          marginRight: 40, 
-          marginTop: 20, 
-          marginBottom: 20
+      bodyStyle: {
+          flex: 7, 
+          backgroundColor: 'blue',
+          paddingLeft: 40, 
+          paddingRight: 40
       }, 
       iconContainerStyle: {
-          flexDirection: 'row', 
-          justifyContent: 'space-between', 
-          flex: 2, 
-          alignItems: 'center', 
+          backgroundColor: 'green', 
+          justifyContent: 'flex-start', 
+          padding: 10, 
+          flex: 2
       }, 
-      bodyContainerStyle: {
-          marginLeft: 40, 
-          marginRight: 40, 
-          flex: 7, 
-          paddingTop: 10, 
-          justifyContent: 'flex-end'
+      headerInputContainerStyle: {
+          backgroundColor: 'yellow', 
+          alignItems: 'stretch', 
+          flex: 8, 
+          justifyContent: 'center'
       }, 
-      textInputStyle: {
-          borderWidth: 1, 
-          borderColor: 'grey', 
-          padding: 5, 
-          height: 40
+      headerInputStyle: {
+          marginLeft: 15, 
+          marginRight: 15,
+          height: 40, 
+          borderColor: 'gray', 
+          borderWidth: 1
+      },
+      textGroupContainerStyle: {
+        flex: 7, 
+        paddingTop: 15, 
+        paddingBottom: 15, 
+        justifyContent: 'center'
       }, 
-      inputContainerStyle: {
+      textGroupStyle: {
+          borderBottomWidth: 1, 
+          borderColor: '#bdc3c7', 
+          paddingBottom: 5, 
+          paddingTop: 5, 
           marginTop: 10, 
           marginBottom: 10
       }, 
-      inputTextStyle: {
+      textHeaderStyle: {
           color: 'grey'
-      }
+      }, 
+      textStyle: {
+          fontSize: 16, 
+          padding: 5
+      }, 
+      textGroupStyle2: {
+        borderBottomWidth: 1, 
+        borderColor: '#bdc3c7', 
+        paddingBottom: 5, 
+        paddingTop: 5, 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        marginTop: 10, 
+        marginBottom: 10
+        },
+    buttonStyle: {
+        backgroundColor: '#2ecc71', 
+        borderRadius: 40/2, 
+        height: 40, 
+        padding: 10, 
+        margin: 5, 
+        justifyContent: 'center', 
+        alignItems: 'center'
+        },  
+    buttonStyle2: {
+        backgroundColor: '#e74c3c', 
+        borderRadius: 40/2, 
+        height: 40, 
+        padding: 10, 
+        margin: 5, 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    }, 
+    buttonTextStyle: {
+        color: 'white', 
+        fontSize: 15
+    }, 
+    buttonGroupStyle: {
+        alignItems: 'stretch', 
+        justifyContent: 'center', 
+        flex: 3, 
+        marginBottom: 20, 
+    }, 
   }
 
   export { NewQualificationScreen };
