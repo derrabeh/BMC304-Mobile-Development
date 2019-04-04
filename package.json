@@ -17,7 +17,8 @@
     "react-native-icons": "^0.7.1",
     "react-native-swipe-list-view": "^1.5.3",
     "react-native-swipeable-row": "^0.8.1",
-    "react-navigation": "^3.3.2"
+    "react-navigation": "^3.3.2",
+    "split-on-first": "^1.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",

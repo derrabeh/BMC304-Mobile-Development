@@ -1,22 +1,21 @@
 import React from 'react';
-import { View, Text, Button , BackHandler,TouchableHighlight , ToastAndroid} from 'react-native';
+import { View, Text , BackHandler,
+    TouchableHighlight , ToastAndroid, Image,TouchableOpacity} from 'react-native';
 import { Header, Input, Card, CardItem } from '../components/common';
 import firebase from 'firebase';
+import { Button } from 'react-native-elements';
 
 
 class UniHomeScreen extends React.Component {
     static navigationOptions = {
         title: 'uni_home'
     };
-    
-
     constructor(props){
         super(props);
         this.state = {
             allProg:{}
           };
     }
-
     componentDidMount(){
         firebase.database().ref('/prog').once('value', function (snapshot) {
             console.log(snapshot.val())
@@ -38,36 +37,83 @@ class UniHomeScreen extends React.Component {
 
       return (
         <View>
-            <Header headerText={'University Admin - Home'} navigation={this.props.navigation} />
-            <Text>University Admin - Home Page{'\n'}</Text>
+            <Header headerText={'University Admin - Home Page'} navigation={this.props.navigation} />
             {
             Object.keys(g).map((d, i) => {
                 if(g[d].uni == 'HELP'){
-                    return(  
-                    <Card>
-                        <CardItem>
-                        <Text>
-                        Name: {g[d].prog_name} {'\n'}
-                        ID  : {g[d].id} {'\n'}
-                        UNI : {g[d].uni} {'\n'}
-                    </Text>
-                    <Button title="View Applicant" onPress={() => this.props.navigation.navigate('App_Prog', {
+                    return( 
+                        
+                        
+                    // <Card>
+                    //     <CardItem>
+                    //     <Text>
+                    //     Name: {g[d].prog_name} {'\n'}
+                    //     {/* ID  : {g[d].id} {'\n'} */}
+                    //     University : {g[d].uni} {'\n'}
+                    // </Text>
+                    // <Button title="View Applicant" onPress={() => this.props.navigation.navigate('App_Prog', {
+                    //     prog_name: g[d].prog_name,
+                    //     prog_id : g[d].id,
+                    //     uni: g[d].uni,
+                    //     })} />
+                    // <Text>{'\n'}</Text>
+                    //     </CardItem>
+                    // </Card>
+                    <TouchableOpacity
+                    style={styles.item}
+                    key={d}
+                    onPress={() => this.props.navigation.navigate('App_Prog', {  
                         prog_name: g[d].prog_name,
                         prog_id : g[d].id,
-                        uni: g[d].uni,
-                        })} />
-                    <Text>{'\n'}</Text>
-                        </CardItem>
-                    </Card>
+                        uni: g[d].uni, })}
+                    >
+                    <Text style={{ fontSize: 20 }}>{g[d].prog_name}</Text>
+
+                    </TouchableOpacity>
+
                     );
                 }
             }
             )
             }
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Login')} />
+            <View style={styles.buttonBack}>
+            <Button title="Back" type="outline" onPress={() => this.props.navigation.navigate('Login')} />
+            </View>
         </View>
       );
     }
 }
+
+const styles = {
+  item: {
+    backgroundColor: '#d7dae0',
+    borderRadius: 10,
+    padding: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 17,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowRadius: 3,
+    shadowOpacity: 0.8,
+    shadowColor: 'rgba(0, 0, 0, 0.24)',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    }
+  },
+  noDataText: {
+    fontSize: 20,
+    paddingTop: 20,
+    paddingBottom: 20
+  },
+  buttonBack:{
+    marginTop: 30,
+    marginLeft: 20,
+    marginRight: 20,
+    // width:40,
+    // justifyContent: 'center',
+  }
+};
 
 export { UniHomeScreen };
