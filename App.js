@@ -1,11 +1,45 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import firebase from 'firebase';
-import { createStackNavigator, createAppContainer } from 'react-navigation'; 
-import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
-import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, HomeScreen, DetailsScreen,
-          QualificationScreen, StudentApplicationScreen, StudentQualification, AddQualification } from './src/screen';
+import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
+import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
+          QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen, ProgListScreen,
+        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen, ApplicantHomeScreen, StudentQualification, AddQualification } from './src/screen';
 
+const SASAdminTabNavigator = createBottomTabNavigator({
+  Qualification: { screen: QualificationScreen },
+  University: { screen: DetailsScreen }
+  }, {
+    tabBarOptions: {
+      activeTintColor: 'white',
+        inactiveTintColor: 'gray',
+        style: {
+            backgroundColor: '#2c3e50',
+        },
+        indicatorStyle: {
+            backgroundColor: '#000',
+        },
+    }
+  }
+);
+
+const StudentTabNavigator = createBottomTabNavigator({
+  Home: { screen: ApplicantHomeScreen },
+  History: { screen: StudentApplicationScreen },
+  Profile: { screen: DetailsScreen }
+  }, {
+    tabBarOptions: {
+      activeTintColor: 'white',
+        inactiveTintColor: 'gray',
+        style: {
+            backgroundColor: '#2c3e50',
+        },
+        indicatorStyle: {
+            backgroundColor: '#000',
+        },
+    }
+  }
+);
 
 const RootStack = createStackNavigator(
   {
@@ -13,23 +47,29 @@ const RootStack = createStackNavigator(
     SignUp: SignUpScreen,
     Uni_Home: UniHomeScreen,
     Admin_Home: AdminHomeScreen,
-    HomeScreen: HomeScreen,
-    Home: AppDrawerNavigator,
+    Student_Home: StudentTabNavigator,
     Details: DetailsScreen,
-    Qualification: QualificationScreen,
+    Qualification: SASAdminTabNavigator,
     StudentApplication: StudentApplicationScreen,
+    App_Prog: ProgApplicationScreen,
+    App_Detail: AppDetails,
+    ProgList: ProgListScreen,
+    ProgDetail: ProgDetailScreen,
+    NewQualification: NewQualificationScreen,
+    QualificationDetail: QualificationDetailsScreen,
     StudentQualification: StudentQualification,
     AddQualification: AddQualification
   },
   {
-    initialRouteName: 'StudentQualification',
+    //need to change later
+    initialRouteName: 'Login',
     headerMode: 'none',
     navigationOptions: {
       headerVisible: false,
     }
   },
 );
-
+console.disableYellowBox = true;
 const AppContainer = createAppContainer(RootStack);
 
 export default class App extends React.Component {

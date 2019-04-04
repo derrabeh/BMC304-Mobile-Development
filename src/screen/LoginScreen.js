@@ -2,14 +2,17 @@ import React from 'react';
 import firebase from 'firebase';
 import { View, Image, ToastAndroid, ImageBackground, Text, 
         KeyboardAvoidingView } from 'react-native';
-import { LoginInput, LoginButton, Container } from '../components/common';
+import { LoginInput, LoginButton, Container, Spinner } from '../components/common';
+// import console = require('console');
 
 class LoginScreen extends React.Component {
-  state = { email: 'User3@user.com', password: '123456789', user: '' };
+  state = { email: 'User10@user.com', password: '123456789', user: '', isLoading: false };
 
   // on login button press
   onButtonPress() {
     const { email, password } = this.state;
+
+    this.setState({ isLoading: true });
 
     // authenticate the user
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -27,24 +30,31 @@ class LoginScreen extends React.Component {
           userType.once('value').then(snapshot => {
             // console.log(snapshot.val().userType);
             if (snapshot.val().userType == 1) {
-              this.props.navigation.navigate('Uni_Home', { userID: this.state.user });
+              this.props.navigation.navigate('Student_Home', { userID: this.state.user });
+              this.setState({ isLoading: false });
             }
             else if (snapshot.val().userType == 2) {
-              this.props.navigation.navigate('Home', { userID: this.state.user });
+              this.props.navigation.navigate('Uni_Home', { userID: this.state.user });
+              this.setState({ isLoading: false });
             }
             else {
-              this.props.navigation.navigate('Admin_Home', { userID: this.state.user });
+              this.props.navigation.navigate('Qualification', { userID: this.state.user });
+              this.setState({ isLoading: false });
             }
           });
 
           this.setState({ email: '', password: '' });
+          
         }
         catch (error) {
           ToastAndroid.show(error.message, ToastAndroid.SHORT);
+          console.log(error.message);
+          this.setState({ isLoading: false });
         }
       })
-        .catch(() => {
+        .catch((error) => {
           ToastAndroid.show('Wrong username or password !', ToastAndroid.SHORT);
+          console.log(error.message);
         });
 
         
@@ -57,6 +67,14 @@ class LoginScreen extends React.Component {
     const background = require('../../assets/background.jpg');
     const emailIcon = require('../../assets/mail2.png');
     const lockIcon = require('../../assets/lock2.png');
+
+    if (this.state.isLoading) {
+      return (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </View>
+      );
+    }
 
     return (
       <ImageBackground style={containerStyle} source={background} blurRadius={2} >

@@ -3,7 +3,7 @@ import { FlatList, View, Text, Button, TouchableOpacity } from 'react-native';
 import { Header, Input, Card } from '../components/common';
 import * as firebase from 'firebase';
 
-export default class HomeScreen extends Component {
+export default class StudentHomeScreen extends Component {
   static navigationOptions = {
     title: 'Home',
   };
@@ -34,14 +34,21 @@ export default class HomeScreen extends Component {
 
 
 render(){
+  let prv = this.props.navigation;
+
   return(
     <View> 
     <Header headerText={'HOME PAGE'} navigation={this.props.navigation} /> 
+    <Text>{prv.state.params.userID} hello</Text>
     <FlatList 
       data={this.state.cat}
       renderItem={({ item, index }) => (  
       <Card>
-      <TouchableOpacity style={styles.itemStyle}>
+      <TouchableOpacity style={styles.itemStyle} onPress={() => this.props.navigation.navigate('ProgList',{
+        cat:item.cat_short,
+        catName:item.cat_name,
+        userID : prv.state.params.userID,
+        })}>
           <Text style={styles.item}> {item.cat_name} </Text>
       </TouchableOpacity>
       </Card> 
@@ -50,8 +57,7 @@ render(){
 
     <Button
         title="Back"
-        onPress={() => this.props.navigation.navigate('StudentQualification')}
-
+        onPress={() => this.props.navigation.navigate('Login')}
     />
       </View>
     );
@@ -80,5 +86,5 @@ const styles = {
 }
 
 
-export { HomeScreen };
+export { StudentHomeScreen };
 

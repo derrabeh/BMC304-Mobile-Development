@@ -4,12 +4,7 @@ import { Header, Input, Card, CardItem } from '../components/common';
 import firebase from 'firebase';
 
 
-class UniHomeScreen extends React.Component {
-    static navigationOptions = {
-        title: 'uni_home'
-    };
-    
-
+class ProgListScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -34,27 +29,30 @@ class UniHomeScreen extends React.Component {
 
     let d = JSON.stringify(this.state.allProg);
     let g = JSON.parse(d);
-    console.log(g,'wwwwww')
+    let prv = this.props.navigation;
 
       return (
         <View>
-            <Header headerText={'University Admin - Home'} navigation={this.props.navigation} />
-            <Text>University Admin - Home Page{'\n'}</Text>
+            <Header headerText={'Programme'} navigation={this.props.navigation} />
+            <Text>Programme List - {prv.state.params.catName}{'\n'}</Text>
             {
             Object.keys(g).map((d, i) => {
-                if(g[d].uni == 'HELP'){
+                if(g[d].cat.toLowerCase() === prv.state.params.cat.toLowerCase()){
                     return(  
                     <Card>
                         <CardItem>
                         <Text>
+                        Cat: {g[d].cat} - prv: {prv.state.params.cat} {'\n'}
                         Name: {g[d].prog_name} {'\n'}
                         ID  : {g[d].id} {'\n'}
                         UNI : {g[d].uni} {'\n'}
                     </Text>
-                    <Button title="View Applicant" onPress={() => this.props.navigation.navigate('App_Prog', {
+                    <Button title="View Details" onPress={() => this.props.navigation.navigate('ProgDetail', {
                         prog_name: g[d].prog_name,
                         prog_id : g[d].id,
                         uni: g[d].uni,
+                        key : i,
+                        userID : prv.state.params.userID,
                         })} />
                     <Text>{'\n'}</Text>
                         </CardItem>
@@ -64,10 +62,10 @@ class UniHomeScreen extends React.Component {
             }
             )
             }
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Login')} />
+            <Button title="Back" onPress={() => this.props.navigation.navigate('Student_Home')} />
         </View>
       );
     }
 }
 
-export { UniHomeScreen };
+export { ProgListScreen };
