@@ -18,10 +18,10 @@ class UniHomeScreen extends React.Component {
     }
     componentDidMount(){
         firebase.database().ref('/prog').once('value', function (snapshot) {
-            console.log(snapshot.val())
-            console.log(snapshot.numChildren(),'count'); //get 3
+            // console.log(snapshot.val())
+            // console.log(snapshot.numChildren(),'count'); //get 3
             for (var p in snapshot.val()) {
-                console.log(p,'-----sss');  //get prog1 prog2 prog3
+                // console.log(p,'-----sss');  //get prog1 prog2 prog3
                 }
             this.setState({
                 allProg: snapshot.val(),
@@ -33,7 +33,7 @@ class UniHomeScreen extends React.Component {
 
     let d = JSON.stringify(this.state.allProg);
     let g = JSON.parse(d);
-    console.log(g,'wwwwww')
+    // console.log(g,'wwwwww')
 
       return (
         <View>

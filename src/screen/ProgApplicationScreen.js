@@ -14,9 +14,9 @@ class ProgApplicationScreen extends React.Component {
       super(props);
       this.state = {
           allApp : {},
+          allA : [],
         };
   }
-  //sssss
   componentDidMount(){
     console.log('NEW PAGE............')
     // firebase.database().ref('/application_test').once('value', function (snapshot) {
@@ -24,21 +24,47 @@ class ProgApplicationScreen extends React.Component {
     //     allApp: snapshot.val(),
     //   });
     // }.bind(this));
-    const ref = firebase.database().ref('/application_test');
-    ref.once('value')
-      .then((snapshot) =>{
-        this.setState({
-          allApp : snapshot.val()
-        })
+    const ref = firebase.database().ref('/applicant_new');
+    ref.once("value").then(snapshot => {
+      snapshot.forEach((child)=>{
+          var key = child.key;
+          this.setAppObject(child.val().applicant,child.val(),key);
+
       })
-      // console.log(www);
+    })
+  
 }
+
+setAppObject(user_id,data,key){
+  console.log(key);
+  let d = user_id;
+  const ref = firebase.database().ref('/users/'+user_id);
+  ref.once('value').then(snapshot=>{
+  let email = snapshot.val().email;
+  let newApp = {
+      applicant : email,
+      applied_prog : data.applied_prog,
+      date : data.date,
+      status : data.status,
+      uni : data.uni,
+      app_key : key,
+  };
+      this.setState({
+        allA : this.state.allA.concat(newApp)
+    })
+
+  })
+}
+
 
 
     render() {
     let d = this.props.navigation;
-    let g = JSON.stringify(this.state.allApp);
+    let g = JSON.stringify(this.state.allA);
     let allApp = JSON.parse(g);
+
+
+    // console.log(this.state.allA,'wwww----------');
 
       return (
 
@@ -47,44 +73,46 @@ class ProgApplicationScreen extends React.Component {
       
             {Object.keys(allApp).map((k,e) => {
             if(allApp[k].applied_prog == d.state.params.prog_id){
-              return(
-                <TouchableOpacity
-                    style={styles.item}
-                    key={d}
-                    onPress={() => this.props.navigation.navigate('App_Detail', {  
-                      applicant : allApp[k].applicant,
-                      applied_prog : allApp[k].applied_prog,
-                      status : allApp[k].status,
-                      prog_name : d.state.params.prog_name,
-                      key : k,
-                      prog_id : d.state.params.prog_id
-                      })}
-                    >
-                    <Text style={{ fontSize: 20 }}>Applicant: {allApp[k].applicant}</Text>
-                    <Text style={{ fontSize: 16, color: 'grey' }}>Appied Program : {allApp[k].applied_prog}</Text>
-                </TouchableOpacity>
-                // <View>
-                // <Text>
-                //   Applicant : {allApp[k].applicant} {'\n'}
-                //   Appied Program : {allApp[k].applied_prog}  (This id is from last screen: {d.state.params.prog_id} ){'\n'}
-                //   Status: {allApp[k].status} {'\n'}
-                //   Key : {k}
-                // </Text>
-                // <Button title="View Applicant Details" onPress={() => this.props.navigation.navigate('App_Detail',
-                // {
-                //   applicant : allApp[k].applicant,
-                //   applied_prog : allApp[k].applied_prog,
-                //   status : allApp[k].status,
-                //   prog_name : d.state.params.prog_name,
-                //   key : k
-                // })} />
-                // </View>
-              );
+              if(allApp[k].status != 'APPROVE'){
+                return(
+                  <TouchableOpacity
+                      style={styles.item}
+                      key={d}
+                      onPress={() => this.props.navigation.navigate('App_Detail', {  
+                        applicant : allApp[k].applicant,
+                        applied_prog : allApp[k].applied_prog,
+                        status : allApp[k].status,
+                        prog_name : d.state.params.prog_name,
+                        key : allApp[k].app_key,
+                        prog_id : d.state.params.prog_id
+                        })}
+                      >
+                      <Text style={{ fontSize: 20 }}>Applicant: {allApp[k].applicant}</Text>
+                  </TouchableOpacity>
+                  // <View>
+                  // <Text>
+                  //   Applicant : {allApp[k].applicant} {'\n'}
+                  //   Appied Program : {allApp[k].applied_prog}  (This id is from last screen: {d.state.params.prog_id} ){'\n'}
+                  //   Status: {allApp[k].status} {'\n'}
+                  //   Key : {k}
+                  // </Text>
+                  // <Button title="View Applicant Details" onPress={() => this.props.navigation.navigate('App_Detail',
+                  // {
+                  //   applicant : allApp[k].applicant,
+                  //   applied_prog : allApp[k].applied_prog,
+                  //   status : allApp[k].status,
+                  //   prog_name : d.state.params.prog_name,
+                  //   key : k
+                  // })} />
+                  // </View>
+                );
+              }
             }
             })
             }
-          
+            <View style={styles.buttonBack}>
             <Button title="Back" onPress={() => this.props.navigation.navigate('Uni_Home')} />
+            </View>
         </View>
       );
     }
