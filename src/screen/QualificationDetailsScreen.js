@@ -2,10 +2,11 @@ import React from 'react';
 import firebase from 'firebase';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { Spinner } from '../components/common';
 
 
 class QualificationDetailsScreen extends React.Component {
-    state = { key: '', name: '', maxScore: '', minScore: '', grades: '', description: '' };
+    state = { isLoading: true };
   
     componentWillMount() {
         const { navigation } = this.props;
@@ -21,6 +22,7 @@ class QualificationDetailsScreen extends React.Component {
                 this.setState({ minScore: snapshot.val().minScore });
                 this.setState({ grades: snapshot.val().grades });
                 this.setState({ description: snapshot.val().description });
+                this.setState({ isLoading: false });
             }
         );
     }
@@ -53,12 +55,19 @@ class QualificationDetailsScreen extends React.Component {
                 buttonGroupStyle, textGroupContainerStyle, buttonStyle2,
                 textGroupStyle, textHeaderStyle, textStyle, textGroupStyle2 } = styles;
 
+        if (this.state.isLoading) {
+            return (
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Spinner />
+                </View>
+            );
+        }
       return (
         <View style={containerStyle}>
             <View style={headerStyle}>
                 <View style={iconContainerStyle}>
                     <TouchableOpacity 
-                    onPress={() => this.props.navigation.push('Qualification')}
+                    onPress={() => this.props.navigation.navigate('Qualification')}
                     >
                         <View 
                             style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
