@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text , BackHandler,
     TouchableHighlight , ToastAndroid, Image,TouchableOpacity} from 'react-native';
-import { Header, Input, Card, CardItem } from '../components/common';
+import { Header, Input, Card, CardItem } from '../../components/common';
 import firebase from 'firebase';
 import { Button } from 'react-native-elements';
 

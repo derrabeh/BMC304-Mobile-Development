@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, 
         ImageBackground } from 'react-native';
-import { SearchBar } from '../components/common/SearchBar';
+import { SearchBar } from '../../components/common/SearchBar';
 
 class ApplicantHomeScreen extends React.Component {
     constructor(props) {
@@ -12,8 +12,8 @@ class ApplicantHomeScreen extends React.Component {
     render() {
         const { containerStyle, searchBarContainer, imageContainerStyle,
                 buttonStyle, buttonTextStyle } = styles;
-        const logo = require('../../assets/logo.png');
-        const background = require('../../assets/background.jpg');
+        const logo = require('../../../assets/logo.png');
+        const background = require('../../../assets/background.jpg');
 
       return (
         <ImageBackground style={containerStyle} source={background} blurRadius={2} >
