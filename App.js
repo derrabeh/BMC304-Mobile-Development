@@ -9,7 +9,7 @@ import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeS
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
-  University: { screen: DetailsScreen }
+  University: { screen: AddUniversity  }
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -27,7 +27,7 @@ const SASAdminTabNavigator = createBottomTabNavigator({
 const StudentTabNavigator = createBottomTabNavigator({
   Home: { screen: ApplicantHomeScreen },
   History: { screen: StudentApplicationScreen },
-  Profile: { screen: AddUniversity },
+  Profile: { screen: StudentQualification},
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -60,7 +60,7 @@ const RootStack = createStackNavigator(
     QualificationDetail: QualificationDetailsScreen,
     StudentQualification: StudentQualification,
     AddQualification: AddQualification,
-    AddUniveristy: AddUniversity,
+    AddUniversty: AddUniversity,
   },
   {
     //need to change later
