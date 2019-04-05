@@ -5,7 +5,7 @@ import { createStackNavigator, createAppContainer,
           createBottomTabNavigator } from 'react-navigation';
 import { LoginScreen, SignUpScreen, DetailsScreen } from './src/screen';
 import { AdminHomeScreen, NewQualificationScreen, QualificationDetailsScreen,
-          QualificationScreen, AddUniversity } from './src/screen/SASAdminScreen';
+          QualificationScreen, AddUniversity, AddUniAdmin } from './src/screen/SASAdminScreen';
 import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen,
           StudentApplicationScreen, StudentQualification, AddQualification
          } from './src/screen/StudentScreen';
@@ -31,7 +31,7 @@ const SASAdminTabNavigator = createBottomTabNavigator({
 const StudentTabNavigator = createBottomTabNavigator({
   Home: { screen: ApplicantHomeScreen },
   History: { screen: StudentApplicationScreen },
-  Profile: { screen: DetailsScreen},
+  Profile: { screen: StudentQualification },
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -62,9 +62,10 @@ const RootStack = createStackNavigator(
     ProgDetail: ProgDetailScreen,
     NewQualification: NewQualificationScreen,
     QualificationDetail: QualificationDetailsScreen,
-    StudentQualification: DetailsScreen,
-    AddQualification: DetailsScreen,
+    StudentQualification: StudentQualification,
+    AddQualification: AddQualification,
     AddUniversity: AddUniversity,
+    AddUniAdmin: AddUniAdmin,
   },
   {
     //need to change later

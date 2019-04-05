@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Picker, Button, StyleSheet, Text,TextInput, View, TouchableOpacity, ScrollView, KeyboardAvoidingView} from 'react-native';
-import { Header, Input, Card} from '../components/common';
+import { Header, Input, Card} from '../../components/common';
 import firebase from 'firebase';
 
 class AddQualification extends React.Component {
