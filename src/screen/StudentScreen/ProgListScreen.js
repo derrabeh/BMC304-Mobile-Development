@@ -13,7 +13,7 @@ class ProgListScreen extends React.Component {
     }
 
     componentDidMount(){
-        firebase.database().ref('/prog').once('value', function (snapshot) {
+        firebase.database().ref('/program').once('value', function (snapshot) {
             for (var p in snapshot.val()) {
                 // console.log(p,'-----sss');  //get prog1 prog2 prog3
                 }
@@ -38,21 +38,20 @@ class ProgListScreen extends React.Component {
                 // if(g[d].cat.toLowerCase() === prv.state.params.cat.toLowerCase()){
                 // if( new RegExp( '\\b' + prv.state.params.searchVAL + '\\b', 'i').test(g[d].cat.toLowerCase()) || 
                 //     new RegExp( '\\b' + prv.state.params.searchVAL + '\\b', 'i').test(g[d].prog_name.toLowerCase())){
-                if(g[d].prog_name.toLowerCase().includes(prv.state.params.searchVAL.toLowerCase())){
+                if(g[d].progName.toLowerCase().includes(prv.state.params.searchVAL.toLowerCase())){
                 return(  
                     <Card>
                         <CardItem>
                         <Text>
                         Cat: {g[d].cat} - prv: {prv.state.params.cat} {'\n'}
-                        Name: {g[d].prog_name} {'\n'}
-                        ID  : {g[d].id} {'\n'}
-                        UNI : {g[d].uni} {'\n'}
+                        Name: {g[d].progName} {'\n'}
+                        ID  : {d} {'\n'}
+                        UNI : {g[d].uniID} {'\n'}
                     </Text>
                     <Button title="View Details" onPress={() => this.props.navigation.navigate('ProgDetail', {
-                        prog_name: g[d].prog_name,
-                        prog_id : g[d].id,
-                        uni: g[d].uni,
-                        key : i,
+                        prog_name: g[d].progName,
+                        prog_id : d,
+                        uni: g[d].uniID,
                         userID : prv.state.params.userID,
                         })} />
                     <Text>{'\n'}</Text>

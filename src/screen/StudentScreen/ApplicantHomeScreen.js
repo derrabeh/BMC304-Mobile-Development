@@ -31,7 +31,7 @@ class ApplicantHomeScreen extends React.Component {
                 </View>
                 <TouchableOpacity 
                     style={buttonStyle}
-                    onPress={()=> this.props.navigation.navigate('ProgList', { catName: 'Information Technology', cat: 'IT', searchVAL : 'inform', userID : d.state.params.userID })}>
+                    onPress={()=> this.props.navigation.navigate('ProgList', { catName: 'Information Technology', cat: 'IT', searchVAL : 'hahahaa', userID : d.state.params.userID })}>
                     <Text style={buttonTextStyle}>Search</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
