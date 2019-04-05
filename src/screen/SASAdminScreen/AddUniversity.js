@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableHighlight, Button, View, TextInput } from 'react-native';
-import { Header } from '../components/common';
+import { Header } from '../../components/common';
 import firebase from 'firebase';
 
 class AddUniversity extends React.Component {

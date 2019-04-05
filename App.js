@@ -31,7 +31,7 @@ const SASAdminTabNavigator = createBottomTabNavigator({
 const StudentTabNavigator = createBottomTabNavigator({
   Home: { screen: ApplicantHomeScreen },
   History: { screen: StudentApplicationScreen },
-  Profile: { screen: StudentQualification},
+  Profile: { screen: DetailsScreen},
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -62,9 +62,9 @@ const RootStack = createStackNavigator(
     ProgDetail: ProgDetailScreen,
     NewQualification: NewQualificationScreen,
     QualificationDetail: QualificationDetailsScreen,
-    StudentQualification: StudentQualification,
-    AddQualification: AddQualification,
-    AddUniversty: AddUniversity,
+    StudentQualification: DetailsScreen,
+    AddQualification: DetailsScreen,
+    AddUniversity: AddUniversity,
   },
   {
     //need to change later
