@@ -77,6 +77,15 @@ class UniHomeScreen extends React.Component {
     renderRow(rowData) {
         return (
             <View>
+                <TouchableOpacity
+                style={styles.item}
+                key={rowData.key}
+                onPress={() => this.props.navigation.navigate('App_Prog', {  
+                    prog_name: rowData.progName,
+                    prog_id : rowData.key,
+                    uni: rowData.uniID, })}
+                >
+                </TouchableOpacity>
               <Text>{rowData.progName}</Text>
             </View>
         );
@@ -232,7 +241,24 @@ class UniHomeScreen extends React.Component {
             justifyContent: 'center', 
             alignItems: 'center', 
             marginRight: 5
-        }
+        },
+        item: {
+            backgroundColor: '#d7dae0',
+            borderRadius: 10,
+            padding: 20,
+            marginLeft: 10,
+            marginRight: 10,
+            marginTop: 17,
+            justifyContent: 'center',
+            alignItems: 'center',
+            shadowRadius: 3,
+            shadowOpacity: 0.8,
+            shadowColor: 'rgba(0, 0, 0, 0.24)',
+            shadowOffset: {
+              width: 0,
+              height: 3
+            }
+          },
   };
 
 
