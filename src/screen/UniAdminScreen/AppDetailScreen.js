@@ -47,8 +47,6 @@ class AppDetails extends React.Component {
     render() {
       let d = this.props.navigation;
 
-
-        
       return (
         <View>
           <Header headerText={'Applicant Details'} navigation={this.props.navigation} />
@@ -62,6 +60,7 @@ class AppDetails extends React.Component {
               <Text>{'\n'}</Text>
               <View>
                 {this.btnStatus()}
+                <Text>{'\n'}</Text>
               </View>
               <Button title="Back" onPress={() => this.props.navigation.push('App_Prog',{ prog_id : d.state.params.prog_id,prog_name : d.state.params.prog_name, })} />
           </View>
@@ -69,7 +68,6 @@ class AppDetails extends React.Component {
       );
     }
 }
-
 const styles = {
   container : {
     marginTop: 30,
