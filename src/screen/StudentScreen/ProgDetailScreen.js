@@ -32,7 +32,7 @@ class ProgDetailScreen extends React.Component {
             dir.set({
               applicantID: applicantID,
               date: today,
-              programID: "PROGIDHERE",
+              programID: all.state.params.prog_id,
               status: 'PENDING'
             });
 

@@ -24,12 +24,12 @@ class ProgApplicationScreen extends React.Component {
     //     allApp: snapshot.val(),
     //   });
     // }.bind(this));
-    const ref = firebase.database().ref('/applicant_new');
+    const ref = firebase.database().ref('/applications');
     ref.once("value").then(snapshot => {
       snapshot.forEach((child)=>{
           var key = child.key;
-          this.setAppObject(child.val().applicant,child.val(),key);
-
+          this.setAppObject(child.val().applicantID,child.val(),key);
+          // console.log(snapshot.val())
       })
     })
   
@@ -43,10 +43,10 @@ setAppObject(user_id,data,key){
   let email = snapshot.val().email;
   let newApp = {
       applicant : email,
-      applied_prog : data.applied_prog,
+      applied_prog : data.programID,
       date : data.date,
       status : data.status,
-      uni : data.uni,
+      uni : data.uniID,
       app_key : key,
   };
       this.setState({
@@ -73,7 +73,7 @@ setAppObject(user_id,data,key){
       
             {Object.keys(allApp).map((k,e) => {
             if(allApp[k].applied_prog == d.state.params.prog_id){
-              if(allApp[k].status != 'APPROVE'){
+              if(allApp[k].status != 'XDDD'){
                 return(
                   <TouchableOpacity
                       style={styles.item}

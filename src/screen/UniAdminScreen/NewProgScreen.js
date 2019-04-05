@@ -60,7 +60,7 @@ class NewProgScreen extends React.Component {
     }
 
     render() {
-
+      let d = this.props.navigation;
 
     // console.log(this.state.allA,'wwww----------');
 
@@ -94,7 +94,7 @@ class NewProgScreen extends React.Component {
             <View style={styles.buttonBack}>
             <Button title="SUBMIT" onPress={() => this.handleSubmit()} />
 
-            <Button title="Back" onPress={() => this.props.navigation.push('Uni_Home')} />
+            <Button title="Back" onPress={() => this.props.navigation.push('Uni_Home',{userID : d.state.params.userID})} />
             </View>
         </View>
       );
