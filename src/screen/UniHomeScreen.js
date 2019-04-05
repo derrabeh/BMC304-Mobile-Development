@@ -4,6 +4,8 @@ import { View, Text , BackHandler,
 import { Header, Input, Card, CardItem } from '../components/common';
 import firebase from 'firebase';
 import { Button } from 'react-native-elements';
+import { SearchBar } from '../components/common/SearchBar';
+
 
 
 class UniHomeScreen extends React.Component {
@@ -13,20 +15,45 @@ class UniHomeScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            allProg:{}
+            allProg:{},
+            searchText : ''
           };
     }
     componentDidMount(){
-        firebase.database().ref('/prog').once('value', function (snapshot) {
-            // console.log(snapshot.val())
-            // console.log(snapshot.numChildren(),'count'); //get 3
-            for (var p in snapshot.val()) {
-                // console.log(p,'-----sss');  //get prog1 prog2 prog3
-                }
-            this.setState({
-                allProg: snapshot.val(),
-            });
-        }.bind(this));
+      this.setAllData();
+    }
+
+    setAllData(){
+      firebase.database().ref('/prog').once('value', function (snapshot) {
+        // console.log(snapshot.val())
+        // console.log(snapshot.numChildren(),'count'); //get 3
+        for (var p in snapshot.val()) {
+            // console.log(p,'-----sss');  //get prog1 prog2 prog3
+            }
+        this.setState({
+            allProg: snapshot.val(),
+        });
+    }.bind(this));
+    }
+
+    filterProgram(searchText){
+      console.log(searchText);
+      // this.setAllData();
+      const filteredData = this.state.allProg.filter(
+        (q) => {
+            const name = q.prog_name.toUpperCase();
+            const value = searchText.toUpperCase();
+            
+            return name.indexOf(value) > -1;
+        }
+    );
+
+    // console.log(filteredData);
+    
+      this.setState({
+        allProg : filteredData,
+        searchText: searchText
+    })
     }
 
     render() {
@@ -38,12 +65,16 @@ class UniHomeScreen extends React.Component {
       return (
         <View>
             <Header headerText={'University Admin - Home Page'} navigation={this.props.navigation} />
+            <SearchBar 
+                        onChangeText={(searchText) => this.filterProgram(searchText)} 
+                        value={this.state.searchText}
+                        placeholder='Search for qualification'
+                    />
             {
             Object.keys(g).map((d, i) => {
                 if(g[d].uni == 'HELP'){
                     return( 
-                        
-                        
+                      
                     // <Card>
                     //     <CardItem>
                     //     <Text>
