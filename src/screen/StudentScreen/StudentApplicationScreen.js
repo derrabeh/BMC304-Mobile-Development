@@ -15,6 +15,7 @@ class StudentApplicationScreen extends React.Component {
         console.log(this.state.userID);
         
         const dir = firebase.database().ref().child('applications');
+      
         console.log("This is directory :" + dir);
 
         dir.once('value').then(snapshot => {
@@ -34,7 +35,7 @@ class StudentApplicationScreen extends React.Component {
             // console.log(applications);
 
             const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
+          
             this.setState({
                 dataSource: ds.cloneWithRows(applications), 
                 isLoading: false

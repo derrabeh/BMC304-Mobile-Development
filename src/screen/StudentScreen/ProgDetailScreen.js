@@ -8,13 +8,8 @@ class ProgDetailScreen extends React.Component {
         title: 'App_Detail',
     };
 
-    applyProg(key){
+    applyProg(key,applicantID){
       console.log(key,'www')
-      let aiKey = '';
-
-
-      firebase.database().ref('application_test').once('value',(snapshot)=>{
-
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
@@ -29,17 +24,16 @@ class ProgDetailScreen extends React.Component {
         today = dd + '/' + mm + '/' + yyyy;
 
         let all = this.props.navigation;
-          let ai = parseInt(snapshot.numChildren()) + 1;
-          aiKey = 'app'+ai;
 
           try{
-            var appRef = firebase.database().ref('application_test');
-            appRef.child(aiKey).set({
-              applicant: all.state.params.userID,
-              applied_prog: all.state.params.prog_id,
-              date : today,
-              status : 'PENDING',
-              uni : all.state.params.uni
+            const dir = firebase.database().ref('/applications').push();
+            const pk = dir.key;
+
+            dir.set({
+              applicantID: applicantID,
+              date: today,
+              programID: "PROGIDHERE",
+              status: 'PENDING'
             });
 
             ToastAndroid.show('Applied Successfully!', ToastAndroid.SHORT);
@@ -51,16 +45,6 @@ class ProgDetailScreen extends React.Component {
             ToastAndroid.show(e, ToastAndroid.SHORT);
 
           }
-
-          
-
-          
-
-
-        
-        
-      })
-
       
 
       
@@ -83,15 +67,17 @@ class ProgDetailScreen extends React.Component {
       let d = this.props.navigation;
       return (
         <View>
-            <Header headerText={'Applicant Details'} navigation={this.props.navigation} />
+            <Header headerText={'Program Details'} navigation={this.props.navigation} />
             <Text>Program Details {'\n'}</Text>
 
             <Text>Prog ID: {d.state.params.prog_id}</Text>
+            <Text>KEY: {d.state.params.key}</Text>
             <Text>UNI: {d.state.params.uni}</Text>
+            <Text>Applicant : {d.state.params.userID}</Text>
             
             <Text>Programme: {d.state.params.prog_name}</Text>
 
-            <Button title="Apply" color="green" onPress={() => this.applyProg(d.state.params.key)}/>
+            <Button title="Apply" color="green" onPress={() => this.applyProg(d.state.params.key,d.state.params.userID)}/>
             <Button title="Cancel" color="red" onPress={() => this.props.navigation.naviga('Student_Home')}/>
 
             <Text>{'\n'}</Text>
@@ -101,7 +87,7 @@ class ProgDetailScreen extends React.Component {
 
 
 
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Uni_Home')} />
+            <Button title="Back" onPress={() => this.props.navigation.navigate('Student_Home',{userID : d.state.params.userID })} />
         </View>
       );
     }

@@ -14,6 +14,7 @@ class ApplicantHomeScreen extends React.Component {
                 buttonStyle, buttonTextStyle } = styles;
         const logo = require('../../../assets/logo.png');
         const background = require('../../../assets/background.jpg');
+        let d = this.props.navigation;
 
       return (
         <ImageBackground style={containerStyle} source={background} blurRadius={2} >
@@ -30,7 +31,7 @@ class ApplicantHomeScreen extends React.Component {
                 </View>
                 <TouchableOpacity 
                     style={buttonStyle}
-                    onPress={()=> this.props.navigation.navigate('ProgList', { catName: 'Information Technology', cat: 'IT' })}>
+                    onPress={()=> this.props.navigation.navigate('ProgList', { catName: 'Information Technology', cat: 'IT', searchVAL : 'inform', userID : d.state.params.userID })}>
                     <Text style={buttonTextStyle}>Search</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
