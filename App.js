@@ -1,18 +1,19 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import firebase from 'firebase';
-import { createStackNavigator, createAppContainer, 
-          createBottomTabNavigator } from 'react-navigation'; 
+import { createStackNavigator, createAppContainer,
+          createBottomTabNavigator } from 'react-navigation';
 import { LoginScreen, SignUpScreen, DetailsScreen } from './src/screen';
 import { AdminHomeScreen, NewQualificationScreen, QualificationDetailsScreen,
-          QualificationScreen } from './src/screen/SASAdminScreen';
-import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen, 
-          StudentApplicationScreen } from './src/screen/StudentScreen';
+          QualificationScreen, AddUniversity } from './src/screen/SASAdminScreen';
+import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen,
+          StudentApplicationScreen, StudentQualification, AddQualification
+         } from './src/screen/StudentScreen';
 import { AppDetails, ProgApplicationScreen, UniHomeScreen } from './src/screen/UniAdminScreen';
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
-  University: { screen: DetailsScreen }
+  University: { screen: AddUniversity  }
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -29,8 +30,8 @@ const SASAdminTabNavigator = createBottomTabNavigator({
 
 const StudentTabNavigator = createBottomTabNavigator({
   Home: { screen: ApplicantHomeScreen },
-  History: { screen: StudentApplicationScreen }, 
-  Profile: { screen: DetailsScreen }
+  History: { screen: StudentApplicationScreen },
+  Profile: { screen: DetailsScreen},
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -58,9 +59,12 @@ const RootStack = createStackNavigator(
     App_Prog: ProgApplicationScreen,
     App_Detail: AppDetails,
     ProgList: ProgListScreen,
-    ProgDetail: ProgDetailScreen, 
+    ProgDetail: ProgDetailScreen,
     NewQualification: NewQualificationScreen,
-    QualificationDetail: QualificationDetailsScreen
+    QualificationDetail: QualificationDetailsScreen,
+    StudentQualification: DetailsScreen,
+    AddQualification: DetailsScreen,
+    AddUniversity: AddUniversity,
   },
   {
     //need to change later

@@ -1,6 +1,6 @@
 import React from 'react';
 import firebase from 'firebase';
-import { View, Image, ToastAndroid, ImageBackground, Text, 
+import { View, Image, ToastAndroid, ImageBackground, Text,
         KeyboardAvoidingView } from 'react-native';
 import { LoginInput, LoginButton, Container, Spinner } from '../components/common';
 // import console = require('console');
@@ -44,7 +44,7 @@ class LoginScreen extends React.Component {
           });
 
           this.setState({ email: '', password: '' });
-          
+
         }
         catch (error) {
           ToastAndroid.show(error.message, ToastAndroid.SHORT);
@@ -58,7 +58,7 @@ class LoginScreen extends React.Component {
           console.log(error.message);
         });
 
-        
+
   }
 
   render() {
@@ -115,34 +115,34 @@ class LoginScreen extends React.Component {
         </KeyboardAvoidingView>
       </ImageBackground>
     );
-  }  
+  }
 }
 
 const styles = {
     containerStyle: {
-      justifyContent:'center', 
+      justifyContent:'center',
       flex: 1,
       backgroundColor: 'red'
-    }, 
+    },
     logoContainerStyle: {
       alignItems: 'center',
       paddingBottom: 20
-    }, 
+    },
     logoStyle: {
       width: 200,
       height: 200
-    }, 
+    },
     buttonsContainerStyle: {
       marginTop: 25,
       marginLeft: 50,
       marginRight: 50
-    }, 
+    },
     buttonContainerStyle: {
       height: 40,
       marginBottom: 10
-    }, 
+    },
     textContainerStyle: {
-      flexDirection: 'row', 
+      flexDirection: 'row',
       justifyContent: 'center',
       marginTop: 5,
       marginBottom: 5,

@@ -12,7 +12,7 @@ class StudentApplicationScreen extends React.Component {
         this.state.userID = navigation.getParam('userID', null);
 
         console.log(this.state.userID);
-        
+
         const dir = firebase.database().ref().child('application/' + this.state.userID);
         console.log("This is directory :" + dir);
 
@@ -36,21 +36,21 @@ class StudentApplicationScreen extends React.Component {
 
             if (snapshot.val() == null) {
                 dir.set(
-                {    
+                {
                     application: {
-                        programme: 'BIT', 
-                        university: 'HELP', 
-                        status: 'NEW', 
+                        programme: 'BIT',
+                        university: 'HELP',
+                        status: 'NEW',
                         date: date
                     }
                 });
             }
             else {
-                dir.child('application2').set(   
+                dir.child('application2').set(
                     {
-                        programme: 'BIT', 
-                        university: 'Sunway', 
-                        status: 'NEW', 
+                        programme: 'BIT',
+                        university: 'Sunway',
+                        status: 'NEW',
                         date: date
                     }
                 )
@@ -59,7 +59,7 @@ class StudentApplicationScreen extends React.Component {
     }
 
     renderApplications() {
-        return this.state.applications.map(application => 
+        return this.state.applications.map(application =>
             <CardItem>
                 <Text>{application.university}</Text>
             </CardItem>);
