@@ -5,7 +5,8 @@ import { View, ToastAndroid, ImageBackground, Text,
 import { LoginInput, LoginButton, Container } from '../components/common';
 
 class SignUpScreen extends React.Component {
-  state = { email: '', password: '', userType: '', userIndex: 0 };
+  state = { email: 'user111@user.com', password: '123456', userType: 'Student', username: 'username', 
+            mobile: '123', dob: '123', idType: '123', idNum: '123' };
 
   // on login button press
   onButtonPress() {
@@ -27,34 +28,23 @@ class SignUpScreen extends React.Component {
             .then(() => {
               const uid = firebase.auth().currentUser.uid;
 
-              const table = firebase.database().ref().child('users/' + uid);
-      
-              if (userIndex === 1) {
-                table.set({
-                  userType: 1,
-                  email: email
-                });
-                this.props.navigation.navigate('Uni_Home');
-              }
-              else if (userIndex === 2) {
-                table.set({
-                  userType: 2,
-                  email: email
-                });
-                this.props.navigation.navigate('Home');
-              }
-              else if (userIndex === 3) {
-                table.set({
-                  userType: 3,
-                  email: email
-                });
-                this.props.navigation.navigate('Admin_Home');
-              }
-              else {
-                table.set({
-                  userType: null
-                });
-              }
+              const userDir = firebase.database().ref().child('users/' + uid);   
+              userDir.set({
+                userType: this.state.userType,
+                email, 
+                username: this.state.username
+              });
+
+              const applicantDir = firebase.database().ref().child('applicants/' + uid);
+              applicantDir.set({
+                idType: this.state.idType, 
+                idNum: this.state.idNum, 
+                mobileNum: this.state.mobile, 
+                dob: this.state.dob
+              });
+
+              this.props.navigation.navigate('Student_Home', { userID: uid });
+
             });      
         })
           .catch((error) => {
@@ -97,22 +87,56 @@ class SignUpScreen extends React.Component {
               icon={lockIcon}
             />
           </Container>
-          <View style={userTypeContainerStyle}>
-            <View style={iconContainerStyle}>
-              <Image source={userIcon} style={userIconStyle} />
-            </View>
-            <Picker
-              selectedValue={this.state.userType}
-              style={pickerStyle}
-              onValueChange={(itemValue, itemIndex) =>
-                this.setState({ userType: itemValue, userIndex: itemIndex })
-              }>
-              <Picker.Item label="Select account type" value="null" />
-              <Picker.Item label="Student" value="student" />
-              <Picker.Item label="University Admin" value="university" />
-              <Picker.Item label="Application Admin" value="app" />
-            </Picker>
-          </View>
+          <Container>
+            <LoginInput
+              onChangeText={username => this.setState({ username })}
+              value={this.state.username}
+              label="Username"
+              placeholder="Enter your username"
+              blurRadius={1}
+              icon={userIcon}
+            />
+          </Container>
+          <Container>
+            <LoginInput
+              onChangeText={mobile => this.setState({ mobile })}
+              value={this.state.mobile}
+              label="Phone"
+              placeholder="Enter your mobile number"
+              blurRadius={1}
+              icon={emailIcon}
+            />
+          </Container>
+          <Container>
+            <LoginInput
+              onChangeText={dob => this.setState({ dob })}
+              value={this.state.dob}
+              label="Email"
+              placeholder="Enter your DOB"
+              blurRadius={1}
+              icon={emailIcon}
+            />
+          </Container>
+          <Container>
+            <LoginInput
+              onChangeText={idType => this.setState({ idType })}
+              value={this.state.idType}
+              label="ID Type"
+              placeholder="Enter your ID Type"
+              blurRadius={1}
+              icon={emailIcon}
+            />
+          </Container>
+          <Container>
+            <LoginInput
+              onChangeText={idNum => this.setState({ idNum })}
+              value={this.state.idNum}
+              label="ID num"
+              placeholder="Enter your ID number"
+              blurRadius={1}
+              icon={emailIcon}
+            />
+          </Container>
           <View style={buttonsContainerStyle}>
             <View style={buttonContainerStyle}>
               <LoginButton onPress={this.onButtonPress.bind(this)} children="Create Account" />
