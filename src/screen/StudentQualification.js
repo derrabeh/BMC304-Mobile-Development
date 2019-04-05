@@ -33,14 +33,14 @@ class StudentQualification extends React.Component {
 	}
 
 	render(){
-		const { Q_type , score } = this.state;
+		const { Q_type , score, userID } = this.state;
 
 		QualificationCond =() => {
 		  if (this.state.Q_type == ""){
 		    return(
 		      <View>
 		      <TouchableOpacity style={styles.addButton}
-		      onPress={() => {this.props.navigation.navigate('AddQualification')}}
+		      onPress={() => {this.props.navigation.navigate('AddQualification', { userID: this.state.userID })}}
 		      >
 		      <Text style={styles.addButtonText}>+</Text>
 		      </TouchableOpacity>
@@ -57,7 +57,7 @@ class StudentQualification extends React.Component {
 		        onSwipeStart={() => this.setState({isSwiping: true})}
 		        onSwipeRelease={() => this.setState({isSwiping: false})}
 		        rightButtons = {[
-		          <TouchableHighlight style={styles.swipeBtn} onPress={() => {this.props.navigation.navigate('AddQualification'), { userID: this.state.userID }}}>
+		          <TouchableHighlight style={styles.swipeBtn} onPress={() => {this.props.navigation.navigate('AddQualification', { userID: this.state.userID })}} >
 		          <Text style={styles.swipeText}> EDIT</Text>
 		          </TouchableHighlight>
 		        ]}

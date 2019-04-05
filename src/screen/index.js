@@ -15,3 +15,4 @@ export * from './QualificationDetailsScreen';
 export * from './ApplicantHomeScreen';
 export * from './StudentQualification';
 export * from './AddQualification';
+export * from './AddUniversity';

@@ -4,7 +4,8 @@ import firebase from 'firebase';
 import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
 import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
           QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen, ProgListScreen,
-        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen, ApplicantHomeScreen, StudentQualification, AddQualification } from './src/screen';
+        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen, ApplicantHomeScreen, StudentQualification,
+         AddQualification, AddUniversity } from './src/screen';
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
@@ -26,7 +27,7 @@ const SASAdminTabNavigator = createBottomTabNavigator({
 const StudentTabNavigator = createBottomTabNavigator({
   Home: { screen: ApplicantHomeScreen },
   History: { screen: StudentApplicationScreen },
-  Profile: { screen: StudentQualification },
+  Profile: { screen: AddUniversity },
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -58,7 +59,8 @@ const RootStack = createStackNavigator(
     NewQualification: NewQualificationScreen,
     QualificationDetail: QualificationDetailsScreen,
     StudentQualification: StudentQualification,
-    AddQualification: AddQualification
+    AddQualification: AddQualification,
+    AddUniveristy: AddUniversity,
   },
   {
     //need to change later
