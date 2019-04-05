@@ -34,7 +34,9 @@ class AddUniversity extends React.Component {
     label="University" placeholder="Enter University Name" blurRadius={1}
     />
 
-    <Button title="Save" onPress={this.saveUni}>
+    <Button title="Save" onPress={this.saveUni}></Button>
+    <Button title="Add University Admin"
+    onPress={() => {this.props.navigation.navigate('AddUniAdmin', { uniName: this.state.uniName })}}>
     </Button>
     </View>
   )

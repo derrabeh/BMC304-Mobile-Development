@@ -1,7 +1,7 @@
 import React from 'react';
 import { Picker, TouchableHighlight, Button, ScrollView,RefreshControl, StyleSheet, Text,TextInput, View, TouchableOpacity } from 'react-native';
 import Swipeable from 'react-native-swipeable-row';
-import { Header, Input, Card} from '../components/common';
+import { Header, Input, Card} from '../../components/common';
 import firebase from 'firebase';
 
 class StudentQualification extends React.Component {
@@ -125,5 +125,4 @@ class StudentQualification extends React.Component {
 
 		});
 
-
-		export {StudentQualification };
+		export { StudentQualification };
