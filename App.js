@@ -1,11 +1,15 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import firebase from 'firebase';
-import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation';
-import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
-          QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen, ProgListScreen,
-        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen, ApplicantHomeScreen, StudentQualification,
-         AddQualification, AddUniversity } from './src/screen';
+import { createStackNavigator, createAppContainer,
+          createBottomTabNavigator } from 'react-navigation';
+import { LoginScreen, SignUpScreen, DetailsScreen } from './src/screen';
+import { AdminHomeScreen, NewQualificationScreen, QualificationDetailsScreen,
+          QualificationScreen, AddUniversity } from './src/screen/SASAdminScreen';
+import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen,
+          StudentApplicationScreen, StudentQualification, AddQualification
+         } from './src/screen/StudentScreen';
+import { AppDetails, ProgApplicationScreen, UniHomeScreen } from './src/screen/UniAdminScreen';
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
