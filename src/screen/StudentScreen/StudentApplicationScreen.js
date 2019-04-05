@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Header, CardItem, Card } from '../components/common';
+import { Header, CardItem, Card } from '../../components/common';
 import firebase from 'firebase';
 import { SwipeListView } from 'react-native-swipe-list-view';
 

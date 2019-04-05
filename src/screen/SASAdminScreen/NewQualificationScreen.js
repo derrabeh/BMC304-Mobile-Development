@@ -70,6 +70,7 @@ class NewQualificationScreen extends React.Component {
                         style={headerInputStyle}
                         onChangeText={console.log('hello world')}
                         value={this.state.name}
+                        placeholder='Qualification Name'
                     />
                 </View>
                 
@@ -140,7 +141,7 @@ class NewQualificationScreen extends React.Component {
   const styles = {
       containerStyle: {
           flex: 1, 
-          backgroundColor: 'yellow'
+          backgroundColor: '#34495e'
       }, 
       headerStyle: {
           flex: 3, 
@@ -149,18 +150,18 @@ class NewQualificationScreen extends React.Component {
       }, 
       bodyStyle: {
           flex: 7, 
-          backgroundColor: 'blue',
+          backgroundColor: 'white',
           paddingLeft: 40, 
           paddingRight: 40
       }, 
       iconContainerStyle: {
-          backgroundColor: 'green', 
+          backgroundColor: '#34495e', 
           justifyContent: 'flex-start', 
           padding: 10, 
           flex: 2
       }, 
       headerInputContainerStyle: {
-          backgroundColor: 'yellow', 
+          backgroundColor: '#34495e', 
           alignItems: 'stretch', 
           flex: 8, 
           justifyContent: 'center'
@@ -169,8 +170,10 @@ class NewQualificationScreen extends React.Component {
           marginLeft: 15, 
           marginRight: 15,
           height: 40, 
-          borderColor: 'gray', 
-          borderWidth: 1
+          borderColor: '#bdc3c7', 
+          borderBottomWidth: 1, 
+          fontSize: 30,
+          textAlign: 'center'
       },
       textGroupContainerStyle: {
         flex: 7, 

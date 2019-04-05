@@ -2,7 +2,7 @@ import React from 'react';
 import firebase from 'firebase';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { Spinner } from '../components/common';
+import { Spinner } from '../../components/common';
 
 
 class QualificationDetailsScreen extends React.Component {
