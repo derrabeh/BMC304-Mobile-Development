@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, 
         ImageBackground } from 'react-native';
 import { SearchBar } from '../../components/common/SearchBar';
+// import console = require('console');
 
 class ApplicantHomeScreen extends React.Component {
     constructor(props) {
         super(props);
-        const navigation = this.props.navigation;
-        this.setState({ userID: navigation.state.params.userID });
-        this.state = { searchValue: '' };
+        const userID = this.props.navigation.getParam('userID', 'null');
+        this.state = { searchValue: '', userID };
     }
     
     render() {
