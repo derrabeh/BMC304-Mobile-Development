@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, ListView, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
 import firebase from 'firebase';
 import { Avatar, Icon } from 'react-native-elements';
-import { SearchBar } from '../components/common/SearchBar';
-import { Spinner } from '../components/common';
+import { SearchBar } from '../../components/common/SearchBar';
+import { Spinner } from '../../components/common';
 import Swipable from 'react-native-swipeable-row';
 
 // import console = require('console');

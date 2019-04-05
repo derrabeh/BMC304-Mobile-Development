@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button, ToastAndroid } from 'react-native';
-import { Header, Input } from '../components/common';
+import { Header, Input } from '../../components/common';
 import firebase from 'firebase';
 
 class ProgDetailScreen extends React.Component {

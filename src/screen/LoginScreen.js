@@ -6,7 +6,7 @@ import { LoginInput, LoginButton, Container, Spinner } from '../components/commo
 // import console = require('console');
 
 class LoginScreen extends React.Component {
-  state = { email: 'ua@ua.com', password: '123123', user: '', isLoading: false };
+  state = { email: 'user11@user.com', password: '123456789', user: '', isLoading: false };
 
   // on login button press
   onButtonPress() {
@@ -53,6 +53,7 @@ class LoginScreen extends React.Component {
         }
       })
         .catch((error) => {
+          this.setState({ isLoading: false });
           ToastAndroid.show('Wrong username or password !', ToastAndroid.SHORT);
           console.log(error.message);
         });

@@ -46,7 +46,7 @@ render(){
       <Card>
       <TouchableOpacity style={styles.itemStyle} onPress={() => this.props.navigation.navigate('ProgList',{
         cat:item.cat_short,
-        catName:item.cat_name,
+        catName:'Information Technology',
         userID : prv.state.params.userID,
         })}>
           <Text style={styles.item}> {item.cat_name} </Text>

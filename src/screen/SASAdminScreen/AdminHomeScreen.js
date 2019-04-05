@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Button, Text, ImageBackground, Image, TouchableOpacity } from 'react-native';
-import { Header } from '../components/common';
+import { Header } from '../../components/common';
 
 class AdminHomeScreen extends React.Component {
   state = { userID: '' };
@@ -13,8 +13,8 @@ class AdminHomeScreen extends React.Component {
   
   render() {
       const { buttonStyle, headerStyle, bodyStyle, containerStyle } = styles;
-      const logo = require('../../assets/logo.png');
-      const background = require('../../assets/background.jpg');
+      const logo = require('../../../assets/logo.png');
+      const background = require('../../../assets/background.jpg');
 
       return (
         <View style={containerStyle}>

@@ -1,12 +1,14 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import firebase from 'firebase';
-import { createStackNavigator, createAppContainer, createBottomTabNavigator } from 'react-navigation'; 
-// import { AppDrawerNavigator } from './src/navigation/DrawerNavigator';
-import { LoginScreen, SignUpScreen, UniHomeScreen, AdminHomeScreen, StudentHomeScreen, DetailsScreen,
-          QualificationScreen, StudentApplicationScreen, AppDetails, ProgApplicationScreen, ProgListScreen,
-        ProgDetailScreen, NewQualificationScreen, QualificationDetailsScreen, 
-        ApplicantHomeScreen } from './src/screen';
+import { createStackNavigator, createAppContainer, 
+          createBottomTabNavigator } from 'react-navigation'; 
+import { LoginScreen, SignUpScreen, DetailsScreen } from './src/screen';
+import { AdminHomeScreen, NewQualificationScreen, QualificationDetailsScreen,
+          QualificationScreen } from './src/screen/SASAdminScreen';
+import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen, 
+          StudentApplicationScreen } from './src/screen/StudentScreen';
+import { AppDetails, ProgApplicationScreen, UniHomeScreen } from './src/screen/UniAdminScreen';
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
@@ -62,7 +64,7 @@ const RootStack = createStackNavigator(
   },
   {
     //need to change later
-    initialRouteName: 'Uni_Home',
+    initialRouteName: 'Login',
     headerMode: 'none',
     navigationOptions: {
       headerVisible: false,
