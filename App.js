@@ -9,7 +9,7 @@ import { AdminHomeScreen, NewQualificationScreen, QualificationDetailsScreen,
 import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen,
           StudentApplicationScreen, StudentQualification, AddQualification
          } from './src/screen/StudentScreen';
-import { AppDetails, ProgApplicationScreen, UniHomeScreen } from './src/screen/UniAdminScreen';
+import { AppDetails, ProgApplicationScreen, UniHomeScreen,NewProgScreen } from './src/screen/UniAdminScreen';
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
@@ -62,10 +62,11 @@ const RootStack = createStackNavigator(
     ProgDetail: ProgDetailScreen,
     NewQualification: NewQualificationScreen,
     QualificationDetail: QualificationDetailsScreen,
+    NewProgram : NewProgScreen,
     StudentQualification: StudentQualification,
     AddQualification: AddQualification,
     AddUniversity: AddUniversity,
-    AddUniAdmin: AddUniAdmin,
+    AddUniAdmin: AddUniAdmin
   },
   {
     //need to change later
