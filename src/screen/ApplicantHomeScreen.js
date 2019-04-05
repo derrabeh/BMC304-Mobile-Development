@@ -4,9 +4,11 @@ import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView,
 import { SearchBar } from '../components/common/SearchBar';
 
 class ApplicantHomeScreen extends React.Component {
-    state = { searchValue: '' };
+    constructor(props) {
+        super(props)
+        this.state = { searchValue: '' };
+    }
     
-
     render() {
         const { containerStyle, searchBarContainer, imageContainerStyle,
                 buttonStyle, buttonTextStyle } = styles;
@@ -26,7 +28,9 @@ class ApplicantHomeScreen extends React.Component {
                         placeholder='Type in a programme name'
                     />
                 </View>
-                <TouchableOpacity style={buttonStyle}>
+                <TouchableOpacity 
+                    style={buttonStyle}
+                    onPress={()=> this.props.navigation.navigate('ProgList', { catName: 'Information Technology', cat: 'IT' })}>
                     <Text style={buttonTextStyle}>Search</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
