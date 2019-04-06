@@ -46,6 +46,7 @@ const StudentTabNavigator = createBottomTabNavigator({
   }
 );
 
+
 const RootStack = createStackNavigator(
   {
     Login: LoginScreen,
@@ -55,7 +56,7 @@ const RootStack = createStackNavigator(
     Student_Home: StudentTabNavigator,
     Details: DetailsScreen,
     Qualification: SASAdminTabNavigator,
-    StudentApplication: StudentApplicationScreen,
+    StudentApplication: StudentTabNavigator,
     App_Prog: ProgApplicationScreen,
     App_Detail: AppDetails,
     ProgList: ProgListScreen,
