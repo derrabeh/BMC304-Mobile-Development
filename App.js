@@ -8,10 +8,12 @@ import { AdminHomeScreen, NewQualificationScreen, QualificationDetailsScreen,
           QualificationScreen, AddUniversity, AddUniAdmin,
           EditQualificationScreen } from './src/screen/SASAdminScreen';
 import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen,
+
           StudentApplicationScreen, StudentQualification, AddQualification } 
           from './src/screen/StudentScreen';
 import { AppDetails, ProgApplicationScreen, UniHomeScreen, NewProgScreen,
           EditProgScreen } from './src/screen/UniAdminScreen';
+
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
@@ -49,11 +51,29 @@ const StudentTabNavigator = createBottomTabNavigator({
 );
 
 
+const UniAdminTabNavigator = createBottomTabNavigator({
+  Home: { screen: UniHomeScreen },
+  Profile: { screen: UniAdminProfileScreen },
+  }, {
+    tabBarOptions: {
+      activeTintColor: 'white',
+        inactiveTintColor: 'gray',
+        style: {
+            backgroundColor: '#2c3e50',
+        },
+        indicatorStyle: {
+            backgroundColor: '#000',
+        },
+    }
+  }
+);
+
+
 const RootStack = createStackNavigator(
   {
     Login: LoginScreen,
     SignUp: SignUpScreen,
-    Uni_Home: UniHomeScreen,
+    Uni_Home: UniAdminTabNavigator,
     Admin_Home: AdminHomeScreen,
     Student_Home: StudentTabNavigator,
     Details: DetailsScreen,
