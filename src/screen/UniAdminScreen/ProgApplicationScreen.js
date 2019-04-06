@@ -56,12 +56,19 @@ setAppObject(user_id,data,key){
   })
 }
 
-
-
     render() {
     let d = this.props.navigation;
     let g = JSON.stringify(this.state.allA);
     let allApp = JSON.parse(g);
+    if(allApp.length == 0){
+        console.log('No App');
+        console.log('-----')
+    }
+    else{
+      console.log('yes');
+      console.log('-----')
+
+    }
 
 
     // console.log(this.state.allA,'wwww----------');
@@ -111,7 +118,7 @@ setAppObject(user_id,data,key){
             })
             }
             <View style={styles.buttonBack}>
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Uni_Home')} />
+            <Button title="Back" onPress={() => this.props.navigation.push('Uni_Home', {userID : d.state.params.userID})} />
             </View>
         </View>
       );

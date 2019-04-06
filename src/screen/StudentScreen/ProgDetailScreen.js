@@ -83,7 +83,19 @@ class ProgDetailScreen extends React.Component {
 
             ToastAndroid.show('Applied Successfully!', ToastAndroid.SHORT);
             setTimeout(()=>{
-                this.props.navigation.push('History',{userID:all.state.params.userID})
+              let navigation = this.props.navigation;
+              const navigateAction = navigation.navigate({
+                routeName: '',
+                params: {},
+              
+                // navigate can have a nested navigate action that will be run inside the child router
+                action: navigation.navigate({ routeName: 'Student_Home' }),
+              });
+
+              Promise.all([
+                navigation.dispatch(navigateAction)
+              ]).then(() => navigation.navigate('History'))
+                // this.props.navigation.push('Student_Home',{userID:all.state.params.userID})
             },1000)
 
           }catch(e){

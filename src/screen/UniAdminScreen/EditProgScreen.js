@@ -4,11 +4,17 @@ import { Header, Input } from '../../components/common';
 import firebase from 'firebase';
 
 
-class NewProgScreen extends React.Component {
+class EditProgScreen extends React.Component {
 
     constructor(props){
         super(props);
-        this.state = { desc: '' , closingDate : '', progName : ''}
+       
+        this.state = { 
+            desc: '' , 
+            closingDate : '', 
+            progName : '',
+            key : '',
+        }
 
         this.handleDescChange = this.handleDescChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -17,11 +23,13 @@ class NewProgScreen extends React.Component {
     }
 
     componentDidMount(){
-      this.setState({
-        desc : '',
-        closingDate : '',
-        progName : ''
-      })
+        let p = this.props.navigation;
+        this.setState({
+            desc: p.state.params.progDesc , 
+            closingDate : p.state.params.closingDate, 
+            progName : p.state.params.progName,
+            key : p.state.params.key,
+        })
     }
 
     handleDescChange(desc){
@@ -46,25 +54,42 @@ class NewProgScreen extends React.Component {
         let d = this.props.navigation;
         console.log(this.state.desc)
         console.log(this.state.closingDate)
-        try{
-            const dir = firebase.database().ref('/program').push();
-            const pk = dir.key;
-    
-            dir.set({
+        try {
+            var program = firebase.database().ref('program/'+this.state.key);
+            program.update({ 
                 closingDate: this.state.closingDate,
                 description: this.state.desc,
                 progName: this.state.progName,
-                uniID: '-LbglPfKTozIcAXzYlK0',
             });
-
-            ToastAndroid.show('Program '+this.state.progName+'  Created!', ToastAndroid.SHORT);
+            ToastAndroid.show('Program Updated!', ToastAndroid.SHORT);
             setTimeout(()=>{
-              this.props.navigation.push('Uni_Home',{ userID : d.state.params.userID})
+              this.props.navigation.push('Uni_Home', {userID : d.state.params.userID})
             },1000);
-        }catch(e){
-            ToastAndroid.show(e, ToastAndroid.SHORT);
+          }
+          catch (error) {
+            ToastAndroid.show(error.message, ToastAndroid.SHORT);
+          }
 
-        }
+
+        // try{
+        //     const dir = firebase.database().ref('/program').push();
+        //     const pk = dir.key;
+    
+        //     dir.set({
+        //         closingDate: this.state.closingDate,
+        //         description: this.state.desc,
+        //         progName: this.state.progName,
+        //         uniID: '-LbglPfKTozIcAXzYlK0',
+        //     });
+
+        //     ToastAndroid.show('Program '+this.state.progName+'  Created!', ToastAndroid.SHORT);
+        //     setTimeout(()=>{
+        //       this.props.navigation.push('Uni_Home',{ userID : d.state.params.userID})
+        //     },1000);
+        // }catch(e){
+        //     ToastAndroid.show(e, ToastAndroid.SHORT);
+
+        // }
     }
 
     render() {
@@ -75,7 +100,7 @@ class NewProgScreen extends React.Component {
       return (
 
         <View>
-            <Header headerText={'NEW PROG'}/>
+            <Header headerText={'Edit Program'}/>
             <View style={styles.inputContainer}>
             <TextInput
                 style={styles.textInput}
@@ -131,4 +156,4 @@ const styles = {
   }
 };
 
-export { NewProgScreen };
+export { EditProgScreen };
