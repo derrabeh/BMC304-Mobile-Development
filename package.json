@@ -16,6 +16,7 @@
     "react-native-datepicker-modal": "^1.1.0",
     "react-native-elements": "^1.1.0",
     "react-native-icons": "^0.7.1",
+    "react-native-mailcore": "0.0.3",
     "react-native-swipe-list-view": "^1.5.3",
     "react-native-swipeable-row": "^0.8.1",
     "react-navigation": "^3.3.2",
