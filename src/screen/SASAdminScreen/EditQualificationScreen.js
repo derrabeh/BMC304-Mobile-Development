@@ -3,11 +3,32 @@ import { View, Text, TextInput, KeyboardAvoidingView,
         TouchableOpacity, ToastAndroid } from 'react-native';
 import firebase from 'firebase';
 import { Icon } from 'react-native-elements';
+import { Spinner } from '../../components/common';
 
 // import console = require('console');
 
-class NewQualificationScreen extends React.Component {
-    state = { name: '', min: '', max: '', grades: '', description: '' }
+class EditQualificationScreen extends React.Component {
+    state = { name: '', min: '', max: '', grades: '', 
+                description: '', isLoading: true, key: '' }
+
+    componentWillMount() {
+        const key = this.props.navigation.getParam('qualificationID', null);
+
+        this.setState({ key });
+
+        const ref = firebase.database().ref('qualification/' + key);
+
+        ref.once('value')
+            .then((snapshot) => {
+                this.setState({ name: snapshot.val().name });
+                this.setState({ max: snapshot.val().maxScore });
+                this.setState({ min: snapshot.val().minScore });
+                this.setState({ grades: snapshot.val().grades });
+                this.setState({ description: snapshot.val().description });
+                this.setState({ isLoading: false });
+            }
+        );
+    }
 
     saveQualification = () => {
 
@@ -16,6 +37,7 @@ class NewQualificationScreen extends React.Component {
         const max = this.state.max;
         const grades = this.state.grades;
         const description = this.state.description;
+        const key = this.state.key;
         
 
         if (name !== '' && min !== '' && max !== '' && 
@@ -23,11 +45,10 @@ class NewQualificationScreen extends React.Component {
 
             try {
                 console.log('sucess');
-                const dir = firebase.database().ref('/qualification').push();
-                const primaryKey = dir.key;
+                const dir = firebase.database().ref('/qualification/' + this.state.key);
 
                 dir.set({
-                    key: primaryKey,
+                    key,
                     name, 
                     minScore: min, 
                     maxScore: max, 
@@ -35,7 +56,7 @@ class NewQualificationScreen extends React.Component {
                     description
                 });
 
-                this.props.navigation.push('Qualification');
+                this.props.navigation.push('QualificationDetail', { qualificationID: this.state.key });
             }
             catch (error) {
                 console.log(error);
@@ -54,6 +75,14 @@ class NewQualificationScreen extends React.Component {
                 textGroupStyle, textHeaderStyle, textGroupStyle2, 
                 buttonStyle, buttonTextStyle, buttonGroupStyle, bodyInputStyle,
                 bodyInputStyle2 } = styles;
+
+        if (this.state.isLoading) {
+            return (
+                <View style={{flex: 1}}>
+                    <Spinner />
+                </View>
+            )
+        }
 
       return (
         <KeyboardAvoidingView style={containerStyle} behavior='padding' enabled >
@@ -74,7 +103,6 @@ class NewQualificationScreen extends React.Component {
                         onChangeText={name => this.setState({ name })}
                         value={this.state.name}
                         placeholder='Qualification Name'
-                        autoFocus
                     />
                 </View>
                 
@@ -105,15 +133,11 @@ class NewQualificationScreen extends React.Component {
                     </View>
                     <View style={textGroupStyle}>
                         <Text style={textHeaderStyle}>List of possible grades</Text>
-                        <View>
                             <TextInput
                                 style={bodyInputStyle2}
                                 onChangeText={grades => this.setState({ grades })}
                                 value={this.state.grades}
                             />
-
-                        </View>
-                            
                     </View>
                     <View style={textGroupStyle}>
                         <Text style={textHeaderStyle}>Description</Text>
@@ -129,7 +153,7 @@ class NewQualificationScreen extends React.Component {
                         onPress={this.saveQualification}
                     >
                         <Text style={buttonTextStyle}>
-                            Add
+                            Update
                         </Text>
                     </TouchableOpacity>
 
@@ -187,7 +211,7 @@ class NewQualificationScreen extends React.Component {
         borderColor: '#bdc3c7', 
         borderWidth: 1, 
         fontSize: 15, 
-        textAlign: 'center', 
+        textAlign: 'center',
         padding: 5,
         marginTop: 10
     },
@@ -195,7 +219,7 @@ class NewQualificationScreen extends React.Component {
         height: 40, 
         borderColor: '#bdc3c7', 
         borderWidth: 1, 
-        fontSize: 15, 
+        fontSize: 15,
         padding: 5,
         marginTop: 10
     },
@@ -256,4 +280,4 @@ class NewQualificationScreen extends React.Component {
     }, 
   }
 
-  export { NewQualificationScreen };
+  export { EditQualificationScreen };

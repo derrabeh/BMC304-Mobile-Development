@@ -102,7 +102,7 @@ class QualificationScreen extends React.Component {
             <TouchableHighlight 
                 style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
                     alignItems: 'center', backgroundColor: '#2ecc71' }}
-                onPress={()=> this.props.navigation.push('QualificationDetail', {
+                onPress={()=> this.props.navigation.push('EditQualification', {
                     qualificationID: rowData.key })}
             >  
                 <View style={{ flex: 1/5 }}>

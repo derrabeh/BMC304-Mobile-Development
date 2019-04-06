@@ -129,7 +129,11 @@ class QualificationDetailsScreen extends React.Component {
                     
                 </View>
                 <View style={buttonGroupStyle}>
-                    <TouchableOpacity style={buttonStyle}>
+                    <TouchableOpacity 
+                        style={buttonStyle}
+                        onPress={() => this.props.navigation.push('EditQualification', 
+                                {qualificationID: this.state.key })}
+                    >
                         <Text style={buttonTextStyle}>
                             Update
                         </Text>
