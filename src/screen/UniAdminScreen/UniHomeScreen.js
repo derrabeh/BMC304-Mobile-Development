@@ -75,19 +75,93 @@ class UniHomeScreen extends React.Component {
 
     // function to render data for list view
     renderRow(rowData) {
+        const { rowContainerStyle, avatarStyle, rowTextContainerStyle, rowText1Style,
+            avatarContainerStyle, iconContainerStyle, rowText2Style } = styles;
+
+            const rightButtons = [
+                <TouchableHighlight 
+                    style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
+                        alignItems: 'center', backgroundColor: '#2ecc71' }}
+                    onPress={()=> this.props.navigation.push('QualificationDetail', {
+                        qualificationID: rowData.key })}
+                >  
+                    <View style={{ flex: 1/5 }}>
+                        <Icon
+                            name='pencil'
+                            type='font-awesome'
+                            color='white'
+                            size={28}
+                            
+                        />
+                    </View>
+                    
+                </TouchableHighlight>,
+                <TouchableHighlight 
+                    style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
+                        alignItems: 'center', backgroundColor: '#e74c3c' }}
+                    onPress={()=> this.askDelete(rowData.key)}
+                >  
+                    <View style={{ flex: 1/5 }}>
+                        <Icon
+                            name='trash'
+                            type='font-awesome'
+                            color='white'
+                            size={28}
+                            
+                        />
+                    </View>
+                </TouchableHighlight>
+                
+            ];
         return (
-            <View>
-                <TouchableOpacity
-                style={styles.item}
-                key={rowData.key}
-                onPress={() => this.props.navigation.navigate('App_Prog', {  
-                    prog_name: rowData.progName,
-                    prog_id : rowData.key,
-                    uni: rowData.uniID, })}
-                >
-                </TouchableOpacity>
-              <Text>{rowData.progName}</Text>
-            </View>
+            <Swipable rightButtons={rightButtons} >
+            <TouchableOpacity 
+                // onPress={() => { this.props.navigation.push('QualificationDetail', {
+                //                 qualificationID: rowData.key });
+            onPress={() => this.props.navigation.navigate('App_Prog', {  
+                        prog_name: rowData.progName,
+                        prog_id : rowData.key,
+                        uni: rowData.uniID, })}
+
+                delayPressIn='70' 
+            >
+                <View style={rowContainerStyle}>
+                    <View style={avatarContainerStyle} >
+                        <Avatar 
+                            rounded 
+                            title={rowData.progName.substring(0, 1).toUpperCase()}
+                            size='medium'
+                            containerStyle={avatarStyle}
+                            overlayContainerStyle={{ backgroundColor: '#34495e' }}
+                        />
+                    </View>
+                    <View style={rowTextContainerStyle} >
+                        <Text style={rowText1Style} >{rowData.progName.toUpperCase()}</Text>
+                        {/* <Text style={rowText2Style} >Maximum Score: {rowData.maxScore}</Text> */}
+                    </View>
+                    <View style={iconContainerStyle}>
+                        <Icon
+                            name='chevron-right'
+                            type='font-awesome'
+                            color='grey' 
+                        />
+                    </View>
+                </View>
+            </TouchableOpacity>
+        </Swipable>
+            
+            // <View>
+            //     <TouchableOpacity
+            //     style={styles.item}
+            //     key={rowData.key}
+            //     onPress={() => this.props.navigation.navigate('App_Prog', {  
+            //         prog_name: rowData.progName,
+            //         prog_id : rowData.key,
+            //         uni: rowData.uniID, })}
+            //     >
+            //     </TouchableOpacity>
+            //   <Text>{rowData.progName}</Text>
+            // </View>
         );
     }
 
