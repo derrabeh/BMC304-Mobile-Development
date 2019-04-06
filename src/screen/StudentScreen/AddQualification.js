@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert, Picker, Button, StyleSheet, Text,TextInput, View, TouchableOpacity, ScrollView, KeyboardAvoidingView} from 'react-native';
 import { Header, Input, Card} from '../../components/common';
 import firebase from 'firebase';
+import MailCore from 'react-native-mailcore';
 
 class AddQualification extends React.Component {
 	static navigationOptions = {
@@ -12,29 +13,104 @@ class AddQualification extends React.Component {
 		super(props);
 		this.state = {
 			userID:'',
-			Q_type: '',
+			qualificationID: '',
 			score:0,
+			isLoading: true,
+			selectedValue: ''
 		}
 	}
 
-	componentWillMount(){
+	componentDidMount(){
 		const { navigation } = this.props;
 		this.state.userID = navigation.getParam('userID', null);
 
-		// console.log(this.state.userID);
-		var ref = firebase.database().ref('/users/' + this.state.userID);
-		ref.once("value", function(snapshot) {
-			this.setState({
-				Q_type: snapshot.val().Q_type,
-				score: snapshot.val().score,
-			});
-		}.bind(this));
+		const ref = firebase.database().ref('/qualification');
+		ref.once('value')
+				.then((snapshot) => {
+						const qualification = [];
+						const names = [];
+
+						snapshot.forEach((childSnapshot) => {
+										qualification.push({
+											id: childSnapshot.key,
+											name: childSnapshot.val().name
+										});
+										// console.log(qualification);
+								});
+							this.setState({
+								qualificationRetrived: qualification,
+								isLoading: false
+							})
+							console.log(this.state.names);
+						});
+
+			}
+
+	renderPicker() {
+		return this.state.qualificationRetrived.map((qualification) => {
+			return (
+				<Picker.Item key={qualification.id} value={qualification.id} label={qualification.name} />
+			)
+		})
 	}
+
 
 
 	render(){
 
-		const { Q_type, score } = this.state;
+		const { userID, qualificationID, qualificationName, score } = this.state;
+		// console.log(this.state.qualificationRetrived);
+
+		if (this.state.isLoading) {
+			return (
+				<View>
+					<Text>Loading</Text>
+				</View>
+			)
+		}
+
+		saveQuali = () => {
+			if (this.state.userID == ''){
+			firebase.database().ref('qualificationObtained/').push({
+        userID: this.state.userID,
+				score: this.state.score,
+				qualificationID: this.state.qualificationID,
+      });
+			Alert.alert(
+				'SUCCESS',
+				'Confirm To Add Qualification?',
+				[
+					{text: 'Cancel'},
+					{text: 'OK', onPress:() => this.props.navigation.push('StudentQualification',{
+						userID: this.state.userID,
+						score: this.state.score,
+						qualificationID: this.state.qualificationID,
+					})
+				}
+			],
+		);
+		}
+		else {
+			firebase.database().ref('qualificationObtained/').set({
+				userID: this.state.userID,
+				score: this.state.score,
+				qualificationID: this.state.qualificationID,
+		})
+		Alert.alert(
+			'SUCCESS',
+			'Confirm To Update Qualification?',
+			[
+				{text: 'Cancel'},
+				{text: 'OK', onPress:() => this.props.navigation.push('StudentQualification',{
+					userID: this.state.userID,
+					score: this.state.score,
+					qualificationID: this.state.qualificationID,
+				})
+			}
+		],
+	);
+	}
+}
 
 		return(
 			<KeyboardAvoidingView behavior='padding' enabled>
@@ -42,20 +118,15 @@ class AddQualification extends React.Component {
 			<Header headerText={'New Qualification'} navigation={this.props.navigation} />
 
 			<Picker
-			selectedValue={this.state.Q_type}
+			selectedValue={this.state.qualificationID}
 			style
 			onValueChange={
-				(Q_type) => this.setState({ Q_type})
-			}>
+				(value, index) => this.setState({qualificationID: value})
+			}
+			>
 
-			<Picker.Item label="Select qualification type" value="null" />
-			<Picker.Item label="STPM" value="STPM" />
-			<Picker.Item label="A-levels" value="A-levels" />
-			<Picker.Item label="Australian Matriculation" value="Australian Matriculation" />
-			<Picker.Item label="Canadian Pre-University" value="Canadian Pre-University" />
-			<Picker.Item label="Unified Examination Certificate (UEC)" value="Unified Examination Certificate (UEC)" />
-			<Picker.Item label="International Baccalaureate" value="International Baccalaureate" />
-			<Picker.Item label="Other" value="other" />
+			{this.renderPicker()}
+
 			</Picker>
 
 			<Card>
@@ -65,7 +136,7 @@ class AddQualification extends React.Component {
 			/>
 			</Card>
 
-			<Button title="SAVE" />
+			<Button title="SAVE" onPress={saveQuali} />
 			</ScrollView>
 			</KeyboardAvoidingView>
 

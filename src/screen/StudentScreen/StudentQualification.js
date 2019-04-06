@@ -11,8 +11,7 @@ class StudentQualification extends React.Component {
 	constructor(props){
 		super(props);
 		this.state ={
-			allUser:{},
-			Q_type:'',
+			qualificationID:'',
 			score: 0,
 			userID:'',
 		};
@@ -22,21 +21,20 @@ class StudentQualification extends React.Component {
 		const { navigation } = this.props;
 		this.state.userID = navigation.getParam('userID', null);
 
-		var ref = firebase.database().ref('/users/' + this.state.userID);
+		var ref = firebase.database().ref('qualificationObtained/');
 		ref.once("value", function(snapshot) {
 			this.setState({
-				allUser: snapshot.val(),
-				Q_type: snapshot.val().Q_type,
+				qualificationID: snapshot.val().qualificationID,
 				score: snapshot.val().score,
 			});
-		}.bind(this));
+	}.bind(this));
 	}
 
 	render(){
-		const { Q_type , score, userID } = this.state;
+		const { qualificationID , score, userID } = this.state;
 
 		QualificationCond =() => {
-		  if (this.state.Q_type == ""){
+		  if (this.state.qualificationID == ""){
 		    return(
 		      <View>
 		      <TouchableOpacity style={styles.addButton}
@@ -62,7 +60,7 @@ class StudentQualification extends React.Component {
 		          </TouchableHighlight>
 		        ]}
 		        >
-		        <Text style={styles.typeItem}>Qualification Type : {this.state.Q_type}</Text>
+		        <Text style={styles.typeItem}>Qualification Type : {this.state.qualificationID}</Text>
 		        <Text style={styles.scoreItem}>Score : {this.state.score}</Text>
 		        </Swipeable>
 		        </Card>
