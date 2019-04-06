@@ -22,7 +22,7 @@ class StudentApplicationScreen extends React.Component {
             const applications = [];
 
             snapshot.forEach((application) => {
-                if (application.val().applicantID === 'USERIDHERE') {
+                if (application.val().applicantID === this.state.userID) {
                     applications.push({
                         key: application.key,
                         date: application.val().date,
@@ -54,9 +54,9 @@ class StudentApplicationScreen extends React.Component {
                     onPress: () => {
                         console.log(key);
                         const ref = firebase.database().ref('applications/' + key); 
-                        // ref.remove();
-                        // console.log(navigation);
-                        // navigation.push('StudentApplication');
+                        ref.remove();
+                        console.log(navigation);
+                        navigation.push('StudentApplication');
                     }
                 }, 
             ], 
