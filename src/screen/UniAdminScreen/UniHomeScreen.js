@@ -14,7 +14,8 @@ class UniHomeScreen extends React.Component {
         super(props);
         this.state = {
             searchText: '', 
-            isLoading: true
+            isLoading: true,
+            count : 0
         };
 
         this.arrayHolder = [];
@@ -25,16 +26,19 @@ class UniHomeScreen extends React.Component {
 
         ref.once('value')
             .then((snapshot) => {
-                const qualiRetrieved = [];
-
+                const qualiRetrieved = []
                 snapshot.forEach((childSnapshot) => {
+                  
                     // pushing all qualifications to array
+                    // this.countApplicant(childSnapshot.key);
                     qualiRetrieved.push({
                         key: childSnapshot.key,
                         progName: childSnapshot.val().progName, 
                         desc: childSnapshot.val().description,
                         closingDate : childSnapshot.val().closingDate,
+                        // count : 'wwww',
                     });
+
                 });
 
                 qualiRetrieved.sort((a, b) => (a.progName.toUpperCase() > b.progName.toUpperCase()) ? 1 : -1);
@@ -54,9 +58,20 @@ class UniHomeScreen extends React.Component {
     // navigate to 'new qualification' screen
     addNewProg = () => {
         let d = this.props.navigation;
-        console.log(d.state.params.userID);
+        // console.log(d.state.params.userID);
         this.props.navigation.navigate('NewProgram', {userID : d.state.params.userID});
     }
+
+    // countApplicant(key){
+    //     const ref = firebase.database().ref('applicantions');
+
+    //     ref.once('value')
+    //     .then((snapshot) => {
+    //         snapshot.forEach((child)=>{
+    //             console.log(child.val())
+    //         })
+    //     })
+    // }
 
     handleDelete(key){
         let d = this.props.navigation;
@@ -170,8 +185,12 @@ class UniHomeScreen extends React.Component {
                         />
                     </View>
                     <View style={rowTextContainerStyle} >
-                        <Text style={rowText1Style} >{rowData.progName.toUpperCase()}</Text>
-                        {/* <Text style={rowText2Style} >Maximum Score: {rowData.maxScore}</Text> */}
+                        <Text style={rowText1Style} >{rowData.progName}</Text>
+                        <Text style={rowText2Style} >Description: {rowData.desc}</Text>
+                        <Text style={rowText2Style}>Closing Date: {rowData.closingDate}</Text>
+                    </View>
+                    <View>
+                    <Text>{rowData.count}</Text>
                     </View>
                     <View style={iconContainerStyle}>
                         <Icon
@@ -205,8 +224,8 @@ class UniHomeScreen extends React.Component {
                 floatButtonStyle, floatButtonContainerStyle, 
                 headerTextContainerStyle, headerIcon1ContainerStyle, 
                 headerIcon2ContainerStyle } = styles;
-        console.log('dataSource: ' + this.state.dataSource);
-        console.log(this.state.isLoading);
+        // console.log('dataSource: ' + this.state.dataSource);
+        // console.log(this.state.isLoading);
 
         if (this.state.isLoading) {
             return (
@@ -278,7 +297,7 @@ class UniHomeScreen extends React.Component {
           flexDirection: 'row', 
           backgroundColor: 'white', 
           marginBottom: 1,
-          height: 80, 
+          height: 100, 
           padding: 10, 
           alignItems: 'center', 
           paddingLeft: 30,
