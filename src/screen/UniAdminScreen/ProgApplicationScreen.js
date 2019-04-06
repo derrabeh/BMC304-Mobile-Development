@@ -41,8 +41,9 @@ setAppObject(user_id,data,key){
   const ref = firebase.database().ref('/users/'+user_id);
   ref.once('value').then(snapshot=>{
   let email = snapshot.val().email;
+  let name = snapshot.val().username;
   let newApp = {
-      applicant : email,
+      applicant : name,
       applied_prog : data.programID,
       date : data.date,
       status : data.status,

@@ -26,18 +26,28 @@ class AppDetails extends React.Component {
     }
     btnStatus(){
       let p = this.props.navigation;
-
-        if(p.state.params.status == 'APPROVE'){
+      console.log(p.state.params.status,'hhh');
+        if(p.state.params.status === 'SUCCESSFUL'){
         return (
             <Text>
             </Text>
         )
-    }
+        }
         else{
+          if(p.state.params.status == 'UNSUCCESSFUL'){
+            return(
+              <View>
+              <Button title="Approve" color="green" onPress={() => this.chgApplicantStatus('SUCCESSFUL',p.state.params.key)}/>
+              {/* <Button title="Decline" color="red" onPress={() => this.chgApplicantStatus('UNSUCCESSFUL',p.state.params.key)}/> */}
+          </View>
+            )
+          }
+          else{
+          }
           return(
           <View>
-              <Button title="Approve" color="green" onPress={() => this.chgApplicantStatus('APPROVE',p.state.params.key)}/>
-              <Button title="Decline" color="red" onPress={() => this.chgApplicantStatus('DECLINE',p.state.params.key)}/>
+              <Button title="Approve" color="green" onPress={() => this.chgApplicantStatus('SUCCESSFUL',p.state.params.key)}/>
+              <Button title="Decline" color="red" onPress={() => this.chgApplicantStatus('UNSUCCESSFUL',p.state.params.key)}/>
           </View>
           )
         }
