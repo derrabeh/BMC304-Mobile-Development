@@ -215,7 +215,7 @@ class UniHomeScreen extends React.Component {
                     <SearchBar 
                         onChangeText={()=>{console.log(this.state.qualifications)}} 
                         value={this.state.searchText}
-                        placeholder='Search for qualification'
+                        placeholder='Search for a Programme'
                     />
                 </View>
                 <Spinner />
