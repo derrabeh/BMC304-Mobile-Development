@@ -16,35 +16,39 @@ class AddQualification extends React.Component {
 			qualificationID: '',
 			score:0,
 			isLoading: true,
-			selectedValue: ''
+			isExist: false,
+			key: ''
 		}
 	}
 
-	componentDidMount(){
+	componentWillMount(){
 		const { navigation } = this.props;
-		this.state.userID = navigation.getParam('userID', null);
+		this.setState({
+			 userID: navigation.getParam('userID', null),
+			 isExist: navigation.getParam('isExist', null),
+			 key: navigation.getParam('key', null)
+		});
 
 		const ref = firebase.database().ref('/qualification');
 		ref.once('value')
-				.then((snapshot) => {
-						const qualification = [];
-						const names = [];
+		.then((snapshot) => {
+			const qualification = [];
+			const names = [];
 
-						snapshot.forEach((childSnapshot) => {
-										qualification.push({
-											id: childSnapshot.key,
-											name: childSnapshot.val().name
-										});
-										// console.log(qualification);
-								});
-							this.setState({
-								qualificationRetrived: qualification,
-								isLoading: false
-							})
-							console.log(this.state.names);
-						});
+			snapshot.forEach((childSnapshot) => {
+				qualification.push({
+					id: childSnapshot.key,
+					name: childSnapshot.val().name
+				});
+				// console.log(qualification);
+			});
+			this.setState({
+				qualificationRetrived: qualification,
+				isLoading: false
+			})
+		});
 
-			}
+	}
 
 	renderPicker() {
 		return this.state.qualificationRetrived.map((qualification) => {
@@ -64,84 +68,93 @@ class AddQualification extends React.Component {
 		if (this.state.isLoading) {
 			return (
 				<View>
-					<Text>Loading</Text>
+				<Text>Loading</Text>
 				</View>
 			)
 		}
 
 		saveQuali = () => {
-			if (this.state.userID == ''){
-			firebase.database().ref('qualificationObtained/').push({
-        userID: this.state.userID,
-				score: this.state.score,
-				qualificationID: this.state.qualificationID,
-      });
-			Alert.alert(
-				'SUCCESS',
-				'Confirm To Add Qualification?',
-				[
-					{text: 'Cancel'},
-					{text: 'OK', onPress:() => this.props.navigation.push('StudentQualification',{
+			console.log(this.state.isExist);
+			console.log(this.state.key);
+			if (this.state.isExist == false){
+				firebase.database().ref('qualificationObtained/').push
+				({
+					userID: this.state.userID,
+					score: this.state.score,
+					qualificationID: this.state.qualificationID,
+				});
+
+				Alert.alert(
+					'SUCCESS',
+					'Confirm To Add Qualification?',
+					[
+						{text: 'Cancel'},
+						{text: 'OK',  onPress: () => {this.props.navigation.push('StudentQualification',
+							{
+								userID: this.state.userID,
+								score: this.state.score,
+								qualificationID: this.state.qualificationID,
+							}
+						)}
+					}
+					]
+				)
+				}
+
+				else {
+					firebase.database().ref('qualificationObtained/' + this.state.key).update({
 						userID: this.state.userID,
 						score: this.state.score,
 						qualificationID: this.state.qualificationID,
 					})
+					Alert.alert(
+						'SUCCESS',
+						'Confirm To Update Qualification?',
+						[
+							{text: 'Cancel'},
+							{text: 'OK', 	onPress: () => {this.props.navigation.push('StudentQualification',
+								{
+									userID: this.state.userID,
+									score: this.state.score,
+									qualificationID: this.state.qualificationID,
+								}
+							)}
+							}
+						]
+					)
+					}
 				}
-			],
-		);
+
+			return(
+				<KeyboardAvoidingView behavior='padding' enabled>
+				<ScrollView>
+				<Header headerText={'New Qualification'} navigation={this.props.navigation} />
+
+				<Picker
+				selectedValue={this.state.qualificationID}
+				style
+				onValueChange={
+					(value, index) => this.setState({qualificationID: value})
+				}
+				>
+
+				{this.renderPicker()}
+
+				</Picker>
+
+				<Card>
+				<TextInput
+				keyboardType="numeric" onChangeText={score => this.setState({score})} value= {this.state.score}
+				label="Score" placeholder="Enter your score" blurRadius={1}
+				/>
+				</Card>
+
+				<Button title="SAVE" onPress={saveQuali} />
+				</ScrollView>
+				</KeyboardAvoidingView>
+
+			);
 		}
-		else {
-			firebase.database().ref('qualificationObtained/').set({
-				userID: this.state.userID,
-				score: this.state.score,
-				qualificationID: this.state.qualificationID,
-		})
-		Alert.alert(
-			'SUCCESS',
-			'Confirm To Update Qualification?',
-			[
-				{text: 'Cancel'},
-				{text: 'OK', onPress:() => this.props.navigation.push('StudentQualification',{
-					userID: this.state.userID,
-					score: this.state.score,
-					qualificationID: this.state.qualificationID,
-				})
-			}
-		],
-	);
 	}
-}
 
-		return(
-			<KeyboardAvoidingView behavior='padding' enabled>
-			<ScrollView>
-			<Header headerText={'New Qualification'} navigation={this.props.navigation} />
-
-			<Picker
-			selectedValue={this.state.qualificationID}
-			style
-			onValueChange={
-				(value, index) => this.setState({qualificationID: value})
-			}
-			>
-
-			{this.renderPicker()}
-
-			</Picker>
-
-			<Card>
-			<TextInput
-			keyboardType="numeric" onChangeText={score => this.setState({score})} value= {this.state.score}
-			label="Score" placeholder="Enter your score" blurRadius={1}
-			/>
-			</Card>
-
-			<Button title="SAVE" onPress={saveQuali} />
-			</ScrollView>
-			</KeyboardAvoidingView>
-
-		);
-	}
-}
-
-		export { AddQualification };
+	export { AddQualification };
