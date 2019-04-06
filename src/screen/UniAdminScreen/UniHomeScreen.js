@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ListView, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
+import { View, Text, ListView, TouchableOpacity, TouchableHighlight, Alert ,ToastAndroid} from 'react-native';
 import firebase from 'firebase';
 import { Avatar, Icon } from 'react-native-elements';
 import { SearchBar } from '../../components/common/SearchBar';
@@ -18,6 +18,7 @@ class UniHomeScreen extends React.Component {
         };
 
         this.arrayHolder = [];
+        this.handleDelete = this.handleDelete.bind(this);
     }
     componentDidMount() {
         const ref = firebase.database().ref('program');
@@ -31,7 +32,8 @@ class UniHomeScreen extends React.Component {
                     qualiRetrieved.push({
                         key: childSnapshot.key,
                         progName: childSnapshot.val().progName, 
-                        desc: childSnapshot.val().description
+                        desc: childSnapshot.val().description,
+                        closingDate : childSnapshot.val().closingDate,
                     });
                 });
 
@@ -56,9 +58,33 @@ class UniHomeScreen extends React.Component {
         this.props.navigation.navigate('NewProgram', {userID : d.state.params.userID});
     }
 
+    handleDelete(key){
+        let d = this.props.navigation;
+
+        Alert.alert(
+            'Are you sure want to delete this program?', 
+            '',
+            [
+                { text: 'No', onPress: () => console.log('No is pressed') }, 
+                { text: 'Yes', 
+                    onPress: () => {
+                        console.log(key);
+                        const ref = firebase.database().ref('program/' + key); 
+                        ref.remove();
+                        ToastAndroid.show('Deleted!', ToastAndroid.SHORT);
+                        setTimeout(()=>{
+                            this.props.navigation.push('Uni_Home',{userID : d.state.params.userID})
+                        },500)
+                    }
+                }, 
+            ], 
+            { cancelable: false }
+        );
+    }
+
     // filter qualifcation - not functioning yet
     filterQualification(searchText) {
-        console.log(searchText);
+        // console.log(searchText);
         const filteredData = this.arrayHolder.filter(
             (qualification) => {
                 const name = qualification.progName.toUpperCase();
@@ -75,6 +101,8 @@ class UniHomeScreen extends React.Component {
 
     // function to render data for list view
     renderRow(rowData) {
+        let d = this.props.navigation;
+
         const { rowContainerStyle, avatarStyle, rowTextContainerStyle, rowText1Style,
             avatarContainerStyle, iconContainerStyle, rowText2Style } = styles;
 
@@ -82,8 +110,14 @@ class UniHomeScreen extends React.Component {
                 <TouchableHighlight 
                     style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
                         alignItems: 'center', backgroundColor: '#2ecc71' }}
-                    onPress={()=> this.props.navigation.push('QualificationDetail', {
-                        qualificationID: rowData.key })}
+                    onPress={()=> this.props.navigation.push('EditProgram', {
+                        userID: d.state.params.userID,
+                        progName : rowData.progName,
+                        progDesc : rowData.desc,
+                        closingDate : rowData.closingDate,   
+                        key : rowData.key,
+                    
+                    })}
                 >  
                     <View style={{ flex: 1/5 }}>
                         <Icon
@@ -99,7 +133,7 @@ class UniHomeScreen extends React.Component {
                 <TouchableHighlight 
                     style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
                         alignItems: 'center', backgroundColor: '#e74c3c' }}
-                    onPress={()=> this.askDelete(rowData.key)}
+                    onPress={()=> this.handleDelete(rowData.key)}
                 >  
                     <View style={{ flex: 1/5 }}>
                         <Icon
@@ -118,7 +152,7 @@ class UniHomeScreen extends React.Component {
             <TouchableOpacity 
                 // onPress={() => { this.props.navigation.push('QualificationDetail', {
                 //                 qualificationID: rowData.key });
-            onPress={() => this.props.navigation.navigate('App_Prog', {  
+            onPress={() => this.props.navigation.push('App_Prog', {  
                         prog_name: rowData.progName,
                         prog_id : rowData.key,
                         uni: rowData.uniID, })}
