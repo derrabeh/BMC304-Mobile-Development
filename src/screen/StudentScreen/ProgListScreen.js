@@ -38,7 +38,6 @@ class ProgListScreen extends React.Component {
                         <View>
                             <Text style={titleStyle}>{g[d].progName} {'\n'}</Text>
                             <Text>{g[d].uniID}</Text>
-                            <Text>{g[d].description}</Text>
                         </View>
                         <TouchableOpacity 
                             style={buttonStyle}
@@ -47,6 +46,7 @@ class ProgListScreen extends React.Component {
                                 prog_id: d,
                                 uni: g[d].uniID,
                                 userID: prv.state.params.userID,
+                                description: g[d].description
                                 })} 
                         >
                             <Text style={buttonTextStyle}>
@@ -68,7 +68,7 @@ class ProgListScreen extends React.Component {
 
         if (this.state.isLoading) {
             return (
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1, paddingTop: 20, backgroundColor: '#34495e' }}>
                     <View style={headerStyle}>
                         <View style={iconContainerStyle}>
                             <TouchableOpacity 
@@ -92,7 +92,7 @@ class ProgListScreen extends React.Component {
                         </View>
                         <View style={{ flex: 2 }}></View>
                     </View>
-                    <View style={{flex: 9}}>
+                    <View style={{flex: 9, backgroundColor: '#bdc3c7' }}>
                         <Spinner />
                     </View>
                 </View>
