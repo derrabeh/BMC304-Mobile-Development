@@ -85,7 +85,7 @@ class ProgDetailScreen extends React.Component {
 
               Promise.all([
                 navigation.dispatch(navigateAction)
-              ]).then(() => navigation.navigate('History'));
+              ]).then(() => navigation.push('History'));
                 // this.props.navigation.push('Student_Home',{userID:all.state.params.userID})
             }, 1000);
           } catch (e) {
@@ -93,12 +93,12 @@ class ProgDetailScreen extends React.Component {
           }
     }
 
-    renderButton(status) {
-      const pv = this.props.navigation;
-
+    renderButton(isApproved) {
       const { buttonGroupStyle, buttonStyle, buttonTextStyle } = styles;
 
-      if (!this.state.approveStatus) {
+      const pv = this.props.navigation;
+
+      if (!isApproved) {
         return (
           <View style={buttonGroupStyle}>
             <TouchableOpacity 
@@ -170,7 +170,7 @@ class ProgDetailScreen extends React.Component {
                 </View>
               </View>
               
-              {this.renderButton(this.state.status)}
+              {this.renderButton(this.state.approveStatus)}
             </View>
             
         </View>
