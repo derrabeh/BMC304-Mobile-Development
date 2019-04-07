@@ -7,7 +7,7 @@ import { LoginInput, LoginButton, Container, Spinner } from '../components/commo
 
 class LoginScreen extends React.Component {
 
-  state = { email: '', password: '', user: '', isLoading: false };
+  state = { email: 'user1@user.com', password: '123456789', user: '', isLoading: false };
 
   // on login button press
   onButtonPress() {

@@ -1,205 +1,240 @@
 import React from 'react';
+import { View, Text, ListView, TouchableHighlight, Alert, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
-import { View, ToastAndroid, ImageBackground, Text, 
-        KeyboardAvoidingView, Picker, Image } from 'react-native';
-import { LoginInput, LoginButton, Container } from '../components/common';
-import DatePicker from 'react-native-datepicker-modal';
+import { Icon, Avatar } from 'react-native-elements';
+import Swipable from 'react-native-swipeable-row';
+import { Spinner } from '../../components/common/';
 
-class SignUpScreen extends React.Component {
-  state = { email: 'user111@user.com', password: '123456', userType: 'Student', username: 'username', 
-            mobile: '123', dob: '', idType: '123', idNum: '123' };
+class StudentApplicationScreen extends React.Component {
 
-  // on login button press
-  onButtonPress() {
-    const { email, password, userIndex } = this.state;
-
-    if (email === '' && password === '' && userIndex === 0) {
-      ToastAndroid.show('Please enter all the details needed !', ToastAndroid.SHORT);
+    constructor(props) {
+        super(props);
+        this.state = { applications: [], userID: '', isLoading: true };
     }
-    else if (email === '' || password === '') {
-      ToastAndroid.show('Please enter your username or email !', ToastAndroid.SHORT);
+
+    componentWillMount() {
+        const { navigation } = this.props;
+        this.state.userID = navigation.getParam('userID', null);
+
+        // console.log(this.state.userID);
+        
+        const dir = firebase.database().ref().child('applications');
+      
+        // console.log("This is directory :" + dir);
+
+        dir.once('value').then(snapshot => {
+            snapshot.forEach((application) => {
+                // console.log(application.val());
+                if (application.val().applicantID === this.state.userID) {
+                    
+                    console.log('found');
+                    this.setApplications(application.val(), application.key);
+                      
+                }
+                console.log(this.state.applications);
+                // console.log(this.state.dataSource);
+            });
+        });
     }
-    else if (userIndex === 0) {
-      ToastAndroid.show('Please select your account type !', ToastAndroid.SHORT);
+
+    setApplications(childSnapshot, applicationID) {
+        const dir = firebase.database().ref().child('program/' + childSnapshot.programID);
+        // console.log('in');
+        
+        dir.once('value').then(snapshot => {
+            // console.log(snapshot.val());
+            const application = {
+                name: snapshot.val().progName,
+                status: childSnapshot.status, 
+                key: applicationID
+            };
+            this.setState({
+                applications: this.state.applications.concat(application),
+            });
+
+            const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+            
+            this.setState({
+                dataSource: ds.cloneWithRows(this.state.applications), 
+                isLoading: false
+            });   
+            
+        });
     }
-    else {
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
-              const uid = firebase.auth().currentUser.uid;
 
-              const userDir = firebase.database().ref().child('users/' + uid);   
-              userDir.set({
-                userType: this.state.userType,
-                email, 
-                username: this.state.username
-              });
+    askDelete(key) {
+        const navigation = this.props.navigation;
+        Alert.alert(
+            'Are you sure to withdraw this application?', 
+            '',
+            [
+                { text: 'No', onPress: () => console.log('No is pressed') }, 
+                { text: 'yes', 
+                    onPress: () => {
+                        console.log(key);
+                        const ref = firebase.database().ref('applications/' + key); 
+                        ref.remove();
+                        console.log(navigation);
+                        navigation.push('Student_Home');
+                    }
+                }, 
+            ], 
+            { cancelable: false }
+        );
+    }
 
-              const applicantDir = firebase.database().ref().child('applicants/' + uid);
-              applicantDir.set({
-                idType: this.state.idType, 
-                idNum: this.state.idNum, 
-                mobileNum: this.state.mobile, 
-                dob: this.state.dob
-              });
+    renderStatus(status) {
+        if (status.toUpperCase() == 'UNSUCCESSFUL') {
+            return (
+                <View style={{flexDirection: 'row'}}>
+                    <Text>Status: </Text>
+                    <Text style={{ color: 'red' }} >{status}</Text>
+                </View>
+            );
+        }
+        else if (status.toUpperCase() == 'SUCCESSFUL') {
+            return (
+                <View style={{flexDirection: 'row'}}>
+                    <Text>Status: </Text>
+                    <Text style={{ color: 'green' }} >{status}</Text>
+                </View>
+            );
+        }
+        
+        return (
+            <View style={{flexDirection: 'row'}}>
+                <Text>Status: </Text>
+                <Text style={{ color: 'grey' }} >{status}</Text>
+            </View>
+        );
+        
+    }
 
-              this.props.navigation.navigate('Student_Home', { userID: uid });
+    // function to render data for list view
+    renderRow(rowData) {
+        const { rowContainerStyle, avatarStyle, rowTextContainerStyle, rowText1Style,
+                avatarContainerStyle, iconContainerStyle, rowText2Style } = styles;
 
-            });      
-        })
-          .catch((error) => {
-            ToastAndroid.show(error.message, ToastAndroid.SHORT);
-            console.log(error.message);
-          })
+                
+        const rightButtons = [
+            <TouchableHighlight 
+                style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
+                    alignItems: 'center', backgroundColor: '#e74c3c' }}
+                onPress={()=> this.askDelete(rowData.key, rowData)}
+            >  
+                <View style={{ flex: 1/5 }}>
+                    <Icon
+                        name='trash'
+                        type='font-awesome'
+                        color='white'
+                        size={28}
+                        
+                    />
+                </View>
+            </TouchableHighlight>
+            
+        ];
+
+        return (
+            <Swipable rightButtons={rightButtons} >
+                <View style={rowContainerStyle}>
+                    <View style={avatarContainerStyle} >
+                        <Avatar 
+                            rounded 
+                            title={rowData.name.substring(0, 1).toUpperCase()}
+                            size='medium'
+                            containerStyle={avatarStyle}
+                            overlayContainerStyle={{ backgroundColor: '#34495e' }}
+                        />
+                    </View>
+                    <View style={rowTextContainerStyle} >
+                        <Text style={rowText1Style} >{rowData.name}</Text>
+                        {this.renderStatus(rowData.status)}
+                    </View>
+                </View>
+            </Swipable>
+            
+        );
+    }
+
+    // render the whole screen view
+    render() {
+        const { headerStyle, nameContainerStyle, nameStyle, bodyStyle } = styles;
+        // console.log('dataSource: ' + this.state.dataSource);
+        // console.log(this.state.applications);
+        // console.log('isLoading: ', this.state.isLoading);
+        
+
+        if (this.state.isLoading) {
+            return (
+                <View style={{ backgroundColor: '#bdc3c7', flex: 1 }} >
+                    <Spinner />
+                </View>
+            );
+        }
+
+        return (
+            <View style={{ backgroundColor: '#bdc3c7', flex: 1 }} >
+                <View style={headerStyle}>
+                    <View style={nameContainerStyle}>
+                        <Text style={nameStyle} >Applications</Text>
+                    </View>
+                </View>
+                <View style={bodyStyle}>
+                    <ListView
+                        dataSource={this.state.dataSource}
+                        renderRow={this.renderRow.bind(this)}
+                    />
+                </View>
+                
+            </View>
+            
+        );
     }
   }
 
-  render() {
-    const { containerStyle, buttonsContainerStyle, buttonContainerStyle,
-            userIconStyle, userTypeContainerStyle, iconContainerStyle,
-            pickerStyle } = styles;
-    const background = require('../../assets/background.jpg');
-    const emailIcon = require('../../assets/mail2.png');
-    const lockIcon = require('../../assets/lock2.png');
-    const userIcon = require('../../assets/user2.png');
-
-    return (
-      <ImageBackground style={containerStyle} source={background} blurRadius={2} >
-        <KeyboardAvoidingView behavior='padding' enabled>
-          <Container>
-            <LoginInput
-              onChangeText={email => this.setState({ email })}
-              value={this.state.email}
-              label="Email"
-              placeholder="Enter your email"
-              blurRadius={1}
-              icon={emailIcon}
-            />
-          </Container>
-          <Container>
-            <LoginInput
-              onChangeText={password => this.setState({ password })}
-              value={this.state.password}
-              label="Password"
-              placeholder="Enter your password"
-              secureTextEntry
-              blurRadius={1}
-              icon={lockIcon}
-            />
-          </Container>
-          <Container>
-            <LoginInput
-              onChangeText={username => this.setState({ username })}
-              value={this.state.username}
-              label="Username"
-              placeholder="Enter your username"
-              blurRadius={1}
-              icon={userIcon}
-            />
-          </Container>
-          <Container>
-            <LoginInput
-              onChangeText={mobile => this.setState({ mobile })}
-              value={this.state.mobile}
-              label="Phone"
-              placeholder="Enter your mobile number"
-              blurRadius={1}
-              icon={emailIcon}
-            />
-          </Container>
-          <Container>
-            <View style={{height: 40}}></View>
-              <DatePicker
-                style={{ width: 200, backgroundColor: 'red', height: 40 }}
-                date={this.state.dob} //initial date from state
-                mode="date" //The enum of date, datetime and time
-                placeholder="select date"
-                format="DD-MM-YYYY"
-                minDate="01-01-2016"
-                maxDate="01-01-2019"
-              />
-          </Container>
-          <Container>
-            <LoginInput
-              onChangeText={idType => this.setState({ idType })}
-              value={this.state.idType}
-              label="ID Type"
-              placeholder="Enter your ID Type"
-              blurRadius={1}
-              icon={emailIcon}
-            />
-          </Container>
-          <View style={buttonsContainerStyle}>
-            <View style={buttonContainerStyle}>
-              <LoginButton onPress={this.onButtonPress.bind(this)} children="Create Account" />
-            </View>
-            <View style={buttonContainerStyle}>
-              <LoginButton children="Cancel" onPress={() => {this.props.navigation.navigate('Login')}} />
-            </View>
-          </View>
-        </KeyboardAvoidingView>
-          
-      </ImageBackground>
-    );
-  }  
-}
-
-const styles = {
-    containerStyle: {
-      justifyContent:'center', 
-      flex: 1,
-      backgroundColor: 'red'
+  const styles = {
+    rowContainerStyle: {
+        flex: 1,
+        flexDirection: 'row', 
+        backgroundColor: 'white', 
+        marginBottom: 1,
+        height: 80, 
+        padding: 10, 
+        alignItems: 'center', 
+        paddingLeft: 30,
+        paddingRight: 30
     }, 
-    logoContainerStyle: {
-      alignItems: 'center',
-      paddingBottom: 20
+    headerStyle: {
+        flex: 1, 
+        backgroundColor: '#34495e',
+        paddingTop: 25
+    },
+    nameContainerStyle: {
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        flex: 7
     }, 
-    logoStyle: {
-      width: 200,
-      height: 200
+    nameStyle: {
+        fontSize: 20, 
+        color: 'white'
     }, 
-    buttonsContainerStyle: {
-      marginTop: 25,
-      marginLeft: 50,
-      marginRight: 50
+    rowTextContainerStyle: {
+        flexDirection: 'column',
+        flex: 7
     }, 
-    buttonContainerStyle: {
-      height: 40, 
-      marginTop: 5
+    rowText1Style: {
+        fontSize: 20
     }, 
-    textContainerStyle: {
-      flexDirection: 'row', 
-      justifyContent: 'center',
-      marginTop: 5,
-      marginBottom: 5,
+    rowText2Style: {
+        color: 'grey'
+    },
+    avatarContainerStyle: {
+        flex: 2
     }, 
-    userIconStyle: {
-      height: 30,
-      width: 30,
-    }, 
-    userTypeContainerStyle: {
-      flexDirection: 'row', 
-      marginLeft: 50,
-      marginRight: 50,
-      alignItems: 'center',
-      padding: 5,
-      borderBottomWidth: 0.5,
-      borderColor: 'white'
-    }, 
-    iconContainerStyle: {
-      flex: 2,
-      paddingRight: 20, 
-    }, 
-    pickerStyle: {
-      height: 40, 
-      width: 100, 
-      flex: 10, 
-      paddingLeft: 4, 
-      color: 'white', 
-      borderWidth: 0.5
+    bodyStyle: {
+        flex: 9
     }
-}
+};
 
-
-export { SignUpScreen };
+  export { StudentApplicationScreen };
