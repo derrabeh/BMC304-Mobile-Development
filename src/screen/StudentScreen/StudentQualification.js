@@ -14,6 +14,7 @@ class StudentQualification extends React.Component {
 			qualificationID:'',
 			score: 0,
 			userID:'',
+			isExist:false,
 		};
 	}
 
@@ -21,62 +22,73 @@ class StudentQualification extends React.Component {
 		const { navigation } = this.props;
 		this.state.userID = navigation.getParam('userID', null);
 
-		var ref = firebase.database().ref('qualificationObtained/');
-		ref.once("value", function(snapshot) {
-			this.setState({
-				qualificationID: snapshot.val().qualificationID,
-				score: snapshot.val().score,
+		const ref = firebase.database().ref('qualificationObtained')
+		ref.once('value').then((snapshot) => {
+			snapshot.forEach((childSnapshot) =>{
+
+				if (childSnapshot.val().userID == this.state.userID){
+
+					this.setState({
+						qualificationID: childSnapshot.val().qualificationID,
+						score:childSnapshot.val().score,
+						isExist: true,
+						key: childSnapshot.key
+					})
+
+				}
 			});
-	}.bind(this));
+			console.log('first-', this.state.isExist)
+			console.log('first-', this.state.key)
+		})
 	}
 
 	render(){
-		const { qualificationID , score, userID } = this.state;
+		const { qualificationID , score, userID, isExist } = this.state;
 
 		QualificationCond =() => {
-		  if (this.state.qualificationID == ""){
-		    return(
-		      <View>
-		      <TouchableOpacity style={styles.addButton}
-		      onPress={() => {this.props.navigation.navigate('AddQualification', { userID: this.state.userID })}}
-		      >
-		      <Text style={styles.addButtonText}>+</Text>
-		      </TouchableOpacity>
-		      </View>
-		    )}
+			if (!this.state.isExist){
+				return(
+					<View>
+					<TouchableOpacity style={styles.addButton}
+					onPress={() => {this.props.navigation.push('AddQualification', { userID: this.state.userID , isExist:this.state.isExist})}}
+					>
+					<Text style={styles.addButtonText}>+</Text>
+					</TouchableOpacity>
+					</View>
+				)}
 
-		    else{
-		      return(
-		        <View>
-		        <ScrollView
-		        scrollEnabled={!this.state.isSwiping}>
-		        <Card>
-		        <Swipeable
-		        onSwipeStart={() => this.setState({isSwiping: true})}
-		        onSwipeRelease={() => this.setState({isSwiping: false})}
-		        rightButtons = {[
-		          <TouchableHighlight style={styles.swipeBtn} onPress={() => {this.props.navigation.navigate('AddQualification', { userID: this.state.userID })}} >
-		          <Text style={styles.swipeText}> EDIT</Text>
-		          </TouchableHighlight>
-		        ]}
-		        >
-		        <Text style={styles.typeItem}>Qualification Type : {this.state.qualificationID}</Text>
-		        <Text style={styles.scoreItem}>Score : {this.state.score}</Text>
-		        </Swipeable>
-		        </Card>
-		        </ScrollView>
-		        </View>
-		      )}
-		      return null;
-		    }
+				else {
 					return(
 						<View>
-							<Header headerText={'Academic Qualification'}/>
-								{QualificationCond()}
+						<ScrollView
+						scrollEnabled={!this.state.isSwiping}>
+						<Card>
+						<Swipeable
+						onSwipeStart={() => this.setState({isSwiping: true})}
+						onSwipeRelease={() => this.setState({isSwiping: false})}
+						rightButtons = {[
+							<TouchableHighlight style={styles.swipeBtn} onPress={() => {this.props.navigation.push('AddQualification', { userID: this.state.userID, isExist:this.state.isExist, key: this.state.key })}} >
+							<Text style={styles.swipeText}> EDIT</Text>
+							</TouchableHighlight>
+						]}
+						>
+						<Text style={styles.typeItem}>Qualification Type : {this.state.qualificationID}</Text>
+						<Text style={styles.scoreItem}>Score : {this.state.score}</Text>
+						</Swipeable>
+						</Card>
+						</ScrollView>
 						</View>
-					);
+					)}
 				}
+
+				return(
+					<View>
+					<Header headerText={'Academic Qualification'}/>
+					{QualificationCond()}
+					</View>
+				);
 			}
+		}
 
 		const styles = StyleSheet.create({
 
