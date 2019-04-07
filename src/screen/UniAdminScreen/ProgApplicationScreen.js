@@ -41,9 +41,9 @@ setAppObject(user_id,data,key){
   const ref = firebase.database().ref('/users/'+user_id);
   ref.once('value').then(snapshot=>{
   let email = snapshot.val().email;
-  let name = snapshot.val().username;
+  let name = snapshot.val().name;
   let newApp = {
-      applicant : email,
+      applicant : name,
       applied_prog : data.programID,
       date : data.date,
       status : data.status,
@@ -88,6 +88,7 @@ setAppObject(user_id,data,key){
                         })}
                       >
                       <Text style={{ fontSize: 20 }}>Applicant : {allApp[k].applicant}</Text>
+                      <Text style={{ fontSize: 20 }}>Status: {allApp[k].status}</Text>
                   </TouchableOpacity>
                   // <View>
                   // <Text>
