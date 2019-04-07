@@ -6,47 +6,65 @@ import Swipable from 'react-native-swipeable-row';
 import { Spinner } from '../../components/common/';
 
 class StudentApplicationScreen extends React.Component {
-    state = { applications: [], userID: '', isLoading: true };
+
+    constructor(props) {
+        super(props);
+        this.state = { applications: [], userID: '', isLoading: true };
+    }
 
     componentWillMount() {
         const { navigation } = this.props;
         this.state.userID = navigation.getParam('userID', null);
 
-        console.log(this.state.userID);
+        // console.log(this.state.userID);
         
         const dir = firebase.database().ref().child('applications');
       
-        console.log("This is directory :" + dir);
+        // console.log("This is directory :" + dir);
 
         dir.once('value').then(snapshot => {
-            const applications = [];
-
             snapshot.forEach((application) => {
+                // console.log(application.val());
                 if (application.val().applicantID === this.state.userID) {
-                    applications.push({
-                        key: application.key,
-                        date: application.val().date,
-                        programme: application.val().programID,
-                        status: application.val().status,
-                    });
+                    
+                    console.log('found');
+                    this.setApplications(application.val());
+                      
                 }
+                console.log(this.state.applications);
+                // console.log(this.state.dataSource);
             });
+        });
+    }
 
-            // console.log(applications);
+    setApplications(childSnapshot) {
+        const dir = firebase.database().ref().child('program/' + childSnapshot.programID);
+        // console.log('in');
+        dir.once('value').then(snapshot => {
+            // console.log(snapshot.val());
+            const application = {
+                name: snapshot.val().progName,
+                status: childSnapshot.status, 
+                key: childSnapshot.key
+            };
+            this.setState({
+                applications: this.state.applications.concat(application),
+            });
 
             const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-          
+            
             this.setState({
-                dataSource: ds.cloneWithRows(applications), 
+                dataSource: ds.cloneWithRows(this.state.applications), 
                 isLoading: false
-            });
+            })   
+            
         });
     }
 
     askDelete(key) {
         const navigation = this.props.navigation;
         Alert.alert(
-            'Are you sure to withdraw this application?', 
+            'Are you sure to withdraw this application?' + key, 
             '',
             [
                 { text: 'No', onPress: () => console.log('No is pressed') }, 
@@ -56,7 +74,7 @@ class StudentApplicationScreen extends React.Component {
                         const ref = firebase.database().ref('applications/' + key); 
                         ref.remove();
                         console.log(navigation);
-                        navigation.push('StudentApplication');
+                        navigation.push('History');
                     }
                 }, 
             ], 
@@ -64,11 +82,39 @@ class StudentApplicationScreen extends React.Component {
         );
     }
 
+    renderStatus(status) {
+        if (status.toUpperCase() == 'UNSUCCESSFUL') {
+            return (
+                <View style={{flexDirection: 'row'}}>
+                    <Text>Status: </Text>
+                    <Text style={{ color: 'red' }} >{status}</Text>
+                </View>
+            );
+        }
+        else if (status.toUpperCase() == 'SUCCESSFUL') {
+            return (
+                <View style={{flexDirection: 'row'}}>
+                    <Text>Status: </Text>
+                    <Text style={{ color: 'greed' }} >{status}</Text>
+                </View>
+            );
+        }
+        
+        return (
+            <View style={{flexDirection: 'row'}}>
+                <Text>Status: </Text>
+                <Text style={{ color: 'grey' }} >{status}</Text>
+            </View>
+        );
+        
+    }
+
     // function to render data for list view
     renderRow(rowData) {
         const { rowContainerStyle, avatarStyle, rowTextContainerStyle, rowText1Style,
                 avatarContainerStyle, iconContainerStyle, rowText2Style } = styles;
 
+                
         const rightButtons = [
             <TouchableHighlight 
                 style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
@@ -90,33 +136,21 @@ class StudentApplicationScreen extends React.Component {
 
         return (
             <Swipable rightButtons={rightButtons} >
-                <TouchableOpacity 
-                    onPress={() => console.log('hello world')}
-                    delayPressIn='70' 
-                >
-                    <View style={rowContainerStyle}>
-                        <View style={avatarContainerStyle} >
-                            <Avatar 
-                                rounded 
-                                title={rowData.programme.substring(0, 1).toUpperCase()}
-                                size='medium'
-                                containerStyle={avatarStyle}
-                                overlayContainerStyle={{ backgroundColor: '#34495e' }}
-                            />
-                        </View>
-                        <View style={rowTextContainerStyle} >
-                            <Text style={rowText1Style} >{rowData.programme}</Text>
-                            <Text style={rowText2Style} >Status: {rowData.status}</Text>
-                        </View>
-                        <View style={iconContainerStyle}>
-                            <Icon
-                                name='chevron-right'
-                                type='font-awesome'
-                                color='grey' 
-                            />
-                        </View>
+                <View style={rowContainerStyle}>
+                    <View style={avatarContainerStyle} >
+                        <Avatar 
+                            rounded 
+                            title={rowData.name.substring(0, 1).toUpperCase()}
+                            size='medium'
+                            containerStyle={avatarStyle}
+                            overlayContainerStyle={{ backgroundColor: '#34495e' }}
+                        />
                     </View>
-                </TouchableOpacity>
+                    <View style={rowTextContainerStyle} >
+                        <Text style={rowText1Style} >{rowData.name}</Text>
+                        {this.renderStatus(rowData.status)}
+                    </View>
+                </View>
             </Swipable>
             
         );
@@ -125,8 +159,10 @@ class StudentApplicationScreen extends React.Component {
     // render the whole screen view
     render() {
         const { headerStyle, nameContainerStyle, nameStyle, bodyStyle } = styles;
-        console.log('dataSource: ' + this.state.dataSource);
-        console.log(this.state.isLoading);
+        // console.log('dataSource: ' + this.state.dataSource);
+        // console.log(this.state.applications);
+        // console.log('isLoading: ', this.state.isLoading);
+        
 
         if (this.state.isLoading) {
             return (

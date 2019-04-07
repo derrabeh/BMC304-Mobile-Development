@@ -1,71 +1,197 @@
 import React from 'react';
-import { View, Text, Button , BackHandler,TouchableHighlight , ToastAndroid} from 'react-native';
-import { Header, Input, Card, CardItem } from '../../components/common';
+import { View, Text, Button , ScrollView, TouchableOpacity } from 'react-native';
+import { Icon } from 'react-native-elements';
 import firebase from 'firebase';
+import { Spinner } from '../../components/common/Spinner';
 
 
 class ProgListScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            allProg:{}
+            allProg: {},
+            isLoading: true
           };
     }
 
     componentDidMount(){
         firebase.database().ref('/program').once('value', function (snapshot) {
-            for (var p in snapshot.val()) {
-                // console.log(p,'-----sss');  //get prog1 prog2 prog3
-                }
             this.setState({
                 allProg: snapshot.val(),
+                isLoading: false
             });
         }.bind(this));
     }
 
-    render() {
+    renderProgramme() {
+        let d = JSON.stringify(this.state.allProg);
+        let g = JSON.parse(d);
+        let prv = this.props.navigation;
 
-    let d = JSON.stringify(this.state.allProg);
-    let g = JSON.parse(d);
-    let prv = this.props.navigation;
+        const { cardStyle, titleStyle, buttonStyle, buttonTextStyle } = styles;
 
-      return (
-        <View>
-            <Header headerText={'Programme'} navigation={this.props.navigation} />
-            <Text>Programme List - {prv.state.params.catName}{'\n'}</Text>
-            {
+        return (
             Object.keys(g).map((d, i) => {
-                // if(g[d].cat.toLowerCase() === prv.state.params.cat.toLowerCase()){
-                // if( new RegExp( '\\b' + prv.state.params.searchVAL + '\\b', 'i').test(g[d].cat.toLowerCase()) || 
-                //     new RegExp( '\\b' + prv.state.params.searchVAL + '\\b', 'i').test(g[d].prog_name.toLowerCase())){
-                if(g[d].progName.toLowerCase().includes(prv.state.params.searchVAL.toLowerCase())){
-                return(  
-                    <Card>
-                        <CardItem>
-                        <Text>
-                        Cat: {g[d].cat} - prv: {prv.state.params.cat} {'\n'}
-                        Name: {g[d].progName} {'\n'}
-                        ID  : {d} {'\n'}
-                        UNI : {g[d].uniID} {'\n'}
-                    </Text>
-                    <Button title="View Details" onPress={() => this.props.navigation.navigate('ProgDetail', {
-                        prog_name: g[d].progName,
-                        prog_id : d,
-                        uni: g[d].uniID,
-                        userID : prv.state.params.userID,
-                        })} />
-                    <Text>{'\n'}</Text>
-                        </CardItem>
-                    </Card>
+                if (g[d].progName.toLowerCase().includes(prv.state.params.searchVAL.toLowerCase())){
+                return (  
+                    <View style={cardStyle}>
+                        <View>
+                            <Text style={titleStyle}>{g[d].progName} {'\n'}</Text>
+                            <Text>{g[d].uniID}</Text>
+                            <Text>{g[d].description}</Text>
+                        </View>
+                        <TouchableOpacity 
+                            style={buttonStyle}
+                            onPress={() => this.props.navigation.navigate('ProgDetail', {
+                                prog_name: g[d].progName,
+                                prog_id: d,
+                                uni: g[d].uniID,
+                                userID: prv.state.params.userID,
+                                })} 
+                        >
+                            <Text style={buttonTextStyle}>
+                                View
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                     );
                 }
             }
             )
-            }
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Student_Home',{userID : prv.state.params.userID})} />
-        </View>
-      );
+        )
     }
+
+    render() {
+
+        const { headerStyle, bodyStyle, iconContainerStyle, headerTextContainerStyle,
+                headerTextStyle } = styles;
+
+        if (this.state.isLoading) {
+            return (
+                <View style={{flex: 1}}>
+                    <View style={headerStyle}>
+                        <View style={iconContainerStyle}>
+                            <TouchableOpacity 
+                            onPress={() => this.props.navigation.navigate('Student_Home')}
+                            >
+                                <View 
+                                    style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
+                                    paddingBottom: 5 }}
+                                >
+                                    <Icon
+                                        name='chevron-left'
+                                        type='font-awesome'
+                                        color='white'
+                                        size={28}
+                                    />
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={headerTextContainerStyle}>
+                            <Text style={headerTextStyle}>Programmes</Text>
+                        </View>
+                        <View style={{ flex: 2 }}></View>
+                    </View>
+                    <View style={{flex: 9}}>
+                        <Spinner />
+                    </View>
+                </View>
+            );
+        }
+
+        return (
+            <View style={{ flex: 1, paddingTop: 20, backgroundColor: '#34495e' }}>
+                <View style={headerStyle}>
+                    <View style={iconContainerStyle}>
+                        <TouchableOpacity 
+                        onPress={() => this.props.navigation.navigate('Student_Home')}
+                        >
+                            <View 
+                                style={{ paddingLeft: 13, paddingRight: 13, paddingTop: 5, 
+                                paddingBottom: 5 }}
+                            >
+                                <Icon
+                                    name='chevron-left'
+                                    type='font-awesome'
+                                    color='white'
+                                    size={28}
+                                />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={headerTextContainerStyle}>
+                        <Text style={headerTextStyle}>Programmes</Text>
+                    </View>
+                    <View style={{flex: 2}}>
+
+                    </View>
+                </View>
+                <View style={bodyStyle}>
+                <ScrollView>
+                {
+                    this.renderProgramme()
+                }
+                </ScrollView>
+                </View>
+            </View>
+        );
+    }
+}
+
+const styles = {
+    headerStyle: {
+        backgroundColor: '#34495e', 
+        flex: 1, 
+        flexDirection: 'row'
+    },
+    bodyStyle: {
+        backgroundColor: '#bdc3c7',
+        flex: 9, 
+        paddingBottom: 10
+    },
+    iconContainerStyle: {
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        flex: 2
+    }, 
+    headerTextContainerStyle: {
+        flex: 6, 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    }, 
+    headerTextStyle: {
+        color: 'white', 
+        fontSize: 18
+    }, 
+    cardStyle: {
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10, 
+        backgroundColor: '#ecf0f1',
+        padding: 15, 
+        alignItems: 'center',
+        borderRadius: 10
+    }, 
+    titleStyle: {
+        fontSize: 20
+    }, 
+    buttonStyle: {
+        backgroundColor: '#2ecc71', 
+        borderRadius: 40/2, 
+        height: 40, 
+        padding: 10, 
+        margin: 5, 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginTop: 10
+    },
+    buttonTextStyle: {
+        color: 'white', 
+        fontSize: 15, 
+        marginLeft: 20, 
+        marginRight: 20
+    }, 
 }
 
 export { ProgListScreen };
