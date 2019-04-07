@@ -28,15 +28,15 @@ class AppDetails extends React.Component {
     }
 
     getScore(){
-      let d = this.props.navigation;
-      var score_ref = firebase.database().ref('qualificationObtained');
+      // let d = this.props.navigation;
+      // var score_ref = firebase.database().ref('qualificationObtained');
 
-      score_ref
-      .orderBy("userID")
-      .equalTo(d.state.params.userID)
-      .once("value", function(snapshot) {
-        console.log(snapshot.val(),'wxd');
-      });
+      // score_ref
+      // .orderBy("userID")
+      // .equalTo(d.state.params.userID)
+      // .once("value", function(snapshot) {
+      //   console.log(snapshot.val(),'wxd');
+      // });
 
     }
     btnStatus(){
