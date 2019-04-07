@@ -43,7 +43,7 @@ setAppObject(user_id,data,key){
   let email = snapshot.val().email;
   let name = snapshot.val().name;
   let newApp = {
-      applicant : name,
+      applicant : email,
       applied_prog : data.programID,
       date : data.date,
       status : data.status,

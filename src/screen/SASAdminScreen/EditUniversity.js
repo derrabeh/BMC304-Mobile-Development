@@ -15,7 +15,7 @@ import { Spinner } from '../../components/common';
   }
 
     componentWillMount() {
-      const key = this.props.navigation.getParam('uniID', null);
+      const key = this.props.navigation.getParam('UniID', null);
 
       this.setState({ key });
 

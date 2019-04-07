@@ -65,7 +65,7 @@ class StudentApplicationScreen extends React.Component {
     askDelete(key) {
         const navigation = this.props.navigation;
         Alert.alert(
-            'Are you sure to withdraw this application?' + key, 
+            'Are you sure to withdraw this application?', 
             '',
             [
                 { text: 'No', onPress: () => console.log('No is pressed') }, 
@@ -75,7 +75,7 @@ class StudentApplicationScreen extends React.Component {
                         const ref = firebase.database().ref('applications/' + key); 
                         ref.remove();
                         console.log(navigation);
-                        navigation.push('History');
+                        navigation.push('Student_Home');
                     }
                 }, 
             ], 
@@ -96,7 +96,7 @@ class StudentApplicationScreen extends React.Component {
             return (
                 <View style={{flexDirection: 'row'}}>
                     <Text>Status: </Text>
-                    <Text style={{ color: 'greed' }} >{status}</Text>
+                    <Text style={{ color: 'green' }} >{status}</Text>
                 </View>
             );
         }

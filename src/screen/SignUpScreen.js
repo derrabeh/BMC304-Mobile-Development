@@ -5,8 +5,8 @@ import { View, ToastAndroid, ImageBackground, Text,
 import { LoginInput, LoginButton, Container } from '../components/common';
 
 class SignUpScreen extends React.Component {
-  state = { email: 'user111@user.com', password: '123456', userType: 'Student', username: 'username', 
-            mobile: '123', dob: '123', idType: '123', idNum: '123' };
+  state = { email: '', password: '', userType: 'Student', username: '', 
+            mobile: '', dob: '', idType: '', idNum: '' };
 
   // on login button press
   onButtonPress() {
