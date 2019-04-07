@@ -23,6 +23,11 @@ class UniAdminProfileScreen extends React.Component {
         password : '',
         confirm_password : '',
       })
+
+
+      
+
+
       let p = this.props.navigation;
       console.log(p.state.params.userID);
     }

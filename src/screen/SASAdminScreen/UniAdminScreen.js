@@ -164,14 +164,6 @@ renderRow(rowData) {
             <View style={rowTextContainerStyle} >
               <Text style={rowText1Style} >{rowData.name.toUpperCase()}</Text>
             </View>
-
-            <View style={iconContainerStyle}>
-              <Icon
-                name='chevron-right'
-                type='font-awesome'
-                color='grey'
-              />
-            </View>
           </View>
         </TouchableOpacity>
       </Swipable>
