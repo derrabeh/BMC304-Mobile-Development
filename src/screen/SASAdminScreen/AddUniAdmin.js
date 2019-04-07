@@ -22,7 +22,7 @@ class AddUniAdmin extends React.Component {
   saveUni = () => {
     const { username, password, name, email, userType } = this.state;
 
-    if (email === '' && password === '' && name === '' && username === '') {
+    if (email === 'u' && password === '123456789' && name === 'uaua' && username === '') {
       ToastAndroid.show('Please enter all the details needed !', ToastAndroid.SHORT);
       Alert.alert("Hahahhah")
     }
@@ -34,23 +34,30 @@ class AddUniAdmin extends React.Component {
              .then(() => {
                const uid = firebase.auth().currentUser.uid;
                const { navigation } = this.props;
-               this.state.uniID = navigation.getParam('uniID', null);
+               this.state.UniID = navigation.getParam('UniID', null);
 
                const userDir = firebase.database().ref().child('users/' + uid);
                userDir.set({
-                 userType: "uniAdmin",
+                 userType: "UniAdmin",
                  email:this.state.email,
                  username: this.state.username,
                  name: this.state.name,
-                uniID: this.state.uniID
+                 uniID: this.state.UniID,
+                 password: this.state.password,
                });
 
                const uniAdminDir = firebase.database().ref().child('uniAdmin/' + uid);
+               console.log(this.state.UniID,'09876540987654');
                uniAdminDir.set({
                    userID: uid,
-                   uniID: this.state.uniID,
+                   uniID: this.state.UniID,
                });
+
+              this.props.navigation.push('UniAdminScreen', {
+                UniID: this.state.UniID
+              });
              });
+
          }).catch((error) => {
              ToastAndroid.show(error.message, ToastAndroid.SHORT);
              console.log(error.message);
@@ -59,8 +66,8 @@ class AddUniAdmin extends React.Component {
    }
 
   render(){
-    const { containerStyle, headerStyle, nameContainerStyle,nameStyle, iconContainerStyle,
-            bodyStyle, bodyContainerStyle, textInputStyle,inputContainerStyle, inputTextStyle } = styles;
+    const { containerStyle, headerStyle, nameContainerStyle,nameStyle, iconContainerStyle,buttonStyle, buttonTextStyle,
+          buttonGroupStyle, bodyStyle, bodyContainerStyle, textInputStyle,inputContainerStyle, inputTextStyle, inputContainer } = styles;
 
     return(
     <KeyboardAvoidingView style={containerStyle} behavior='padding' enabled >
@@ -92,6 +99,7 @@ class AddUniAdmin extends React.Component {
         <View style={bodyStyle}>
           <View style={inputContainerStyle}>
           <Text style ={inputTextStyle}> Username </Text>
+          <View style={inputContainer}>
             <TextInput
               onChangeText={username => this.setState({username})}
               value= {this.state.username}
@@ -99,10 +107,12 @@ class AddUniAdmin extends React.Component {
               placeholder="Enter username for university admin"
               blurRadius={1}
             />
+            </View>
           </View>
 
         <View style={inputContainerStyle}>
             <Text style ={inputTextStyle}> Email </Text>
+            <View style={inputContainer}>
               <TextInput
                 onChangeText={email => this.setState({email})}
                 value= {this.state.email}
@@ -110,22 +120,26 @@ class AddUniAdmin extends React.Component {
                 placeholder="Enter email of university admin"
                 blurRadius={1}
               />
+              </View>
         </View>
 
         <View style={inputContainerStyle}>
             <Text style ={inputTextStyle}> Password </Text>
-            <TextInput
-            onChangeText={password => this.setState({password})}
-            value= {this.state.password}
-            label="password"
-            placeholder="Enter password for university admin"
-            secureTextEntry
-            blurRadius={1}
-            />
+            <View style={inputContainer}>
+              <TextInput
+              onChangeText={password => this.setState({password})}
+              value= {this.state.password}
+              label="password"
+              placeholder="Enter password for university admin"
+              secureTextEntry
+              blurRadius={1}
+              />
+            </View>
         </View>
 
         <View style={inputContainerStyle}>
             <Text style ={inputTextStyle}> Name </Text>
+            <View style={inputContainer}>
               <TextInput
               onChangeText={name=> this.setState({name})}
               value= {this.state.name}
@@ -133,11 +147,20 @@ class AddUniAdmin extends React.Component {
               placeholder="Enter name of university admin"
               blurRadius={1}
               />
+            </View>
         </View>
 
-        <Button title="Save" onPress={this.saveUni}>
-        </Button>
+        <View style={buttonGroupStyle}>
+          <TouchableOpacity
+            style={buttonStyle}
+            onPress={this.saveUni}
+          >
+          <Text style={buttonTextStyle}>
+            Save
+          </Text>
+          </TouchableOpacity>
         </View>
+      </View>
       </View>
       </KeyboardAvoidingView>
     );
@@ -190,11 +213,47 @@ const styles = {
         height: 40
     },
     inputContainerStyle: {
-        marginTop: 10,
-        marginBottom: 10
+        marginTop: 20,
+        marginBottom: 20
     },
     inputTextStyle: {
+        font: 25,
+        padding: 15,
         color: 'grey'
+    },
+    inputContainer:{
+      borderWidth: 1,
+      padding: 15,
+      borderRadius:5,
+      borderColor:'grey',
+    },
+    buttonStyle: {
+        backgroundColor: '#2ecc71',
+        borderRadius: 40/2,
+        height: 40,
+        padding: 10,
+        margin: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+        },
+    buttonStyle2: {
+        backgroundColor: '#e74c3c',
+        borderRadius: 40/2,
+        height: 40,
+        padding: 10,
+        margin: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    buttonTextStyle: {
+        color: 'white',
+        fontSize: 15
+    },
+    buttonGroupStyle: {
+        alignItems: 'stretch',
+        justifyContent: 'center',
+        flex: 3,
+        marginBottom: 20,
     }
 }
 

@@ -11,34 +11,44 @@ class UniAdminScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      searchText:'',
+      isLoading: true,
+      email:'',
+      name:'',
+      username:'',
+      key:'',
+      password:'',
     };
 
     this.arrayHolder = [];
   }
 
 
-  componentDidMount() {
+  componentWillMount() {
     const { navigation } = this.props;
-    this.state.uniID = navigation.getParam('uniID', null);
-    //console.log(this.state.uniID);
+    this.state.UniID = navigation.getParam('UniID', null);
+    console.log('Unicersity ID :' + this.state.UniID);
 
     const ref = firebase.database().ref('users');
       ref.once('value')
-      .then((snapshot) => {
-        const uniAdminRetrieved =[];
+        .then((snapshot) => {
 
-        if (childSnapshot.val().uniID == this.state.uniID){
-          snapshot.forEach((childSnapshot) => {
+          const uniAdminRetrieved =[];
 
-            uniAdminRetrieved.push({
-              key: childSnapshot.key,
-              name: childSnapshot.val().name,
-              email:  childSnapshot.val().email,
-              username: childSnapshot.val().username,
-            });
-        });
-      }
+            snapshot.forEach((childSnapshot) => {
+              if (childSnapshot.val().userType === 'UniAdmin'){
+                if (childSnapshot.val().uniID === this.state.UniID){
+                  uniAdminRetrieved.push({
+                    key: childSnapshot.key,
+                    name: childSnapshot.val().name,
+                    email:  childSnapshot.val().email,
+                    username: childSnapshot.val().username,
+                    password: childSnapshot.val().password,
+                });
+
+            }
+          }
+          });
 
         uniAdminRetrieved.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
 
@@ -55,11 +65,29 @@ class UniAdminScreen extends React.Component {
       }
 
   addNewUniAdmin = () => {
-    this.props.navigation.push('AddUniAdmin');
+    this.props.navigation.push('AddUniAdmin',
+      { UniID: this.state.UniID });
   }
 
-  askDelete(key) {
+  filterQualification(searchText) {
+      console.log(searchText);
+      const filteredData = this.arrayHolder.filter(
+          (uniAdmin) => {
+              const name = uniAdmin.name.toUpperCase();
+              const value = searchText.toUpperCase();
+
+              return name.indexOf(value) > -1;
+          }
+      );
+      this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(filteredData),
+          searchText: searchText
+      })
+  }
+
+  askDelete(key,e,pw) {
     const navigation = this.props.navigation;
+    const { email, password }= this.state;
     Alert.alert(
       'Delete this university admin?',
       '',
@@ -67,12 +95,19 @@ class UniAdminScreen extends React.Component {
         { text: 'No', onPress: () => console.log('No is pressed') },
         { text: 'yes',
         onPress: () => {
-          console.log(key);
-          const ref = firebase.database().ref('users/' + key);
-          ref.remove();
-          const uniRef = firebase.database().ref('uniAdmin/' + key);
-          uniRef.remove();
-          navigation.push('UniAdminScreen');
+          firebase.auth().signInWithEmailAndPassword(e,pw)
+            .then(() => {
+              var user = firebase.auth().currentUser;
+              user.delete().then(function(){
+                const ref = firebase.database().ref('users/' + key);
+                  ref.remove();
+
+                  const uniRef = firebase.database().ref('uniAdmin/' + key);
+                    uniRef.remove();
+              })
+            });
+
+          navigation.push('UniversityScreen', {UniID: this.state.UniID});
         }
       },
     ],
@@ -85,76 +120,61 @@ renderRow(rowData) {
     avatarContainerStyle, iconContainerStyle, rowText2Style } = styles;
 
     const rightButtons = [
+
       <TouchableHighlight
-        style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start',
-        alignItems: 'center', backgroundColor: '#2ecc71' }}
-        onPress={()=> this.props.navigation.push('EditUniAdmin', {
-          uniAdminID: rowData.key,
-          userID: rowData.userID
-      })}
+        style={{
+          flexDirection: 'row', flex: 1, justifyContent: 'flex-start',
+          alignItems: 'center', backgroundColor: '#e74c3c'
+        }}
+        onPress={
+          ()=> this.askDelete(rowData.key,rowData.email,rowData.password)
+        }
       >
+
       <View style={{ flex: 1/5 }}>
         <Icon
-        name='pencil'
-        type='font-awesome'
-        color='white'
-        size={28}
-      />
-      </View>
-
-      </TouchableHighlight>,
-      <TouchableHighlight
-      style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start',
-      alignItems: 'center', backgroundColor: '#e74c3c' }}
-      onPress={()=> this.askDelete(rowData.key)}
-      >
-      <View style={{ flex: 1/5 }}>
-      <Icon
-      name='trash'
-      type='font-awesome'
-      color='white'
-      size={28}
-
-      />
+          name='trash'
+          type='font-awesome'
+          color='white'
+          size={28}
+        />
       </View>
       </TouchableHighlight>
-
     ];
 
     return (
       <Swipable rightButtons={rightButtons} >
         <TouchableOpacity
-          onPress={() => { this.props.navigation.push('AddUniAdmin', {
-            uniID: rowData.key });
-        }}
-        delayPressIn='70'
+          onPress={() => { this.props.navigation.push('UniAdminDetails', {
+            UniID: rowData.key });
+          }}
+          delayPressIn='70'
         >
-      <View style={rowContainerStyle}>
-      <View style={avatarContainerStyle} >
-        <Avatar
-          rounded
-          title={rowData.name.substring(0, 1).toUpperCase()}
-          size='medium'
-          containerStyle={avatarStyle}
-          overlayContainerStyle={{ backgroundColor: '#34495e' }}
-        />
-      </View>
+          <View style={rowContainerStyle}>
+            <View style={avatarContainerStyle} >
+              <Avatar
+                rounded
+                title={rowData.name.substring(0, 1).toUpperCase()}
+                size='medium'
+                containerStyle={avatarStyle}
+                overlayContainerStyle={{ backgroundColor: '#34495e' }}
+              />
+            </View>
 
-      <View style={rowTextContainerStyle} >
-        <Text style={rowText1Style} >{rowData.name.toUpperCase()}</Text>
-      </View>
+            <View style={rowTextContainerStyle} >
+              <Text style={rowText1Style} >{rowData.name.toUpperCase()}</Text>
+            </View>
 
-      <View style={iconContainerStyle}>
-        <Icon
-          name='chevron-right'
-          type='font-awesome'
-          color='grey'
-        />
-      </View>
-      </View>
-      </TouchableOpacity>
+            <View style={iconContainerStyle}>
+              <Icon
+                name='chevron-right'
+                type='font-awesome'
+                color='grey'
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
       </Swipable>
-
     );
   }
 
@@ -163,59 +183,75 @@ renderRow(rowData) {
       floatButtonStyle, floatButtonContainerStyle,
       headerTextContainerStyle, headerIcon1ContainerStyle,
       headerIcon2ContainerStyle } = styles;
-      console.log('dataSource: ' + this.state.dataSource);
-      console.log(this.state.isLoading);
 
       if (this.state.isLoading) {
         return (
           <View style={{ backgroundColor: '#bdc3c7', flex: 1 }} >
+          <View style={searchBarDiv} >
+              <SearchBar
+                  onChangeText={()=>{console.log(this.state.qualifications)}}
+                  value={this.state.searchText}
+                  placeholder='Search for university admin'
+              />
+          </View>
+
           <Spinner />
-          <View style={floatButtonContainerStyle}>
+            <View style={floatButtonContainerStyle}>
+                <TouchableOpacity
+                  onPress={() => this.addNewUniAdmin()}
+                  style={floatButtonStyle}
+                >
+                <Icon
+                  name='plus'
+                  type='font-awesome'
+                  color='white'
+                  style={{ margin: 5 }}
+                  activeOpacity='0.8'
+                  underlayColor='#34495e'
+                />
+                </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+
+    else {
+      return (
+      <View style={{ backgroundColor: '#bdc3c7', flex: 1 }} >
+      <View style={searchBarDiv} >
+          <SearchBar
+              onChangeText={(searchText) => this.filterQualification(searchText)}
+              value={this.state.searchText}
+              placeholder='Search for university Admin'
+          />
+      </View>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this.renderRow.bind(this)}
+        />
+
+        <View style={floatButtonContainerStyle}>
           <TouchableOpacity
-          onPress={() => this.addNewUni()}
-          style={floatButtonStyle}
+            onPress={() => this.addNewUniAdmin()}
+            style={floatButtonStyle}
           >
-          <Icon
+        <Icon
           name='plus'
           type='font-awesome'
           color='white'
           style={{ margin: 5 }}
           activeOpacity='0.8'
           underlayColor='#34495e'
-          />
+        />
+
           </TouchableOpacity>
-          </View>
-          </View>
-        );
-      }
-
-      return (
-        <View style={{ backgroundColor: '#bdc3c7', flex: 1 }} >
-
-        <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this.renderRow.bind(this)}
-        />
-        <View style={floatButtonContainerStyle}>
-        <TouchableOpacity
-        onPress={() => this.addNewUniAdmin()}
-        style={floatButtonStyle}
-        >
-        <Icon
-        name='plus'
-        type='font-awesome'
-        color='white'
-        style={{ margin: 5 }}
-        activeOpacity='0.8'
-        underlayColor='#34495e'
-        />
-        </TouchableOpacity>
         </View>
-        </View>
+      </View>
 
       );
     }
   }
+}
 
   const styles = {
     rowContainerStyle: {
