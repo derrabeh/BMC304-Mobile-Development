@@ -95,7 +95,7 @@ class UniversityScreen extends React.Component {
                 style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start',
                     alignItems: 'center', backgroundColor: '#2ecc71' }}
                 onPress={()=> this.props.navigation.push('EditUniversity', {
-                    uniID: rowData.key })}
+                    UniID: rowData.key })}
             >
                 <View style={{ flex: 1/5 }}>
                     <Icon
@@ -130,7 +130,7 @@ class UniversityScreen extends React.Component {
             <Swipable rightButtons={rightButtons} >
                 <TouchableOpacity
                     onPress={() => { this.props.navigation.push('UniAdminScreen', {
-                                    uniID: rowData.key });
+                                    UniID: rowData.key });
                             }}
                     delayPressIn='70'
                 >

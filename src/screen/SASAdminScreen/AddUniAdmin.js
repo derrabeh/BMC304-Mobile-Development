@@ -34,23 +34,29 @@ class AddUniAdmin extends React.Component {
              .then(() => {
                const uid = firebase.auth().currentUser.uid;
                const { navigation } = this.props;
-               this.state.uniID = navigation.getParam('uniID', null);
+               this.state.UniID = navigation.getParam('UniID', null);
 
                const userDir = firebase.database().ref().child('users/' + uid);
                userDir.set({
-                 userType: "uniAdmin",
+                 userType: "UniAdmin",
                  email:this.state.email,
                  username: this.state.username,
                  name: this.state.name,
-                uniID: this.state.uniID
+                 UniID: this.state.UniID,
+                 password: this.state.password,
                });
 
                const uniAdminDir = firebase.database().ref().child('uniAdmin/' + uid);
                uniAdminDir.set({
                    userID: uid,
-                   uniID: this.state.uniID,
+                   UniID: this.state.UniID,
                });
+
+              this.props.navigation.push('UniAdminScreen', {
+                UniID: this.state.UniID
+              });
              });
+
          }).catch((error) => {
              ToastAndroid.show(error.message, ToastAndroid.SHORT);
              console.log(error.message);
