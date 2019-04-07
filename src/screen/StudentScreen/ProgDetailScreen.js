@@ -94,9 +94,11 @@ class ProgDetailScreen extends React.Component {
     }
 
     renderButton(status) {
+      const pv = this.props.navigation;
+
       const { buttonGroupStyle, buttonStyle, buttonTextStyle } = styles;
 
-      if (status) {
+      if (!this.state.approveStatus) {
         return (
           <View style={buttonGroupStyle}>
             <TouchableOpacity 
