@@ -12,7 +12,7 @@ import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen,
           StudentApplicationScreen, StudentQualification, AddQualification } 
           from './src/screen/StudentScreen';
 import { AppDetails, ProgApplicationScreen, UniHomeScreen, NewProgScreen,
-          EditProgScreen } from './src/screen/UniAdminScreen';
+          EditProgScreen, UniAdminProfileScreen } from './src/screen/UniAdminScreen';
 
 
 const SASAdminTabNavigator = createBottomTabNavigator({
@@ -90,13 +90,8 @@ const RootStack = createStackNavigator(
     StudentQualification: StudentQualification,
     AddQualification: AddQualification,
     AddUniversity: AddUniversity,
-<<<<<<< HEAD
-    AddUniAdmin: AddUniAdmin,
-
-=======
     AddUniAdmin: AddUniAdmin, 
     EditQualification: EditQualificationScreen
->>>>>>> 721755c70c06fe394707b23c87fe678f4a137197
   },
   {
     //need to change later

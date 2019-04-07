@@ -54,7 +54,7 @@ class NewProgScreen extends React.Component {
                 closingDate: this.state.closingDate,
                 description: this.state.desc,
                 progName: this.state.progName,
-                uniID: '-LbglPfKTozIcAXzYlK0',
+                uniID: d.state.params.uniID,
             });
 
             ToastAndroid.show('Program '+this.state.progName+'  Created!', ToastAndroid.SHORT);
