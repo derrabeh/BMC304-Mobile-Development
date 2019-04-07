@@ -26,6 +26,19 @@ class AppDetails extends React.Component {
       }
 
     }
+
+    getScore(){
+      // let d = this.props.navigation;
+      // var score_ref = firebase.database().ref('qualificationObtained');
+
+      // score_ref
+      // .orderBy("userID")
+      // .equalTo(d.state.params.userID)
+      // .once("value", function(snapshot) {
+      //   console.log(snapshot.val(),'wxd');
+      // });
+
+    }
     btnStatus(){
       let p = this.props.navigation;
       console.log(p.state.params.status,'hhh');

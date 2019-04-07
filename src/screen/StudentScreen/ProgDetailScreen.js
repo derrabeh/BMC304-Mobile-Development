@@ -69,7 +69,7 @@ class ProgDetailScreen extends React.Component {
               applicantID,
               date: today,
               programID: all.state.params.prog_id,
-              status: 'PENDING'
+              status: 'New'
             });
 
             ToastAndroid.show('Applied Successfully!', ToastAndroid.SHORT);
