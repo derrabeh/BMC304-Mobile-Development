@@ -73,7 +73,7 @@ class UniAdminProfileScreen extends React.Component {
       return (
 
         <View>
-            <Header headerText={'NEW PROG'}/>
+            <Header headerText={'Edit Admin Password'}/>
             <View style={styles.inputContainer}>
 
             <TextInput
