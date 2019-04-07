@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, TextInput, ToastAndroid, Button, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { Text, TouchableOpacity, View, TextInput, ToastAndroid, 
+  Button, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Container } from '../../components/common';
 import firebase from 'firebase';
 import { Icon } from 'react-native-elements';

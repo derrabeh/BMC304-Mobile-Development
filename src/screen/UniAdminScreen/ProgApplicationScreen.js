@@ -41,9 +41,9 @@ setAppObject(user_id,data,key){
   const ref = firebase.database().ref('/users/'+user_id);
   ref.once('value').then(snapshot=>{
   let email = snapshot.val().email;
-  let name = snapshot.val().username;
+  let name = snapshot.val().name;
   let newApp = {
-      applicant : name,
+      applicant : email,
       applied_prog : data.programID,
       date : data.date,
       status : data.status,
@@ -61,15 +61,6 @@ setAppObject(user_id,data,key){
     let d = this.props.navigation;
     let g = JSON.stringify(this.state.allA);
     let allApp = JSON.parse(g);
-    if(allApp.length == 0){
-        console.log('No App');
-        console.log('-----')
-    }
-    else{
-      console.log('yes');
-      console.log('-----')
-
-    }
 
 
     // console.log(this.state.allA,'wwww----------');
@@ -81,7 +72,7 @@ setAppObject(user_id,data,key){
       
             {Object.keys(allApp).map((k,e) => {
             if(allApp[k].applied_prog == d.state.params.prog_id){
-              if(allApp[k].status != 'XDDD'){
+              if(allApp[k].status != ''){
                 return(
                   <TouchableOpacity
                       style={styles.item}
@@ -92,10 +83,12 @@ setAppObject(user_id,data,key){
                         status : allApp[k].status,
                         prog_name : d.state.params.prog_name,
                         key : allApp[k].app_key,
-                        prog_id : d.state.params.prog_id
+                        prog_id : d.state.params.prog_id,
+                        userID :  d.state.params.userID,
                         })}
                       >
-                      <Text style={{ fontSize: 20 }}>Applicant: {allApp[k].applicant}</Text>
+                      <Text style={{ fontSize: 20 }}>Applicant : {allApp[k].applicant}</Text>
+                      <Text style={{ fontSize: 20 }}>Status: {allApp[k].status}</Text>
                   </TouchableOpacity>
                   // <View>
                   // <Text>

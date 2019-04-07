@@ -173,28 +173,29 @@ class AddQualification extends React.Component {
 					}
 				}
 
-			return(
-				<KeyboardAvoidingView behavior='padding' enabled>
-				<ScrollView>
-				<Header headerText={'New Qualification'} navigation={this.props.navigation} />
-
-				<Picker
-				selectedValue={this.state.qualificationID}
-				style
-				onValueChange={
-					(value, index) => {this.setState({qualificationID: value}); console.log(value);}
-				}
-				>
-				{this.renderPicker()}
-				<Picker.Item label='others' value='OTHERS'/>
-
-				</Picker>
-
-				<View>
-				 {pickerOptionText()}
-				</View>
-
-				</ScrollView>
+			return (
+				<KeyboardAvoidingView behavior='padding' enabled style={{flex: 1}}>
+					<View 
+						style={{flex:1, backgroundColor: 'red', paddingLeft: 40,
+						paddingRight: 40,
+						justifyContent: 'center', alignItems: 'stretch' }}>
+						<View style={{marginBottom: 20}}>
+							<Text>Please choose your qualification type:</Text>
+							<Picker
+								selectedValue={this.state.qualificationID}
+								style={{borderWidth: 1, height: 40}}
+								onValueChange={
+									(value, index) => {this.setState({qualificationID: value}); console.log(value);}
+								}
+								>
+								{this.renderPicker()}
+								<Picker.Item label='others' value='OTHERS'/>
+							</Picker>
+						</View>
+						
+						<Text>Please enter your score: </Text>
+						<View>{pickerOptionText()}</View>
+					</View>
 				</KeyboardAvoidingView>
 
 			);
