@@ -7,3 +7,5 @@ export * from './AddUniAdmin';
 export * from './EditQualificationScreen';
 export * from './UniversityScreen';
 export * from './EditUniversity';
+export * from './UniAdminScreen';
+export * from './notificationScreen';

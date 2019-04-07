@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, TextInput, ToastAndroid, Button } from 'react-native';
+import { Text, TouchableOpacity, View, TextInput, ToastAndroid, Button, KeyboardAvoidingView } from 'react-native';
 import { Container } from '../../components/common';
 import firebase from 'firebase';
 import { Icon } from 'react-native-elements';
@@ -29,40 +29,41 @@ class AddUniAdmin extends React.Component {
 
     else{
       firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
-              const uid = firebase.auth().currentUser.uid;
+         .then(() => {
+           firebase.auth().signInWithEmailAndPassword(email, password)
+             .then(() => {
+               const uid = firebase.auth().currentUser.uid;
+               const { navigation } = this.props;
+               this.state.uniID = navigation.getParam('uniID', null);
 
-              const userDir = firebase.database().ref().child('users/' + uid);
-              userDir.set({
-                userType: "uniAdmin",
-                email:this.state.email,
-                username: this.state.username,
-                name: this.state.name,
-              });
+               const userDir = firebase.database().ref().child('users/' + uid);
+               userDir.set({
+                 userType: "uniAdmin",
+                 email:this.state.email,
+                 username: this.state.username,
+                 name: this.state.name,
+                uniID: this.state.uniID
+               });
 
-              const uniAdminDir = firebase.database().ref().child('uniAdmin/' + uid);
-              const { navigation } = this.props;
-              this.state.uniID = navigation.getParam('uniID', null);
-
-              uniAdminDir.set({
-                  userID: uid,
-                  UniID: this.state.uniID
-              });
-            });
-        }).catch((error) => {
-            ToastAndroid.show(error.message, ToastAndroid.SHORT);
-            console.log(error.message);
-          });
-    }
-  }
+               const uniAdminDir = firebase.database().ref().child('uniAdmin/' + uid);
+               uniAdminDir.set({
+                   userID: uid,
+                   uniID: this.state.uniID,
+               });
+             });
+         }).catch((error) => {
+             ToastAndroid.show(error.message, ToastAndroid.SHORT);
+             console.log(error.message);
+           });
+     }
+   }
 
   render(){
     const { containerStyle, headerStyle, nameContainerStyle,nameStyle, iconContainerStyle,
             bodyStyle, bodyContainerStyle, textInputStyle,inputContainerStyle, inputTextStyle } = styles;
 
     return(
+    <KeyboardAvoidingView style={containerStyle} behavior='padding' enabled >
       <View style ={containerStyle}>
         <View style={headerStyle}>
           <View style={iconContainerStyle}>
@@ -138,6 +139,7 @@ class AddUniAdmin extends React.Component {
         </Button>
         </View>
       </View>
+      </KeyboardAvoidingView>
     );
   }
 }
