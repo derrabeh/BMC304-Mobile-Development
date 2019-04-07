@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ListView, TouchableHighlight, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, ListView, TouchableHighlight, Alert, RefreshControl } from 'react-native';
 import firebase from 'firebase';
 import { Icon, Avatar } from 'react-native-elements';
 import Swipable from 'react-native-swipeable-row';
@@ -9,7 +9,8 @@ class StudentApplicationScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { applications: [], userID: '', isLoading: true };
+        this.state = { applications: [], userID: '', isLoading: true, refreshing: false };
+        this.webCall();
     }
 
     componentWillMount() {
@@ -23,44 +24,73 @@ class StudentApplicationScreen extends React.Component {
         // console.log("This is directory :" + dir);
 
         dir.once('value').then(snapshot => {
+            const applicationRetrived = [];
             snapshot.forEach((application) => {
-                // console.log(application.val());
-                if (application.val().applicantID === this.state.userID) {
-                    
-                    console.log('found');
-                    this.setApplications(application.val(), application.key);
-                      
+                if (application.val().applicantID == this.state.userID) {
+                    applicationRetrived.push({
+                        name: application.val().programName,
+                        key: application.key,
+                        status: application.val().status
+                    });
                 }
-                console.log(this.state.applications);
-                // console.log(this.state.dataSource);
             });
-        });
-    }
 
-    setApplications(childSnapshot, applicationID) {
-        const dir = firebase.database().ref().child('program/' + childSnapshot.programID);
-        // console.log('in');
-        
-        dir.once('value').then(snapshot => {
-            // console.log(snapshot.val());
-            const application = {
-                name: snapshot.val().progName,
-                status: childSnapshot.status, 
-                key: applicationID
-            };
-            this.setState({
-                applications: this.state.applications.concat(application),
-            });
+            applicationRetrived.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
 
             const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-            
+
             this.setState({
-                dataSource: ds.cloneWithRows(this.state.applications), 
-                isLoading: false
-            });   
-            
+                isLoading: false,
+                dataSource: ds.cloneWithRows(applicationRetrived),
+                }
+            );
         });
     }
+
+    webCall = () =>{
+ 
+        const { navigation } = this.props;
+        this.state.userID = navigation.getParam('userID', null);
+
+        // console.log(this.state.userID);
+        
+        const dir = firebase.database().ref().child('applications');
+      
+        // console.log("This is directory :" + dir);
+
+        dir.once('value').then(snapshot => {
+            const applicationRetrived = [];
+            snapshot.forEach((application) => {
+                if (application.val().applicantID == this.state.userID) {
+                    applicationRetrived.push({
+                        name: application.val().programName,
+                        key: application.key,
+                        status: application.val().status
+                    });
+                }
+            });
+
+            applicationRetrived.sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : -1);
+
+            const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
+            this.setState({
+                isLoading: false,
+                dataSource: ds.cloneWithRows(applicationRetrived),
+                }
+            );
+        });
+    }
+     
+    onRefresh() {
+
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    
+        this.setState({ dataSource: ds.cloneWithRows([]) });
+    
+        this.webCall();
+        
+        }
 
     askDelete(key) {
         const navigation = this.props.navigation;
@@ -160,9 +190,9 @@ class StudentApplicationScreen extends React.Component {
     // render the whole screen view
     render() {
         const { headerStyle, nameContainerStyle, nameStyle, bodyStyle } = styles;
-        // console.log('dataSource: ' + this.state.dataSource);
-        // console.log(this.state.applications);
-        // console.log('isLoading: ', this.state.isLoading);
+        console.log('dataSource: ' + this.state.dataSource);
+        console.log(this.state.applications);
+        console.log('isLoading: ', this.state.isLoading);
         
 
         if (this.state.isLoading) {
@@ -184,6 +214,12 @@ class StudentApplicationScreen extends React.Component {
                     <ListView
                         dataSource={this.state.dataSource}
                         renderRow={this.renderRow.bind(this)}
+                        refreshControl={
+                            <RefreshControl
+                              refreshing={this.state.refreshing}
+                              onRefresh={this.onRefresh.bind(this)}
+                            />
+                        }
                     />
                 </View>
                 

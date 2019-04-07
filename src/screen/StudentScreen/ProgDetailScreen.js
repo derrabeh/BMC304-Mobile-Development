@@ -75,7 +75,7 @@ class ProgDetailScreen extends React.Component {
 
             ToastAndroid.show('Applied Successfully!', ToastAndroid.SHORT);
             setTimeout(() => {
-              this.props.navigation.push('StudentApplication');
+              this.props.navigation.push('StudentApplication', { userID: this.props.navigation.state.params.userID });
               // const navigation = this.props.navigation;
               // const navigateAction = navigation.navigate({
               //   routeName: '',
