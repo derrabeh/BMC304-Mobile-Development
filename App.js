@@ -17,7 +17,7 @@ import { AppDetails, ProgApplicationScreen, UniHomeScreen, NewProgScreen,
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
-  University: { screen: UniversityScreen  }
+  University: { screen: AddUniversity  }
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -92,8 +92,8 @@ const RootStack = createStackNavigator(
     AddUniversity: AddUniversity,
     AddUniAdmin: AddUniAdmin,
     EditQualification: EditQualificationScreen,
-    UniversityScreen: UniversityScreen,
     EditUniversity: EditUniversity,
+    UniversityScreen: UniversityScreen
   },
   {
     //need to change later
