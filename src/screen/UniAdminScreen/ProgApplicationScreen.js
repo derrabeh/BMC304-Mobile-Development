@@ -43,7 +43,7 @@ setAppObject(user_id,data,key){
   let email = snapshot.val().email;
   let name = snapshot.val().username;
   let newApp = {
-      applicant : name,
+      applicant : email,
       applied_prog : data.programID,
       date : data.date,
       status : data.status,
@@ -61,15 +61,6 @@ setAppObject(user_id,data,key){
     let d = this.props.navigation;
     let g = JSON.stringify(this.state.allA);
     let allApp = JSON.parse(g);
-    if(allApp.length == 0){
-        console.log('No App');
-        console.log('-----')
-    }
-    else{
-      console.log('yes');
-      console.log('-----')
-
-    }
 
 
     // console.log(this.state.allA,'wwww----------');

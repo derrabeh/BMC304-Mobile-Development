@@ -7,7 +7,11 @@ class UniAdminProfileScreen extends React.Component {
 
     constructor(props){
         super(props);
-        this.state = { password: '' , confirm_password : ''}
+        this.state = { 
+          password: '' , 
+          confirm_password : '',
+          isSubmit : false,
+        }
 
         this.handlePwChange = this.handlePwChange.bind(this);
         this.handleCPwChange = this.handleCPwChange.bind(this);
@@ -50,6 +54,11 @@ class UniAdminProfileScreen extends React.Component {
                 ToastAndroid.show('Confirm Password Does Not Match!', ToastAndroid.SHORT);
             }
             else{
+              if(!this.state.isSubmit){
+                this.setState({
+                  isSubmit : true,
+                 })
+                 console.log('submitted');
                 let user = firebase.auth().currentUser;
             
                 user.updatePassword(pw).then(() => {
@@ -60,6 +69,20 @@ class UniAdminProfileScreen extends React.Component {
                 }, (error) => {
                     console.log(error);
                 });
+              }
+              else{
+                console.log('do nth');
+              }
+                // let user = firebase.auth().currentUser;
+            
+                // user.updatePassword(pw).then(() => {
+                //     ToastAndroid.show('Password Updated !', ToastAndroid.SHORT);
+                //     setTimeout(()=>{
+                //         this.props.navigation.push('Uni_Home',{userID : d.state.params.userID});
+                //     },1000)
+                // }, (error) => {
+                //     console.log(error);
+                // });
             }
         }
 

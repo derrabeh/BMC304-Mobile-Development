@@ -9,19 +9,41 @@ class ProgListScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            allProg: {},
+            allProg: [],
             isLoading: true
           };
     }
 
     componentDidMount(){
         firebase.database().ref('/program').once('value', function (snapshot) {
+            snapshot.forEach((child)=>{
+                var key = child.key;
+                this.setProgObject(child.val().uniID,child.val(),key);
+            })
             this.setState({
-                allProg: snapshot.val(),
+                // allProg: snapshot.val(),
                 isLoading: false
             });
         }.bind(this));
     }
+
+    setProgObject(uniID,data,key){
+        let d = uniID;
+        const ref = firebase.database().ref('/university/'+uniID);
+        ref.once('value').then(snapshot=>{
+        let uniName = snapshot.val().uniName;
+        let newProg = {
+            closingDate : data.closingDate,
+            description : data.description,
+            progName : data.progName,
+            uniID : uniName,
+        };
+            this.setState({
+                allProg : this.state.allProg.concat(newProg)
+          })
+      
+        })
+      }
 
     renderProgramme() {
         let d = JSON.stringify(this.state.allProg);
@@ -37,8 +59,9 @@ class ProgListScreen extends React.Component {
                     <View style={cardStyle}>
                         <View>
                             <Text style={titleStyle}>{g[d].progName} {'\n'}</Text>
-                            <Text>{g[d].uniID}</Text>
-                            <Text>{g[d].description}</Text>
+                            <Text>From: {g[d].uniID}</Text>
+                            <Text>Description:{g[d].description}</Text>
+                            <Text>Closing Date: {g[d].closingDate}</Text>
                         </View>
                         <TouchableOpacity 
                             style={buttonStyle}

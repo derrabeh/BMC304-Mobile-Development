@@ -66,13 +66,16 @@ class AppDetails extends React.Component {
               <Text>Applicant: {d.state.params.applicant}{'\n'}</Text>
               <Text>Status: {d.state.params.status}{'\n'}</Text>
               <Text>Apply Programme: {d.state.params.prog_name}{'\n'}</Text>
-              <Text>Key : {d.state.params.key}</Text>
+              {/* <Text>Key : {d.state.params.key}</Text> */}
               <Text>{'\n'}</Text>
               <View>
                 {this.btnStatus()}
                 <Text>{'\n'}</Text>
               </View>
-              <Button title="Back" onPress={() => this.props.navigation.push('App_Prog',{ prog_id : d.state.params.prog_id,prog_name : d.state.params.prog_name, })} />
+              <Button title="Back" onPress={() => this.props.navigation.push('App_Prog',{ 
+                prog_id : d.state.params.prog_id,
+                prog_name : d.state.params.prog_name, 
+                userID: d.state.params.userID })} />
           </View>
         </View>
       );
