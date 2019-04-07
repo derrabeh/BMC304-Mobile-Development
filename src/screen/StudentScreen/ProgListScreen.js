@@ -37,6 +37,7 @@ class ProgListScreen extends React.Component {
             description : data.description,
             progName : data.progName,
             uniID : uniName,
+            key : key,
         };
             this.setState({
                 allProg : this.state.allProg.concat(newProg)
@@ -59,6 +60,7 @@ class ProgListScreen extends React.Component {
                     <View style={cardStyle}>
                         <View>
                             <Text style={titleStyle}>{g[d].progName} {'\n'}</Text>
+
                             <Text>From: {g[d].uniID}</Text>
                             <Text>Description:{g[d].description}</Text>
                             <Text>Closing Date: {g[d].closingDate}</Text>
@@ -67,7 +69,7 @@ class ProgListScreen extends React.Component {
                             style={buttonStyle}
                             onPress={() => this.props.navigation.navigate('ProgDetail', {
                                 prog_name: g[d].progName,
-                                prog_id: d,
+                                prog_id: g[d].key,
                                 uni: g[d].uniID,
                                 userID: prv.state.params.userID,
                                 description: g[d].description
