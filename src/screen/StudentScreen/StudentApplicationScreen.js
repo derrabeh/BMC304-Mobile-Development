@@ -57,7 +57,7 @@ class StudentApplicationScreen extends React.Component {
             this.setState({
                 dataSource: ds.cloneWithRows(this.state.applications), 
                 isLoading: false
-            })   
+            });   
             
         });
     }
