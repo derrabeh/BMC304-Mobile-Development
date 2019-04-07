@@ -129,7 +129,7 @@ class UniversityScreen extends React.Component {
         return (
             <Swipable rightButtons={rightButtons} >
                 <TouchableOpacity
-                    onPress={() => { this.props.navigation.push('AddUniAdmin', {
+                    onPress={() => { this.props.navigation.push('UniAdminScreen', {
                                     uniID: rowData.key });
                             }}
                     delayPressIn='70'
