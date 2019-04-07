@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, TextInput, ToastAndroid, Button, KeyboardAvoidingView } from 'react-native';
+import { Text, TouchableOpacity, View, TextInput, ToastAndroid, 
+  Button, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Container } from '../../components/common';
 import firebase from 'firebase';
 import { Icon } from 'react-native-elements';
@@ -71,7 +72,7 @@ class AddUniAdmin extends React.Component {
 
     return(
     <KeyboardAvoidingView style={containerStyle} behavior='padding' enabled >
-      <View style ={containerStyle}>
+      <ScrollView style ={containerStyle}>
         <View style={headerStyle}>
           <View style={iconContainerStyle}>
           <TouchableOpacity
@@ -161,7 +162,7 @@ class AddUniAdmin extends React.Component {
           </TouchableOpacity>
         </View>
       </View>
-      </View>
+      </ScrollView>
       </KeyboardAvoidingView>
     );
   }
@@ -185,7 +186,7 @@ const styles = {
     flex: 7
   },
   nameStyle: {
-    fontSize: 40,
+    fontSize: 30,
     color: 'white'
   },
     iconContainerStyle: {
@@ -253,6 +254,7 @@ const styles = {
         alignItems: 'stretch',
         justifyContent: 'center',
         flex: 3,
+        marginTop: 20,
         marginBottom: 20,
     }
 }

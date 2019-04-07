@@ -125,7 +125,7 @@ class UniHomeScreen extends React.Component {
     // navigate to 'new qualification' screen
     addNewProg = () => {
         let d = this.props.navigation;
-        this.props.navigation.navigate('NewProgram', {userID : d.state.params.userID, uniID : this.state.unikeyOfAdmin});
+        this.props.navigation.push('NewProgram', {userID : d.state.params.userID, uniID : this.state.unikeyOfAdmin});
 
     }
 

@@ -14,7 +14,7 @@ class ProgDetailScreen extends React.Component {
       this.state = {
         approveStatus: false,
         status: '',
-        isLoading: true
+        isLoading: false
       };
       this.checkApplicationStatus = this.checkApplicationStatus.bind(this);
     }
@@ -44,7 +44,7 @@ class ProgDetailScreen extends React.Component {
       });
     }
 
-    applyProg(key, applicantID) {
+    applyProg(key, applicantID, name ) {
       console.log(key, 'www');
         let today = new Date();
         let dd = today.getDate();
@@ -68,24 +68,26 @@ class ProgDetailScreen extends React.Component {
             dir.set({
               applicantID,
               date: today,
+              programName: name,
               programID: all.state.params.prog_id,
               status: 'New'
             });
 
             ToastAndroid.show('Applied Successfully!', ToastAndroid.SHORT);
             setTimeout(() => {
-              const navigation = this.props.navigation;
-              const navigateAction = navigation.navigate({
-                routeName: '',
-                params: {},
+              this.props.navigation.push('StudentApplication');
+              // const navigation = this.props.navigation;
+              // const navigateAction = navigation.navigate({
+              //   routeName: '',
+              //   params: {},
               
-                // navigate can have a nested navigate action that will be run inside the child router
-                action: navigation.navigate({ routeName: 'Student_Home' }),
-              });
+              //   // navigate can have a nested navigate action that will be run inside the child router
+              //   action: navigation.navigate({ routeName: 'Student_Home' }),
+              // });
 
-              Promise.all([
-                navigation.dispatch(navigateAction)
-              ]).then(() => navigation.push('History'));
+              // Promise.all([
+              //   navigation.dispatch(navigateAction)
+              // ]).then(() => navigation.push('Student_Home'));
                 // this.props.navigation.push('Student_Home',{userID:all.state.params.userID})
             }, 1000);
           } catch (e) {
@@ -103,7 +105,7 @@ class ProgDetailScreen extends React.Component {
           <View style={buttonGroupStyle}>
             <TouchableOpacity 
                 style={buttonStyle}
-                onPress={() => this.applyProg(pv.state.params.key, pv.state.params.userID)}
+                onPress={() => this.applyProg(pv.state.params.key, pv.state.params.userID, pv.state.params.prog_name)}
             >
                 <Text style={buttonTextStyle}>
                     Apply
