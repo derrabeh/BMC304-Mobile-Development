@@ -28,9 +28,7 @@ class UniHomeScreen extends React.Component {
             .then((snapshot) => {
                 const qualiRetrieved = []
                 snapshot.forEach((childSnapshot) => {
-                  
-                    // pushing all qualifications to array
-                    // this.countApplicant(childSnapshot.key);
+         
                     qualiRetrieved.push({
                         key: childSnapshot.key,
                         progName: childSnapshot.val().progName, 
@@ -60,6 +58,7 @@ class UniHomeScreen extends React.Component {
         let d = this.props.navigation;
         // console.log(d.state.params.userID);
         this.props.navigation.navigate('NewProgram', {userID : d.state.params.userID});
+
     }
 
     // countApplicant(key){

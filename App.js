@@ -87,7 +87,8 @@ const RootStack = createStackNavigator(
     StudentQualification: StudentQualification,
     AddQualification: AddQualification,
     AddUniversity: AddUniversity,
-    AddUniAdmin: AddUniAdmin
+    AddUniAdmin: AddUniAdmin,
+
   },
   {
     //need to change later
