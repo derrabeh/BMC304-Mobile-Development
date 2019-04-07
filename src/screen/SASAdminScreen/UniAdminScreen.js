@@ -37,7 +37,7 @@ class UniAdminScreen extends React.Component {
 
             snapshot.forEach((childSnapshot) => {
               if (childSnapshot.val().userType === 'UniAdmin'){
-                if (childSnapshot.val().UniID === this.state.UniID){
+                if (childSnapshot.val().uniID === this.state.UniID){
                   uniAdminRetrieved.push({
                     key: childSnapshot.key,
                     name: childSnapshot.val().name,
@@ -107,7 +107,7 @@ class UniAdminScreen extends React.Component {
               })
             });
 
-          navigation.push('UniAdminScreen', {UniID: this.state.UniID});
+          navigation.push('UniversityScreen', {UniID: this.state.UniID});
         }
       },
     ],
