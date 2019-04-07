@@ -28,7 +28,7 @@ class StudentApplicationScreen extends React.Component {
                 if (application.val().applicantID === this.state.userID) {
                     
                     console.log('found');
-                    this.setApplications(application.val());
+                    this.setApplications(application.val(), application.key);
                       
                 }
                 console.log(this.state.applications);
@@ -37,15 +37,16 @@ class StudentApplicationScreen extends React.Component {
         });
     }
 
-    setApplications(childSnapshot) {
+    setApplications(childSnapshot, applicationID) {
         const dir = firebase.database().ref().child('program/' + childSnapshot.programID);
         // console.log('in');
+        
         dir.once('value').then(snapshot => {
             // console.log(snapshot.val());
             const application = {
                 name: snapshot.val().progName,
                 status: childSnapshot.status, 
-                key: childSnapshot.key
+                key: applicationID
             };
             this.setState({
                 applications: this.state.applications.concat(application),
@@ -119,7 +120,7 @@ class StudentApplicationScreen extends React.Component {
             <TouchableHighlight 
                 style={{ flexDirection: 'row', flex: 1, justifyContent: 'flex-start', 
                     alignItems: 'center', backgroundColor: '#e74c3c' }}
-                onPress={()=> this.askDelete(rowData.key)}
+                onPress={()=> this.askDelete(rowData.key, rowData)}
             >  
                 <View style={{ flex: 1/5 }}>
                     <Icon

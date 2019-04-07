@@ -15,27 +15,40 @@ class UniHomeScreen extends React.Component {
         this.state = {
             searchText: '', 
             isLoading: true,
-            count : 0
+            count : 0,
+            adminName : '',
+            unikeyOfAdmin : '',
+            uninameOfAdmin : '',
         };
-
         this.arrayHolder = [];
+        this.myArray = [];
         this.handleDelete = this.handleDelete.bind(this);
+        this.setAdminUsername = this.setAdminUsername.bind(this);
+        this.setUniNameID = this.setUniNameID.bind(this);
+        this.countApplicant = this.countApplicant.bind(this);
+
     }
+
     componentDidMount() {
         const ref = firebase.database().ref('program');
+        this.setAdminUsername();
+        this.setUniNameID();
+
 
         ref.once('value')
             .then((snapshot) => {
                 const qualiRetrieved = []
                 snapshot.forEach((childSnapshot) => {
-         
-                    qualiRetrieved.push({
-                        key: childSnapshot.key,
-                        progName: childSnapshot.val().progName, 
-                        desc: childSnapshot.val().description,
-                        closingDate : childSnapshot.val().closingDate,
-                        // count : 'wwww',
-                    });
+                    // let count = this.countApplicant(childSnapshot.key);
+                    if(this.state.unikeyOfAdmin == childSnapshot.val().uniID){
+                        qualiRetrieved.push({
+                            key: childSnapshot.key,
+                            progName: childSnapshot.val().progName, 
+                            desc: childSnapshot.val().description,
+                            closingDate : childSnapshot.val().closingDate,
+                            // count : count,
+                        });    
+                    }
 
                 });
 
@@ -47,30 +60,74 @@ class UniHomeScreen extends React.Component {
                     isLoading: false,
                     dataSource: ds.cloneWithRows(qualiRetrieved),
                     }, 
-                    () => { this.arrayHolder = qualiRetrieved; }
+                    () => { this.arrayHolder = qualiRetrieved;
+                    
+                    }
                 );
                 
             });
+
+            
+    }
+
+    countApplicant(key){
+        let prv = this.props.navigation;
+        const ref = firebase.database().ref('/applications');
+
+        ref.once('value')
+        .then((ss)=>{
+            ss.forEach((cs)=>{
+                if(cs.val().programID == key){
+                        //
+                }
+            })
+        })
+    }
+
+
+
+    setAdminUsername(){
+        let prv = this.props.navigation;
+        const ref_user = firebase.database().ref('/users/' + prv.state.params.userID );
+        ref_user.once('value')
+        .then((ss) => {
+            this.setState({
+                adminName : ss.val().name,
+                unikeyOfAdmin : ss.val().uniID,
+            })
+        })
+    }
+
+    setUniNameID(){
+        let prv = this.props.navigation;
+        const ref_uni = firebase.database().ref('/uniAdmin');
+
+        let x = ref_uni
+        .orderByChild('userID')
+        .equalTo(prv.state.params.userID)
+        .once('value')
+        .then((s)=>{
+            s.forEach((c)=>{
+                const ref_uni = firebase.database().ref('/university/' + c.val().uniID );
+                ref_uni.once('value')
+                .then((uniss)=>{
+                    this.setState({
+                        uninameOfAdmin : uniss.val().uniName,
+                    })
+                })
+                this.setState({
+                    unikeyOfAdmin : c.val().uniID,
+                })
+            })
+        })
     }
 
     // navigate to 'new qualification' screen
     addNewProg = () => {
         let d = this.props.navigation;
-        // console.log(d.state.params.userID);
-        this.props.navigation.navigate('NewProgram', {userID : d.state.params.userID});
+        this.props.navigation.navigate('NewProgram', {userID : d.state.params.userID, uniID : this.state.unikeyOfAdmin});
 
     }
-
-    // countApplicant(key){
-    //     const ref = firebase.database().ref('applicantions');
-
-    //     ref.once('value')
-    //     .then((snapshot) => {
-    //         snapshot.forEach((child)=>{
-    //             console.log(child.val())
-    //         })
-    //     })
-    // }
 
     handleDelete(key){
         let d = this.props.navigation;
@@ -82,7 +139,7 @@ class UniHomeScreen extends React.Component {
                 { text: 'No', onPress: () => console.log('No is pressed') }, 
                 { text: 'Yes', 
                     onPress: () => {
-                        console.log(key);
+                        // console.log(key);
                         const ref = firebase.database().ref('program/' + key); 
                         ref.remove();
                         ToastAndroid.show('Deleted!', ToastAndroid.SHORT);
@@ -98,7 +155,6 @@ class UniHomeScreen extends React.Component {
 
     // filter qualifcation - not functioning yet
     filterQualification(searchText) {
-        // console.log(searchText);
         const filteredData = this.arrayHolder.filter(
             (qualification) => {
                 const name = qualification.progName.toUpperCase();
@@ -169,7 +225,8 @@ class UniHomeScreen extends React.Component {
             onPress={() => this.props.navigation.push('App_Prog', {  
                         prog_name: rowData.progName,
                         prog_id : rowData.key,
-                        uni: rowData.uniID, })}
+                        uni: rowData.uniID,
+                        userID : d.state.params.userID })}
 
                 delayPressIn='70' 
             >
@@ -223,8 +280,6 @@ class UniHomeScreen extends React.Component {
                 floatButtonStyle, floatButtonContainerStyle, 
                 headerTextContainerStyle, headerIcon1ContainerStyle, 
                 headerIcon2ContainerStyle } = styles;
-        // console.log('dataSource: ' + this.state.dataSource);
-        // console.log(this.state.isLoading);
 
         if (this.state.isLoading) {
             return (
@@ -264,6 +319,9 @@ class UniHomeScreen extends React.Component {
                         value={this.state.searchText}
                         placeholder='Search for qualification'
                     />
+                </View>
+                <View style={styles.greetContainer}>
+                    <Text>Hello! {this.state.adminName} - {this.state.uninameOfAdmin}</Text>
                 </View>
                 <ListView
                     dataSource={this.state.dataSource}
@@ -385,6 +443,12 @@ class UniHomeScreen extends React.Component {
               height: 3
             }
           },
+
+        greetContainer : {
+            marginTop : 5,
+            marginLeft: 30,
+            marginBottom:10,
+        }
   };
 
 
