@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ListView, TouchableOpacity, TouchableHighlight, Alert ,ToastAndroid} from 'react-native';
 import firebase from 'firebase';
-import { Avatar, Icon } from 'react-native-elements';
+import { Avatar, Icon, withTheme } from 'react-native-elements';
 import { SearchBar } from '../../components/common/SearchBar';
 import { Spinner } from '../../components/common';
 import Swipable from 'react-native-swipeable-row';
@@ -321,7 +321,7 @@ class UniHomeScreen extends React.Component {
                     />
                 </View>
                 <View style={styles.greetContainer}>
-                    <Text>Hello! {this.state.adminName} - {this.state.uninameOfAdmin}</Text>
+                    <Text style={styles.greetText}>Welcome !{'\n'}{this.state.adminName} - {this.state.uninameOfAdmin}</Text>
                 </View>
                 <ListView
                     dataSource={this.state.dataSource}
@@ -448,6 +448,9 @@ class UniHomeScreen extends React.Component {
             marginTop : 5,
             marginLeft: 30,
             marginBottom:10,
+        },
+        greetText : {
+            fontSize : 18
         }
   };
 

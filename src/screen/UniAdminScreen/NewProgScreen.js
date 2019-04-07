@@ -75,7 +75,7 @@ class NewProgScreen extends React.Component {
       return (
 
         <View>
-            <Header headerText={'NEW PROG'}/>
+            <Header headerText={'Create New Program'}/>
             <View style={styles.inputContainer}>
             <TextInput
                 style={styles.textInput}
