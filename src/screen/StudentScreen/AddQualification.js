@@ -50,6 +50,7 @@ class AddQualification extends React.Component {
 
 	}
 
+
 	renderPicker() {
 		return this.state.qualificationRetrived.map((qualification) => {
 			return (
@@ -65,6 +66,18 @@ class AddQualification extends React.Component {
 		const { userID, qualificationID, qualificationName, score } = this.state;
 		// console.log(this.state.qualificationRetrived);
 
+		pickerOptionText = () => {
+			if (this.state.selectedValue == 'OTHERS'){
+				return(
+				<View>
+				<TextInput
+				onChangeText={qualificationID => this.setState({qualificationID})} value= {this.state.qualificationID}
+				label="Qaulification Name" placeholder="Enter the Qualification Name" blurRadius={1}
+				/>
+				</View>
+			)}
+		}
+
 		if (this.state.isLoading) {
 			return (
 				<View>
@@ -74,8 +87,8 @@ class AddQualification extends React.Component {
 		}
 
 		saveQuali = () => {
-			console.log(this.state.isExist);
-			console.log(this.state.key);
+			//console.log(this.state.isExist);
+			//console.log(this.state.key);
 			if (this.state.isExist == false){
 				firebase.database().ref('qualificationObtained/').push
 				({
@@ -137,8 +150,8 @@ class AddQualification extends React.Component {
 					(value, index) => this.setState({qualificationID: value})
 				}
 				>
-
 				{this.renderPicker()}
+				<Picker.Item label='others' value='OTHERS'/>
 
 				</Picker>
 
