@@ -3,7 +3,6 @@ import { View, Text, Button, TextInput, ToastAndroid, Alert, Keyboard } from 're
 import { Header, Input } from '../../components/common';
 import firebase from 'firebase';
 
-
 class UniAdminProfileScreen extends React.Component {
 
     constructor(props){
