@@ -17,7 +17,8 @@ class AddQualification extends React.Component {
 			score:0,
 			isLoading: true,
 			isExist: false,
-			key: ''
+			key: '',
+			newQuali:'',
 		}
 	}
 
@@ -67,13 +68,30 @@ class AddQualification extends React.Component {
 		// console.log(this.state.qualificationRetrived);
 
 		pickerOptionText = () => {
-			if (this.state.selectedValue == 'OTHERS'){
+			if (this.state.qualificationID == 'OTHERS'){
 				return(
 				<View>
 				<TextInput
-				onChangeText={qualificationID => this.setState({qualificationID})} value= {this.state.qualificationID}
+				onChangeText={newQuali => this.setState({newQuali})} value= {this.state.newQuali}
 				label="Qaulification Name" placeholder="Enter the Qualification Name" blurRadius={1}
 				/>
+
+			<Button title="SEND FOR VERIFICATION" onPress={sendNoti} />
+			</View>
+
+			)}
+
+			else{
+				return(
+				<View>
+				<Card>
+				<TextInput
+				keyboardType="numeric" onChangeText={score => this.setState({score})} value= {this.state.score}
+				label="Score" placeholder="Enter your score" blurRadius={1}
+				/>
+				</Card>
+
+				<Button title="SAVE" onPress={saveQuali} />
 				</View>
 			)}
 		}
@@ -85,6 +103,23 @@ class AddQualification extends React.Component {
 				</View>
 			)
 		}
+
+		sendNoti =() =>{
+			firebase.database().ref('notification/').push
+			({
+				newQuali: this.state.newQuali,
+			});
+
+			Alert.alert(
+				'SUCCESS',
+				'Your Qualification is sent to admin for verification',
+				[
+					{text: 'Cancel'},
+					{text: 'OK',  onPress: () => {this.props.navigation.push('StudentQualification')}
+				}
+				]
+			)
+			}
 
 		saveQuali = () => {
 			//console.log(this.state.isExist);
@@ -114,7 +149,7 @@ class AddQualification extends React.Component {
 				)
 				}
 
-				else {
+				if (this.state.isExist == true) {
 					firebase.database().ref('qualificationObtained/' + this.state.key).update({
 						userID: this.state.userID,
 						score: this.state.score,
@@ -147,7 +182,7 @@ class AddQualification extends React.Component {
 				selectedValue={this.state.qualificationID}
 				style
 				onValueChange={
-					(value, index) => this.setState({qualificationID: value})
+					(value, index) => {this.setState({qualificationID: value}); console.log(value);}
 				}
 				>
 				{this.renderPicker()}
@@ -155,14 +190,10 @@ class AddQualification extends React.Component {
 
 				</Picker>
 
-				<Card>
-				<TextInput
-				keyboardType="numeric" onChangeText={score => this.setState({score})} value= {this.state.score}
-				label="Score" placeholder="Enter your score" blurRadius={1}
-				/>
-				</Card>
+				<View>
+				 {pickerOptionText()}
+				</View>
 
-				<Button title="SAVE" onPress={saveQuali} />
 				</ScrollView>
 				</KeyboardAvoidingView>
 
