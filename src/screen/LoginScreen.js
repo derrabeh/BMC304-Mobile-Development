@@ -6,7 +6,9 @@ import { LoginInput, LoginButton, Container, Spinner } from '../components/commo
 // import console = require('console');
 
 class LoginScreen extends React.Component {
+
   state = { email: 'admin@admin.com', password: '123456789', user: '', isLoading: false };
+
 
   // on login button press
   onButtonPress() {
@@ -33,7 +35,7 @@ class LoginScreen extends React.Component {
               this.props.navigation.navigate('Student_Home', { userID: this.state.user });
               this.setState({ isLoading: false });
             }
-            else if (snapshot.val().userType == 2) {
+            else if (snapshot.val().userType == 'UniAdmin') {
               this.props.navigation.navigate('Uni_Home', { userID: this.state.user });
               this.setState({ isLoading: false });
             }

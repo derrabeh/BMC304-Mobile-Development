@@ -4,5 +4,6 @@ export * from './QualificationDetailsScreen';
 export * from './AdminHomeScreen';
 export * from './AddUniversity';
 export * from './AddUniAdmin';
+export * from './EditQualificationScreen';
 export * from './UniversityScreen';
 export * from './EditUniversity';

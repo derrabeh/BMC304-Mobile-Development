@@ -2,11 +2,13 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, KeyboardAvoidingView, 
         ImageBackground } from 'react-native';
 import { SearchBar } from '../../components/common/SearchBar';
+// import console = require('console');
 
 class ApplicantHomeScreen extends React.Component {
     constructor(props) {
-        super(props)
-        this.state = { searchValue: '' };
+        super(props);
+        const userID = this.props.navigation.getParam('userID', 'null');
+        this.state = { searchValue: '', userID };
     }
     
     render() {
@@ -14,6 +16,7 @@ class ApplicantHomeScreen extends React.Component {
                 buttonStyle, buttonTextStyle } = styles;
         const logo = require('../../../assets/logo.png');
         const background = require('../../../assets/background.jpg');
+        
 
       return (
         <ImageBackground style={containerStyle} source={background} blurRadius={2} >
@@ -30,7 +33,9 @@ class ApplicantHomeScreen extends React.Component {
                 </View>
                 <TouchableOpacity 
                     style={buttonStyle}
-                    onPress={()=> this.props.navigation.navigate('ProgList', { catName: 'Information Technology', cat: 'IT' })}>
+                    onPress={()=> this.props.navigation.navigate('ProgList', 
+                            { searchVAL: this.state.searchValue, userID: this.state.userID })}
+                >
                     <Text style={buttonTextStyle}>Search</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>

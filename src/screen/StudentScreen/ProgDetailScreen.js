@@ -2,19 +2,59 @@ import React from 'react';
 import { View, Text, Button, ToastAndroid } from 'react-native';
 import { Header, Input } from '../../components/common';
 import firebase from 'firebase';
+import Swipable from 'react-native-swipeable-row';
+
 
 class ProgDetailScreen extends React.Component {
     static navigationOptions = {
         title: 'App_Detail',
     };
 
-    applyProg(key){
+    constructor(props){
+      super();
+      this.state = {
+        approveStatus : false,
+        status : '',
+      }
+      this.checkApplicationStatus = this.checkApplicationStatus.bind(this);
+    }
+
+    componentDidMount(){
+      this.checkApplicationStatus();
+        }
+
+    checkApplicationStatus(){
+      let pv = this.props.navigation;
+      firebase.database().ref(`/applications`)
+      .once('value', snapshot => {
+          snapshot.forEach((child)=>{
+              if(pv.state.params.userID == child.val().applicantID && 
+              pv.state.params.prog_id == child.val().programID ){
+                this.setState({
+                  approveStatus : true,
+                  status : child.val().status,
+                })
+              }
+              
+          })
+      });
+
+      if(this.state.approveStatus){
+        return(
+          <Text>Applications Status : {this.state.status}</Text>
+      );  
+      }
+      else{
+        return(
+          <View>
+            <Button title="Apply" color="green" onPress={() => this.applyProg(pv.state.params.key,pv.state.params.userID)}/>
+          </View>
+        )
+      }
+    }
+
+    applyProg(key,applicantID){
       console.log(key,'www')
-      let aiKey = '';
-
-
-      firebase.database().ref('application_test').once('value',(snapshot)=>{
-
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
@@ -29,22 +69,33 @@ class ProgDetailScreen extends React.Component {
         today = dd + '/' + mm + '/' + yyyy;
 
         let all = this.props.navigation;
-          let ai = parseInt(snapshot.numChildren()) + 1;
-          aiKey = 'app'+ai;
 
           try{
-            var appRef = firebase.database().ref('application_test');
-            appRef.child(aiKey).set({
-              applicant: all.state.params.userID,
-              applied_prog: all.state.params.prog_id,
-              date : today,
-              status : 'PENDING',
-              uni : all.state.params.uni
+            const dir = firebase.database().ref('/applications').push();
+            const pk = dir.key;
+
+            dir.set({
+              applicantID: applicantID,
+              date: today,
+              programID: all.state.params.prog_id,
+              status: 'PENDING'
             });
 
             ToastAndroid.show('Applied Successfully!', ToastAndroid.SHORT);
             setTimeout(()=>{
-                this.props.navigation.navigate('Student_Home',{userID:all.state.params.userID})
+              let navigation = this.props.navigation;
+              const navigateAction = navigation.navigate({
+                routeName: '',
+                params: {},
+              
+                // navigate can have a nested navigate action that will be run inside the child router
+                action: navigation.navigate({ routeName: 'Student_Home' }),
+              });
+
+              Promise.all([
+                navigation.dispatch(navigateAction)
+              ]).then(() => navigation.navigate('History'))
+                // this.props.navigation.push('Student_Home',{userID:all.state.params.userID})
             },1000)
 
           }catch(e){
@@ -52,47 +103,25 @@ class ProgDetailScreen extends React.Component {
 
           }
 
-          
-
-          
-
-
-        
-        
-      })
-
-      
-
-      
-    //   try {
-    //     var applicant = firebase.database().ref('prog/app1');
-    //     applicant.update({ status: status});
-    //     ToastAndroid.show('Status Updated!', ToastAndroid.SHORT);
-    //     setTimeout(()=>{
-    //       this.props.navigation.navigate('Uni_Home')
-    //     },1000);
-
-    //   }
-    //   catch (error) {
-    //     ToastAndroid.show(error.message, ToastAndroid.SHORT);
-    //   }
-
     }
 
     render() {
       let d = this.props.navigation;
       return (
         <View>
-            <Header headerText={'Applicant Details'} navigation={this.props.navigation} />
+            <Header headerText={'Program Details'} navigation={this.props.navigation} />
             <Text>Program Details {'\n'}</Text>
 
             <Text>Prog ID: {d.state.params.prog_id}</Text>
+            <Text>KEY: {d.state.params.key}</Text>
             <Text>UNI: {d.state.params.uni}</Text>
+            <Text>Applicant : {d.state.params.userID}</Text>
             
             <Text>Programme: {d.state.params.prog_name}</Text>
+            {this.checkApplicationStatus()}
 
-            <Button title="Apply" color="green" onPress={() => this.applyProg(d.state.params.key)}/>
-            <Button title="Cancel" color="red" onPress={() => this.props.navigation.naviga('Student_Home')}/>
+            {/* <Button title="Apply" color="green" onPress={() => this.applyProg(d.state.params.key,d.state.params.userID)}/> */}
+            <Button title="Cancel" color="red" onPress={() => this.props.navigation.navigate('Student_Home')}/>
 
             <Text>{'\n'}</Text>
 
@@ -101,7 +130,7 @@ class ProgDetailScreen extends React.Component {
 
 
 
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Uni_Home')} />
+            {/* <Button title="Back" onPress={() => this.props.navigation.navigate('Student_Home',{userID : d.state.params.userID })} /> */}
         </View>
       );
     }

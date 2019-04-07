@@ -24,12 +24,12 @@ class ProgApplicationScreen extends React.Component {
     //     allApp: snapshot.val(),
     //   });
     // }.bind(this));
-    const ref = firebase.database().ref('/applicant_new');
+    const ref = firebase.database().ref('/applications');
     ref.once("value").then(snapshot => {
       snapshot.forEach((child)=>{
           var key = child.key;
-          this.setAppObject(child.val().applicant,child.val(),key);
-
+          this.setAppObject(child.val().applicantID,child.val(),key);
+          // console.log(snapshot.val())
       })
     })
   
@@ -41,12 +41,13 @@ setAppObject(user_id,data,key){
   const ref = firebase.database().ref('/users/'+user_id);
   ref.once('value').then(snapshot=>{
   let email = snapshot.val().email;
+  let name = snapshot.val().username;
   let newApp = {
-      applicant : email,
-      applied_prog : data.applied_prog,
+      applicant : name,
+      applied_prog : data.programID,
       date : data.date,
       status : data.status,
-      uni : data.uni,
+      uni : data.uniID,
       app_key : key,
   };
       this.setState({
@@ -56,12 +57,19 @@ setAppObject(user_id,data,key){
   })
 }
 
-
-
     render() {
     let d = this.props.navigation;
     let g = JSON.stringify(this.state.allA);
     let allApp = JSON.parse(g);
+    if(allApp.length == 0){
+        console.log('No App');
+        console.log('-----')
+    }
+    else{
+      console.log('yes');
+      console.log('-----')
+
+    }
 
 
     // console.log(this.state.allA,'wwww----------');
@@ -73,7 +81,7 @@ setAppObject(user_id,data,key){
       
             {Object.keys(allApp).map((k,e) => {
             if(allApp[k].applied_prog == d.state.params.prog_id){
-              if(allApp[k].status != 'APPROVE'){
+              if(allApp[k].status != 'XDDD'){
                 return(
                   <TouchableOpacity
                       style={styles.item}
@@ -111,7 +119,7 @@ setAppObject(user_id,data,key){
             })
             }
             <View style={styles.buttonBack}>
-            <Button title="Back" onPress={() => this.props.navigation.navigate('Uni_Home')} />
+            <Button title="Back" onPress={() => this.props.navigation.push('Uni_Home', {userID : d.state.params.userID})} />
             </View>
         </View>
       );

@@ -5,11 +5,15 @@ import { createStackNavigator, createAppContainer,
           createBottomTabNavigator } from 'react-navigation';
 import { LoginScreen, SignUpScreen, DetailsScreen } from './src/screen';
 import { AdminHomeScreen, NewQualificationScreen, QualificationDetailsScreen,
-          QualificationScreen, AddUniversity, AddUniAdmin, UniversityScreen, EditUniversity } from './src/screen/SASAdminScreen';
+          QualificationScreen, AddUniversity, AddUniAdmin,
+          EditQualificationScreen, UniversityScreen, EditUniversity } from './src/screen/SASAdminScreen';
 import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen,
-          StudentApplicationScreen, StudentQualification, AddQualification
-         } from './src/screen/StudentScreen';
-import { AppDetails, ProgApplicationScreen, UniHomeScreen } from './src/screen/UniAdminScreen';
+
+          StudentApplicationScreen, StudentQualification, AddQualification }
+          from './src/screen/StudentScreen';
+import { AppDetails, ProgApplicationScreen, UniHomeScreen, NewProgScreen,
+          EditProgScreen } from './src/screen/UniAdminScreen';
+
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
@@ -46,26 +50,48 @@ const StudentTabNavigator = createBottomTabNavigator({
   }
 );
 
+
+const UniAdminTabNavigator = createBottomTabNavigator({
+  Home: { screen: UniHomeScreen },
+  Profile: { screen: UniAdminProfileScreen },
+  }, {
+    tabBarOptions: {
+      activeTintColor: 'white',
+        inactiveTintColor: 'gray',
+        style: {
+            backgroundColor: '#2c3e50',
+        },
+        indicatorStyle: {
+            backgroundColor: '#000',
+        },
+    }
+  }
+);
+
+
 const RootStack = createStackNavigator(
   {
     Login: LoginScreen,
     SignUp: SignUpScreen,
-    Uni_Home: UniHomeScreen,
+    Uni_Home: UniAdminTabNavigator,
     Admin_Home: AdminHomeScreen,
     Student_Home: StudentTabNavigator,
     Details: DetailsScreen,
     Qualification: SASAdminTabNavigator,
-    StudentApplication: StudentApplicationScreen,
+    StudentApplication: StudentTabNavigator,
     App_Prog: ProgApplicationScreen,
     App_Detail: AppDetails,
     ProgList: ProgListScreen,
     ProgDetail: ProgDetailScreen,
     NewQualification: NewQualificationScreen,
     QualificationDetail: QualificationDetailsScreen,
+    NewProgram : NewProgScreen,
+    EditProgram : EditProgScreen,
     StudentQualification: StudentQualification,
     AddQualification: AddQualification,
     AddUniversity: AddUniversity,
     AddUniAdmin: AddUniAdmin,
+    EditQualification: EditQualificationScreen,
     UniversityScreen: UniversityScreen,
     EditUniversity: EditUniversity,
   },
