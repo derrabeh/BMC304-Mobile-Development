@@ -27,7 +27,7 @@ class UniAdminScreen extends React.Component {
   componentWillMount() {
     const { navigation } = this.props;
     this.state.UniID = navigation.getParam('UniID', null);
-    console.log('Unicersity ID :' + this.state.UniID);
+    console.log('University ID :' + this.state.UniID);
 
     const ref = firebase.database().ref('users');
       ref.once('value')

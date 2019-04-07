@@ -16,7 +16,6 @@ import { Spinner } from '../../components/common';
 
     componentWillMount() {
       const key = this.props.navigation.getParam('UniID', null);
-
       this.setState({ key });
 
       const ref = firebase.database().ref('university/' + key);
@@ -49,41 +48,39 @@ import { Spinner } from '../../components/common';
 
   render() {
     const { containerStyle, headerStyle, bodyStyle, iconContainerStyle,
-      headerInputContainerStyle, headerInputStyle, textGroupContainerStyle,textHeaderStyle,textGroupStyle,
+     headerInputStyle,textHeaderStyle,textGroupStyle,
       buttonStyle, buttonTextStyle, buttonGroupStyle, buttonStyle2, } = styles;
 
         return (
           <KeyboardAvoidingView style={containerStyle} behavior='padding' enabled >
-          <View style={headerStyle}>
-          <View style={iconContainerStyle}>
-          <Icon
-          name='chevron-left'
-          type='font-awesome'
-          color='white'
-          size={28}
-          containerStyle={{alignItems: 'flex-start'}}
-          />
-          </View>
+            <View style={headerStyle}>
+              <View style={iconContainerStyle}>
+                <Icon
+                  name='chevron-left'
+                  type='font-awesome'
+                  color='white'
+                  size={28}
+                  containerStyle={{alignItems: 'flex-start'}}
+                />
+              </View>
 
-          <View style={textGroupStyle}>
-          <Text style={textHeaderStyle}>University Name</Text>
-          <TextInput
-          style={headerInputStyle}
-          onChangeText={uniName => this.setState({uniName})}
-          value={this.state.uniName}
-          />
-          </View>
+            <View style={textGroupStyle}>
+              <Text style={textHeaderStyle}>University Name</Text>
+                <TextInput
+                  style={headerInputStyle}
+                  onChangeText={uniName => this.setState({uniName})}
+                  value={this.state.uniName}
+                />
+            </View>
 
           <View style={buttonGroupStyle}>
-          <TouchableOpacity style={buttonStyle} onPress={this.saveUni}>
-          <Text style={buttonTextStyle}>
-          Save
-          </Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={buttonStyle} onPress={this.saveUni}>
+              <Text style={buttonTextStyle}>Update</Text>
+            </TouchableOpacity>
           </View>
 
           </View>
-          </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
         );
       }
     }
@@ -95,12 +92,12 @@ import { Spinner } from '../../components/common';
       backgroundColor: '#34495e'
     },
     headerStyle: {
-      flex: 3,
+      flex: 6,
       paddingTop: 20,
-      backgroundColor: 'red'
+      backgroundColor: 'grey'
     },
     bodyStyle: {
-      flex: 7,
+      flex: 4,
       backgroundColor: 'white',
       paddingLeft: 40,
       paddingRight: 40
@@ -111,12 +108,6 @@ import { Spinner } from '../../components/common';
       padding: 10,
       flex: 2
     },
-    headerInputContainerStyle: {
-      backgroundColor: '#34495e',
-      alignItems: 'stretch',
-      flex: 8,
-      justifyContent: 'center'
-    },
     headerInputStyle: {
       marginLeft: 15,
       marginRight: 15,
@@ -125,12 +116,6 @@ import { Spinner } from '../../components/common';
       borderBottomWidth: 1,
       fontSize: 30,
       textAlign: 'center'
-    },
-    textGroupContainerStyle: {
-      flex: 7,
-      paddingTop: 15,
-      paddingBottom: 15,
-      justifyContent: 'center'
     },
     textGroupStyle: {
       borderBottomWidth: 1,
@@ -141,13 +126,17 @@ import { Spinner } from '../../components/common';
       marginBottom: 10
     },
     textHeaderStyle: {
-      color: 'grey'
+      color: 'white',
+      fontSize: 15,
+      paddingLeft: 15,
+      paddingBottom:30,
+      marginBottom: 20,
+      marginTop: 50,
     },
     textStyle: {
-      fontSize: 16,
+      fontSize: 20,
       padding: 5
     },
-
     buttonStyle: {
       backgroundColor: '#2ecc71',
       borderRadius: 40/2,
@@ -157,7 +146,6 @@ import { Spinner } from '../../components/common';
       justifyContent: 'center',
       alignItems: 'center'
     },
-
     buttonTextStyle: {
       color: 'white',
       fontSize: 15
