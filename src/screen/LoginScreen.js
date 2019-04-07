@@ -9,7 +9,6 @@ class LoginScreen extends React.Component {
 
   state = { email: 'Help4@admin.com', password: '123123', user: '', isLoading: false };
 
-
   // on login button press
   onButtonPress() {
     const { email, password } = this.state;

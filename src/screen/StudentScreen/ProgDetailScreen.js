@@ -1,89 +1,80 @@
 import React from 'react';
-import { View, Text, Button, ToastAndroid } from 'react-native';
-import { Header, Input } from '../../components/common';
+import { View, Text, Button, ToastAndroid, TouchableOpacity } from 'react-native';
+import { Icon } from 'react-native-elements';
 import firebase from 'firebase';
-import Swipable from 'react-native-swipeable-row';
-
+import { Spinner } from '../../components/common';
 
 class ProgDetailScreen extends React.Component {
     static navigationOptions = {
-        title: 'App_Detail',
+        title: 'App_Detail'
     };
 
-    constructor(props){
-      super();
+    constructor(props) {
+      super(props);
       this.state = {
-        approveStatus : false,
-        status : '',
-      }
+        approveStatus: false,
+        status: '',
+        isLoading: true
+      };
       this.checkApplicationStatus = this.checkApplicationStatus.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
       this.checkApplicationStatus();
-        }
-
-    checkApplicationStatus(){
-      let pv = this.props.navigation;
-      firebase.database().ref(`/applications`)
-      .once('value', snapshot => {
-          snapshot.forEach((child)=>{
-              if(pv.state.params.userID == child.val().applicantID && 
-              pv.state.params.prog_id == child.val().programID ){
-                this.setState({
-                  approveStatus : true,
-                  status : child.val().status,
-                })
-              }
-              
-          })
-      });
-
-      if(this.state.approveStatus){
-        return(
-          <Text>Applications Status : {this.state.status}</Text>
-      );  
-      }
-      else{
-        return(
-          <View>
-            <Button title="Apply" color="green" onPress={() => this.applyProg(pv.state.params.key,pv.state.params.userID)}/>
-          </View>
-        )
-      }
     }
 
-    applyProg(key,applicantID){
-      console.log(key,'www')
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
+    checkApplicationStatus() {
+      const pv = this.props.navigation;
+      
+      firebase.database().ref('/applications')
+      .once('value', snapshot => {
+          snapshot.forEach((child) => {
+              if (pv.state.params.userID == child.val().applicantID && 
+              pv.state.params.prog_id == child.val().programID) {
+                this.setState({
+                  approveStatus: true,
+                  status: child.val().status,
+                });
+              }
 
-        var yyyy = today.getFullYear();
+              this.setState({
+                isLoading: false
+              });
+          });
+      });
+    }
+
+    applyProg(key, applicantID) {
+      console.log(key, 'www');
+        let today = new Date();
+        let dd = today.getDate();
+        let mm = today.getMonth() + 1; //January is 0!
+
+        let yyyy = today.getFullYear();
         if (dd < 10) {
-        dd = '0' + dd;
+        dd = `0${  dd}`;
         } 
         if (mm < 10) {
-        mm = '0' + mm;
+        mm = `0${  mm}`;
         } 
-        today = dd + '/' + mm + '/' + yyyy;
+        today = `${dd  }/${  mm  }/${  yyyy}`;
 
-        let all = this.props.navigation;
+        const all = this.props.navigation;
 
-          try{
+          try {
             const dir = firebase.database().ref('/applications').push();
             const pk = dir.key;
 
             dir.set({
-              applicantID: applicantID,
+              applicantID,
               date: today,
               programID: all.state.params.prog_id,
               status: 'PENDING'
             });
 
             ToastAndroid.show('Applied Successfully!', ToastAndroid.SHORT);
-            setTimeout(()=>{
-              let navigation = this.props.navigation;
+            setTimeout(() => {
+              const navigation = this.props.navigation;
               const navigateAction = navigation.navigate({
                 routeName: '',
                 params: {},
@@ -94,46 +85,165 @@ class ProgDetailScreen extends React.Component {
 
               Promise.all([
                 navigation.dispatch(navigateAction)
-              ]).then(() => navigation.navigate('History'))
+              ]).then(() => navigation.navigate('History'));
                 // this.props.navigation.push('Student_Home',{userID:all.state.params.userID})
-            },1000)
-
-          }catch(e){
+            }, 1000);
+          } catch (e) {
             ToastAndroid.show(e, ToastAndroid.SHORT);
-
           }
+    }
 
+    renderButton(status) {
+      const { buttonGroupStyle, buttonStyle, buttonTextStyle } = styles;
+
+      if (status) {
+        return (
+          <View style={buttonGroupStyle}>
+            <TouchableOpacity 
+                style={buttonStyle}
+                onPress={() => this.applyProg(pv.state.params.key, pv.state.params.userID)}
+            >
+                <Text style={buttonTextStyle}>
+                    Apply
+                </Text>
+            </TouchableOpacity>
+          </View>
+        );  
+      }
+
+      return <View style={buttonGroupStyle} />
     }
 
     render() {
-      let d = this.props.navigation;
+      const d = this.props.navigation;
+
+      const { headerStyle, bodyStyle, containerStyle, iconContainerStyle,
+              nameStyle, nameContainerStyle, textGroupContainerStyle, 
+              textGroupStyle } = styles;
+
+      if (this.state.isLoading) {
+        return (
+          <View style={{flex: 1, backgroundColor: 'white'}}>
+            <Spinner />
+          </View>
+        );
+      }
+
       return (
-        <View>
-            <Header headerText={'Program Details'} navigation={this.props.navigation} />
-            <Text>Program Details {'\n'}</Text>
-
-            <Text>Prog ID: {d.state.params.prog_id}</Text>
-            <Text>KEY: {d.state.params.key}</Text>
-            <Text>UNI: {d.state.params.uni}</Text>
-            <Text>Applicant : {d.state.params.userID}</Text>
+        <View style={containerStyle}>
+            <View style={headerStyle}>
+                <View style={iconContainerStyle}>
+                    <TouchableOpacity 
+                    onPress={() => this.props.navigation.goBack()}
+                    >
+                        <View 
+                            style={{ paddingLeft: 13,
+                                    paddingRight: 13,
+                                    paddingTop: 5, 
+                                    paddingBottom: 5 }}
+                        >
+                            <Icon
+                                name='chevron-left'
+                                type='font-awesome'
+                                color='white'
+                                size={28}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <View style={nameContainerStyle}>
+                    <Text style={nameStyle} >{d.state.params.prog_name}</Text>
+                </View>
+                
+            </View>
+            <View style={bodyStyle}>
+              <View style={textGroupContainerStyle}>
+                <View style={textGroupStyle}>
+                  <Text style={{color: 'grey', marginBottom: 10}}>University: </Text>
+                  <Text style={{fontSize: 18, textAlign: 'center'}}>{d.state.params.uni}</Text>
+                </View>
+                <View style={textGroupStyle}>
+                  <Text style={{color: 'grey', marginBottom: 10}}>Description: </Text>
+                  <Text style={{fontSize: 18}}>{d.state.params.description}</Text>
+                </View>
+              </View>
+              
+              {this.renderButton(this.state.status)}
+            </View>
             
-            <Text>Programme: {d.state.params.prog_name}</Text>
-            {this.checkApplicationStatus()}
-
-            {/* <Button title="Apply" color="green" onPress={() => this.applyProg(d.state.params.key,d.state.params.userID)}/> */}
-            <Button title="Cancel" color="red" onPress={() => this.props.navigation.navigate('Student_Home')}/>
-
-            <Text>{'\n'}</Text>
-
-
-
-
-
-
-            {/* <Button title="Back" onPress={() => this.props.navigation.navigate('Student_Home',{userID : d.state.params.userID })} /> */}
         </View>
       );
     }
 }
+
+const styles = {
+  containerStyle: {
+    backgroundColor: '#34495e', 
+    paddingTop: 20, 
+    flex: 1
+  },
+  headerStyle: {
+    flex: 3, 
+    backgroundColor: '#34495e',
+  }, 
+  bodyStyle: {
+    flex: 7, 
+    backgroundColor: 'white', 
+    paddingLeft: 40, 
+    paddingRight: 40
+  }, 
+  iconContainerStyle: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    flex: 3, 
+    alignItems: 'center'
+  }, 
+  nameStyle: {
+    fontSize: 25, 
+    color: 'white'
+  }, 
+  nameContainerStyle: {
+    justifyContent: 'center', 
+    alignItems: 'center',
+    flex: 7, 
+  },
+  buttonStyle: {
+    backgroundColor: '#2ecc71', 
+    borderRadius: 40 / 2, 
+    height: 40, 
+    padding: 10, 
+    margin: 5, 
+    justifyContent: 'center', 
+    alignItems: 'center'
+    },  
+  buttonStyle2: {
+      backgroundColor: '#e74c3c', 
+      borderRadius: 40 / 2, 
+      height: 40, 
+      padding: 10, 
+      margin: 5, 
+      justifyContent: 'center', 
+      alignItems: 'center'
+  }, 
+  buttonTextStyle: {
+      color: 'white', 
+      fontSize: 15
+  }, 
+  buttonGroupStyle: {
+    alignItems: 'stretch', 
+    justifyContent: 'center', 
+    flex: 3, 
+    marginBottom: 20
+  }, 
+  textGroupContainerStyle: {
+    flex: 7, 
+    paddingTop: 15, 
+    paddingBottom: 15, 
+    justifyContent: 'center'
+  }, 
+  textGroupStyle: {
+    marginBottom: 25
+  }
+};
 
 export { ProgDetailScreen };
