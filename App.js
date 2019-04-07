@@ -6,7 +6,8 @@ import { createStackNavigator, createAppContainer,
 import { LoginScreen, SignUpScreen, DetailsScreen } from './src/screen';
 import { AdminHomeScreen, NewQualificationScreen, QualificationDetailsScreen,
           QualificationScreen, AddUniversity, AddUniAdmin,
-          EditQualificationScreen, UniversityScreen, EditUniversity } from './src/screen/SASAdminScreen';
+          EditQualificationScreen, UniversityScreen, EditUniversity,
+          UniAdminScreen, notificationScreen } from './src/screen/SASAdminScreen';
 import { ApplicantHomeScreen, ProgDetailScreen, ProgListScreen,
 
           StudentApplicationScreen, StudentQualification, AddQualification }
@@ -17,7 +18,8 @@ import { AppDetails, ProgApplicationScreen, UniHomeScreen, NewProgScreen,
 
 const SASAdminTabNavigator = createBottomTabNavigator({
   Qualification: { screen: QualificationScreen },
-  University: { screen: UniversityScreen  }
+  University: { screen: UniversityScreen  },
+  Notification: { screen: notificationScreen  },
   }, {
     tabBarOptions: {
       activeTintColor: 'white',
@@ -94,8 +96,11 @@ const RootStack = createStackNavigator(
     EditQualification: EditQualificationScreen,
     AddUniAdmin: AddUniAdmin,
     EditQualification: EditQualificationScreen,
-    UniversityScreen: UniversityScreen,
     EditUniversity: EditUniversity,
+    UniversityScreen: UniversityScreen,
+    UniAdminProfile: UniAdminProfileScreen,
+    UniAdminScreen: UniAdminScreen,
+    notificationScreen: notificationScreen,
   },
   {
     //need to change later
