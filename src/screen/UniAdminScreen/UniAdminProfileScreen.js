@@ -62,6 +62,9 @@ class UniAdminProfileScreen extends React.Component {
                 let user = firebase.auth().currentUser;
             
                 user.updatePassword(pw).then(() => {
+                  firebase.database().ref('users/' + d.state.params.userID).update({
+                      password : pw
+                    });
                     ToastAndroid.show('Password Updated !', ToastAndroid.SHORT);
                     setTimeout(()=>{
                         this.props.navigation.push('Uni_Home',{userID : d.state.params.userID});
