@@ -81,7 +81,7 @@ setAppObject(user_id,data,key){
       
             {Object.keys(allApp).map((k,e) => {
             if(allApp[k].applied_prog == d.state.params.prog_id){
-              if(allApp[k].status != 'XDDD'){
+              if(allApp[k].status != ''){
                 return(
                   <TouchableOpacity
                       style={styles.item}
@@ -92,10 +92,11 @@ setAppObject(user_id,data,key){
                         status : allApp[k].status,
                         prog_name : d.state.params.prog_name,
                         key : allApp[k].app_key,
-                        prog_id : d.state.params.prog_id
+                        prog_id : d.state.params.prog_id,
+                        userID :  d.state.params.userID,
                         })}
                       >
-                      <Text style={{ fontSize: 20 }}>Applicant: {allApp[k].applicant}</Text>
+                      <Text style={{ fontSize: 20 }}>Applicant : {allApp[k].applicant}</Text>
                   </TouchableOpacity>
                   // <View>
                   // <Text>
