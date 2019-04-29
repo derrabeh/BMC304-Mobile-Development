@@ -48,6 +48,7 @@ class AddUniversity extends React.Component {
                 color='white'
                 size={28}
                 containerStyle={{alignItems: 'flex-start'}}
+                onPress={() => this.props.navigation.navigate('UniversityScreen')}
               />
             </View>
 
@@ -74,84 +75,75 @@ class AddUniversity extends React.Component {
     }
   }
   const styles = {
-      containerStyle: {
-          flex: 1,
-          backgroundColor: '#34495e'
-      },
-      headerStyle: {
-          flex: 3,
-          paddingTop: 20,
-          backgroundColor: 'red'
-      },
-      bodyStyle: {
-          flex: 7,
-          backgroundColor: 'white',
-          paddingLeft: 40,
-          paddingRight: 40
-      },
-      ContainerStyle: {
-          backgroundColor: '#34495e',
-          justifyContent: 'flex-start',
-          padding: 10,
-          flex: 2
-      },
-      headerInputContainerStyle: {
-          backgroundColor: '#34495e',
-          alignItems: 'stretch',
-          flex: 8,
-          justifyContent: 'center'
-      },
-      headerInputStyle: {
-          marginLeft: 15,
-          marginRight: 15,
-          height: 40,
-          borderColor: '#bdc3c7',
-          borderBottomWidth: 1,
-          fontSize: 30,
-          textAlign: 'center'
-      },
-      textGroupContainerStyle: {
-        flex: 7,
-        paddingTop: 15,
-        paddingBottom: 15,
-        justifyContent: 'center'
-      },
-      textGroupStyle: {
-          borderBottomWidth: 1,
-          borderColor: '#bdc3c7',
-          paddingBottom: 5,
-          paddingTop: 5,
-          marginTop: 10,
-          marginBottom: 10
-      },
-      textHeaderStyle: {
-          color: 'grey'
-      },
-      textStyle: {
-          fontSize: 16,
-          padding: 5
-      },
-
+    containerStyle: {
+      flex: 1,
+      backgroundColor: '#34495e'
+    },
+    headerStyle: {
+      flex: 6,
+      paddingTop: 20,
+      backgroundColor: 'grey'
+    },
+    bodyStyle: {
+      flex: 4,
+      backgroundColor: 'white',
+      paddingLeft: 40,
+      paddingRight: 40
+    },
+    ContainerStyle: {
+      backgroundColor: '#34495e',
+      justifyContent: 'flex-start',
+      padding: 10,
+      flex: 2
+    },
+    headerInputStyle: {
+      marginLeft: 15,
+      marginRight: 15,
+      height: 40,
+      borderColor: '#bdc3c7',
+      borderBottomWidth: 1,
+      fontSize: 30,
+      textAlign: 'center'
+    },
+    textGroupStyle: {
+      borderBottomWidth: 1,
+      borderColor: '#bdc3c7',
+      paddingBottom: 5,
+      paddingTop: 5,
+      marginTop: 10,
+      marginBottom: 10
+    },
+    textHeaderStyle: {
+      color: 'white',
+      fontSize: 15,
+      paddingLeft: 15,
+      paddingBottom:30,
+      marginBottom: 20,
+      marginTop: 50,
+    },
+    textStyle: {
+      fontSize: 20,
+      padding: 5
+    },
     buttonStyle: {
-        backgroundColor: '#2ecc71',
-        borderRadius: 40/2,
-        height: 40,
-        padding: 10,
-        margin: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
-        },
-
+      backgroundColor: '#2ecc71',
+      borderRadius: 40/2,
+      height: 40,
+      padding: 10,
+      margin: 5,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
     buttonTextStyle: {
-        color: 'white',
-        fontSize: 15
+      color: 'white',
+      fontSize: 15
     },
     buttonGroupStyle: {
-        backgroundColor: '#fff',
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        flex: 5,
-        marginBottom: 20,
+      backgroundColor: '#fff',
+      alignItems: 'stretch',
+      justifyContent: 'center',
+      flex: 5,
+      marginBottom: 20,
     },
   }
 

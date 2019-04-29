@@ -186,7 +186,7 @@ const styles = {
     flex: 7
   },
   nameStyle: {
-    fontSize: 40,
+    fontSize: 30,
     color: 'white'
   },
     iconContainerStyle: {
@@ -254,6 +254,7 @@ const styles = {
         alignItems: 'stretch',
         justifyContent: 'center',
         flex: 3,
+        marginTop: 20,
         marginBottom: 20,
     }
 }
